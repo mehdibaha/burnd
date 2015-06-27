@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
@@ -23,7 +21,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.insa.burnd.R;
@@ -164,9 +161,9 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
                     uploadVideo(picturePath, status);
                     // Video
                 }
-                else {
+                else
                     new Connexion(this, this, "newpost","Sending Post...").execute(status);
-                }
+
                 Utils.showToast(this, "Post sent with love.");
                 return true;
             case R.id.action_tutorial:
@@ -197,14 +194,12 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
 
     private Bitmap getUnRotatedImage(String imagePath, Bitmap rotatedBitmap) {
         int rotate = 0;
-        try
-        {
+        try {
             File imageFile = new File(imagePath);
             ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
-            switch (orientation)
-            {
+            switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     rotate = 270;
                     break;
@@ -216,8 +211,7 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
                     break;
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -234,9 +228,8 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
                 maxImageSize / realImage.getHeight());
         int width = Math.round(ratio * realImage.getWidth());
         int height = Math.round(ratio * realImage.getHeight());
-        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
-                height, filter);
-        return newBitmap;
+
+        return Bitmap.createScaledBitmap(realImage, width, height, filter);
     }
 
     @Override
@@ -281,7 +274,6 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
      * returning image / video
      */
     private File getOutputMediaFile(int type) {
-
         // External sdcard location
         File mediaStorageDir = new File(
                 Environment
@@ -291,7 +283,6 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-
                 return null;
             }
         }

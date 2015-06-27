@@ -214,16 +214,16 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
         int fabBottomMargin = lp.bottomMargin;
         fam.animate().translationY(fam.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
 
-        /*if(withToolbar)
-            toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));*/
+        if(withToolbar)
+            toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
 
     }
 
     public void showViews(boolean withToolbar) {
         fam.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 
-        /*if(withToolbar)
-            toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));*/
+        if(withToolbar)
+            toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
     }
 
     public void refreshFeedList (String json) throws JSONException {

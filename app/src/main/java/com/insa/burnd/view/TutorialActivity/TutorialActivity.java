@@ -73,16 +73,16 @@ public class TutorialActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int i) {
-            switch (i) {
-                case 0:
+            switch (i+1) {
+                case 1:
                     //Fragement for Android Tab
                     return new TutorialFragment1();
-                case 1:
+                case 2:
                     //Fragment for Ios Tab
                     return new TutorialFragment2();
-                case 2:
-                    return new TutorialFragment3();
                 case 3:
+                    return new TutorialFragment3();
+                case 4:
                     return new TutorialFragment4();
             }
             return new Fragment();

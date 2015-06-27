@@ -33,7 +33,6 @@ public class MainActivity extends BaseActivity {
     private static String TAG = "BURND-MainActivity";
 
     private Adapter adapter;
-    private Toolbar toolbar;
     private final MainActivity activity = this;
     private boolean clickedOnSearch;
 
@@ -49,7 +48,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         initToolbar();
 
-        // Création des "pages" et assignation d'un adapter pour écouter les pages.
+        // Setting pager and tabLayout
         ViewPager viewPager = (ViewPager) findViewById(R.id.main_pager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
@@ -68,8 +67,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initToolbar() {
-        /*toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);*/
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     public NewsfeedFragment getNewsfeedFragment() {
