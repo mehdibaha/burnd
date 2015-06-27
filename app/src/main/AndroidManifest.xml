@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.insa.burnd" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".utils.Burnd"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Burnd"
+        android:theme="@style/AppTheme" >
+        <service android:name=".syncAdapter.AuthenticatorService" >
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+        <service
+            android:name=".syncAdapter.SyncService"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
+
+        <provider
+            android:name=".syncAdapter.StubProvider"
+            android:authorities="com.insa.burnd.provider"
+            android:exported="false"
+            android:syncable="true" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
+
+        <!-- Tutorial -->
+        <activity
+            android:name=".view.TutorialActivity.TutorialActivity"
+            android:label="Tutorial"
+            android:noHistory="true"
+            android:theme="@style/TutorialTheme" />
+
+        <!-- Splash -->
+        <activity
+            android:name=".view.SplashActivity"
+            android:noHistory="true" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <!-- FB Login -->
+        <activity
+            android:name="com.facebook.LoginActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".view.LoginActivity"
+            android:label="@string/title_activity_login" >
+        </activity>
+
+        <!-- Join -->
+        <activity
+            android:name=".view.JoinActivity"
+            android:label="@string/title_activity_join" />
+
+        <!-- Create -->
+        <activity
+            android:name=".view.CreateActivity"
+            android:label="@string/title_activity_create"
+            android:parentActivityName=".view.JoinActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.JoinActivity" />
+        </activity>
+
+        <!-- Main -->
+        <activity
+            android:name=".view.MainActivity.MainActivity"
+            android:screenOrientation="portrait" >
+
+        </activity>
+
+        <!-- Post -->
+        <activity
+            android:name=".view.MainActivity.PostActivity"
+            android:label="@string/title_activity_post"
+            android:parentActivityName=".view.MainActivity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainActivity.MainActivity" />
+        </activity>
+
+        <!-- Comment -->
+        <activity
+            android:name=".view.CompassActivity"
+            android:hardwareAccelerated="true"
+            android:label="@string/title_activity_compass"
+            android:parentActivityName=".view.MainActivity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainActivity.MainActivity" />
+        </activity>
+
+        <service android:name=".network.BackgroundService" >
+        </service>
+
+    </application>
+
+</manifest>

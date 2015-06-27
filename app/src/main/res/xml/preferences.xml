@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="PROFILE"
+        android:key="profile_settings">
+
+        <com.insa.burnd.utils.DatePreference
+            android:key="date"
+            android:title="Your birthday"
+            android:summary="No date entered yet"
+            android:defaultValue="0" />
+
+        <Preference android:title="Become a first user" android:key="first_user"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="LOVE"
+        android:key="love_settings">
+
+        <CheckBoxPreference
+            android:key="meeting"
+            android:title="@string/activate_meeting"
+            android:summary="@string/meeting_sum"
+            android:defaultValue="true"
+            android:id="@+id/meeting_check"/>
+            <ListPreference
+                android:dependency="meeting"
+                android:key="you"
+                android:title="@string/you"
+                android:dialogTitle="@string/you"
+                android:entries="@array/you_options"
+                android:entryValues="@array/entry_values"
+                android:defaultValue="0" />
+            <ListPreference
+                android:dependency="meeting"
+                android:key="them"
+                android:title="@string/them"
+                android:dialogTitle="@string/them"
+                android:entries="@array/you_options"
+                android:entryValues="@array/entry_values"
+                android:defaultValue="0" />
+
+    </PreferenceCategory>
+
+    <Preference android:title="Leave the Party" android:key="leave_party"/>
+    <Preference android:title="Logout" android:key="logout"/>
+</PreferenceScreen>

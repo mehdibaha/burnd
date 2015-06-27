@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="AwesomeValidation-61dd2bb">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.thyrlian/AwesomeValidation/61dd2bb/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.thyrlian/AwesomeValidation/61dd2bb/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

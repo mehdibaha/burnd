@@ -1,0 +1,107 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.insa.burnd.view.JoinActivity" >
+
+    <!-- Toolbar -->
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar" />
+
+    <!-- Main Layout -->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_join"
+        android:padding="20dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_logo"
+            android:text="Burnd"
+            android:layout_marginBottom="40dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="60sp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_join_party_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_logo">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edittext_join_party_name"
+                android:inputType="text"
+
+                android:hint="party name"
+                style="@style/Base.Widget.AppCompat.EditText"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_join_party_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/til_join_party_name" >
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edittext_join_party_pass"
+                android:hint="party pass"
+                android:inputType="textPassword"
+                style="@style/Base.Widget.AppCompat.EditText" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/til_join_party_pass"
+            android:text="Near parties"
+            android:layout_alignParentRight="true"
+            android:id="@+id/button_join_gps" />
+
+    </RelativeLayout>
+
+    <!-- Footer to create a party -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:gravity="center"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Join your party"
+            android:textColor="@color/white"
+            android:id="@+id/button_join_join"/>
+
+    </RelativeLayout>
+
+    <!-- NEAR PARTIES transparent layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true">
+
+        <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/parties_listView"
+            android:layout_marginBottom="34dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:background="#d4ffffff" />
+
+    </LinearLayout>
+
+</RelativeLayout>

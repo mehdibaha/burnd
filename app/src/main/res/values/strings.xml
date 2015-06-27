@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Burnd</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_tutorial">TutorialActivity</string>
+    <string name="next_tutorial">Next</string>
+    <string name="title_activity_join">JoinActivity</string>
+    <string name="title_activity_create">CreateActivity</string>
+    <string name="title_activity_newsfeed">NewsfeedActivity</string>
+    <string name="party_name">Party Name</string>
+    <string name="join_party">Join Party</string>
+    <string name="create_party">Create Party</string>
+    <string name="party_pass">Party Pass</string>
+    <string name="create">Create</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_post">PostActivity</string>
+    <string name="app_id">913339385389637</string>
+    <string name="hint">Filter Newsfeed</string>
+    <string name="activate_meeting">Activate Meeting</string>
+    <string name="meeting_sum">Check this to meet new people</string>
+    <string name="you">You</string>
+    <string name="them">Them</string>
+    <string name="you_options">You</string>
+
+    <string name="start_button">Start</string>
+    <string name="stop_button">Stop</string>
+    <string name="launch_compass">I choose You !</string>
+    <string name="title_activity_compass">Lookin\' for love</string>
+
+    <string name="hello_world">Hello world!</string>
+
+</resources>

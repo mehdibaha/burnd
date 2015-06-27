@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools" tools:context="com.insa.burnd.view.JoinActivity">
+<item android:id="@+id/action_send"
+    android:icon="@drawable/ic_action_send_now"
+    android:title="Send"
+    app:showAsAction="ifRoom" />
+
+<item android:id="@+id/action_tutorial" android:title="Become first user"
+        android:orderInCategory="100" app:showAsAction="never" />
+</menu>

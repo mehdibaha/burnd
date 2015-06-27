@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context="com.insa.burnd.view.JoinActivity">
+
+    <item android:id="@+id/action_create_party" android:title="Create your party"
+        android:orderInCategory="1" app:showAsAction="always" />
+
+    <item android:id="@+id/action_logout" android:title="Logout"
+        android:orderInCategory="2" app:showAsAction="never" />
+</menu>

@@ -1,0 +1,116 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.insa.burnd.view.CreateActivity">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar_create" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_create"
+        android:padding="30dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_create_party_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edittext_create_party_name"
+                android:inputType="text"
+                android:hint="party name"
+                style="@style/Base.Widget.AppCompat.EditText"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_create_party_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/til_create_party_name">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edittext_create_party_pass"
+                android:hint="party pass"
+                android:inputType="textPassword"
+                style="@style/Base.Widget.AppCompat.EditText"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/til_create_party_pass">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:id="@+id/edittext_location"
+
+                android:hint="address (optional)"
+                style="@style/Base.Widget.AppCompat.EditText"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/til_location"
+            android:text="Get address"
+            android:layout_alignParentRight="true"
+            android:id="@+id/button_location" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/set_time"
+            android:text="ending time"
+            android:layout_marginTop="45dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="17sp"
+            android:layout_below="@+id/button_location"
+            android:layout_centerHorizontal="true" />
+
+        <Button style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:text="18:44"
+            android:layout_below="@id/set_time"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+    <!-- Footer to create a party -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:gravity="center"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create the party"
+            android:textColor="@color/white"
+            android:id="@+id/button_create"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

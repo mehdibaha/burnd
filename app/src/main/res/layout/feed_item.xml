@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="5dp"
+    android:layout_height="match_parent"
+    android:id="@+id/feeditem_container"
+    android:layout_marginLeft="@dimen/feed_item_margin"
+    android:layout_marginRight="@dimen/feed_item_margin"
+    android:layout_marginTop="@dimen/feed_item_margin"
+    card_view:contentPaddingTop="@dimen/feed_item_padding_top_bottom"
+    android:layout_marginBottom="@dimen/feed_item_margin"
+    android:focusable="false"
+    android:elevation="10dp"
+    android:translationZ="0dp"
+    android:background="@color/feed_bg">
+
+    <!-- Spot the MAGIC VARIABLE -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/feed_item_padding_left_right"
+            android:paddingRight="@dimen/feed_item_padding_left_right" >
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/profilePic"
+                android:layout_width="@dimen/feed_item_profile_pic"
+                android:layout_height="@dimen/feed_item_profile_pic"
+                android:scaleType="fitCenter" >
+            </com.android.volley.toolbox.NetworkImageView>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/feed_item_profile_info_padd" >
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/feed_item_profile_name"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/timestamp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/timestamp"
+                    android:textSize="@dimen/feed_item_timestamp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtStatusMsg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingLeft="@dimen/feed_item_padding_left_right"
+            android:paddingRight="@dimen/feed_item_padding_left_right"
+            android:paddingTop="@dimen/feed_item_status_pad_top" />
+
+        <com.insa.burnd.controller.FeedImageView
+            android:id="@+id/feedImage1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:scaleType="fitXY"
+            android:visibility="gone" />
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            android:visibility="visible"
+        android:layout_gravity="center" />
+
+        <ProgressBar
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:progress="50"
+            android:progressBackgroundTint="#ffff0005"
+            android:progressTint="#ff21ff00"
+            style="@style/CustomProgressBarHorizontal"
+            android:id="@+id/progressv" />
+
+        <View
+             android:layout_width="fill_parent"
+             android:layout_height="1dp"
+             android:layout_marginTop="7dp"
+             android:background="@color/divider"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp" >
+
+            <Button  style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/button_up"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Up" />
+                <View
+                    android:layout_height="fill_parent"
+                    android:layout_width="1dp"
+                    android:background="@color/divider"/>
+
+            <TextView
+                android:id="@+id/textview_votes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.00"
+                android:text="0"
+                android:paddingEnd="@dimen/feed_item_padding_left_right"
+                android:paddingStart="@dimen/feed_item_padding_left_right" />
+
+            <View
+                android:layout_height="fill_parent"
+                android:layout_width="1dp"
+                android:background="@color/divider"/>
+
+            <Button  style="?android:attr/borderlessButtonStyle"
+                android:layout_width="50dp"
+                android:id="@+id/button_down"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Down" />
+
+            <View
+                android:layout_height="fill_parent"
+                android:layout_width="1dp"
+                android:background="@color/divider" />
+
+            <Button  style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:id="@+id/button_show_comments"
+                android:layout_height="wrap_content"
+                android:text="Comment"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider"/>
+
+        <LinearLayout
+            android:id="@+id/commentView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:background="@color/white"
+            android:paddingLeft="@dimen/comment_item_pad_left_right"
+            android:paddingRight="@dimen/comment_item_pad_left_right"
+            android:paddingTop="10dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/no_comments_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center"
+                android:textSize="15dp"
+                android:visibility="gone"
+                android:text="No comments yet." />
+
+            <ListView
+                android:id="@+id/comments_listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <View
+                android:layout_height="fill_parent"
+                android:layout_width="5dp"
+                android:background="@color/divider"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/et_comment"
+                    android:layout_weight="8"
+                    android:layout_alignParentLeft="true"
+                    android:hint="Enter your comment..."
+                    android:textSize="@dimen/comment_item_profile_name"/>
+
+                <Button style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Send"
+                    android:id="@+id/button_send_comment" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>
