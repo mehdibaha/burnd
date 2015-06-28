@@ -6,7 +6,7 @@
 
     <!-- Toolbar -->
     <include layout="@layout/toolbar"
-        android:id="@+id/toolbar" />
+        android:id="@+id/toolbar_join" />
 
     <!-- Main Layout -->
     <RelativeLayout

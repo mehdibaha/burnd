@@ -46,7 +46,6 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
     private EditText etStatus;
 
     private Uri fileUri;
-    private Toolbar toolbar;
     private final PostActivity activity = this;
 
     private String picturePath;
@@ -102,7 +101,7 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_post);
         setSupportActionBar(toolbar);
 
         final ActionBar ab = getSupportActionBar();

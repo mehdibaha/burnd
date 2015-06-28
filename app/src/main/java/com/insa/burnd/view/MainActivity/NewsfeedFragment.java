@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -55,7 +54,7 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        toolbar = (Toolbar) mActivity.findViewById(R.id.toolbar);
+        toolbar = (Toolbar) mActivity.findViewById(R.id.toolbar_main);
 
         try {
             updateNewsfeed();

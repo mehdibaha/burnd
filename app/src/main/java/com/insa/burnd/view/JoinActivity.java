@@ -19,12 +19,12 @@ import android.widget.ListView;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
-import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.R;
 import com.insa.burnd.controller.PartyAdapter;
 import com.insa.burnd.models.User;
 import com.insa.burnd.network.Connexion;
 import com.insa.burnd.network.SessionController;
+import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.utils.BaseActivity;
 import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.MainActivity.MainActivity;
@@ -100,6 +100,15 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
         setupSession();
     }
 
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_join);
+        setSupportActionBar(toolbar);
+
+        final ActionBar ab = getSupportActionBar();
+        if(ab!=null)
+            ab.setTitle("Join a party");
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -126,15 +135,6 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        final ActionBar ab = getSupportActionBar();
-        if(ab!=null)
-            ab.setTitle("Join a party");
     }
 
     // Search party buton

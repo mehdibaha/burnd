@@ -29,9 +29,8 @@ import java.text.ParseException;
 import java.util.Calendar;
 
 public class CreateActivity extends BaseActivity implements Connexion.ResponseListener {
-    private final CreateActivity activity = this;
     private static String TAG = "BURND-CreateActivity";
-    private Toolbar toolbar;
+    private final CreateActivity activity = this;
 
     private EditText etPartyName;
     private EditText etPartyPass;
@@ -55,15 +54,8 @@ public class CreateActivity extends BaseActivity implements Connexion.ResponseLi
         setContentView(R.layout.activity_create);
 
         initToolbar();
-        etPartyName = (EditText) findViewById(R.id.edittext_create_party_name);
-        etPartyPass = (EditText) findViewById(R.id.edittext_create_party_pass);
-        etPartyPass.setTypeface(Typeface.DEFAULT);
-        etLocation = (EditText) findViewById(R.id.edittext_location);
-        tilPartyName = (TextInputLayout) findViewById(R.id.til_create_party_name);
-        tilPartyPass = (TextInputLayout) findViewById(R.id.til_create_party_pass);
-        buttonTime = (Button) findViewById(R.id.time);
-
-        setButtonToNow();
+        initViews();
+        setButtonToCurrentTime();
 
         Button buttonCreate = (Button) findViewById(R.id.button_create);
         buttonCreate.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +101,7 @@ public class CreateActivity extends BaseActivity implements Connexion.ResponseLi
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar_create);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create);
         setSupportActionBar(toolbar);
 
         final ActionBar ab = getSupportActionBar();
@@ -119,7 +111,17 @@ public class CreateActivity extends BaseActivity implements Connexion.ResponseLi
         }
     }
 
-    private void setButtonToNow() {
+    private void initViews() {
+        etPartyName = (EditText) findViewById(R.id.edittext_create_party_name);
+        etPartyPass = (EditText) findViewById(R.id.edittext_create_party_pass);
+        etPartyPass.setTypeface(Typeface.DEFAULT);
+        etLocation = (EditText) findViewById(R.id.edittext_location);
+        tilPartyName = (TextInputLayout) findViewById(R.id.til_create_party_name);
+        tilPartyPass = (TextInputLayout) findViewById(R.id.til_create_party_pass);
+        buttonTime = (Button) findViewById(R.id.time);
+    }
+
+    private void setButtonToCurrentTime() {
         now = Calendar.getInstance();
         hours = now.get(Calendar.HOUR_OF_DAY);
         minutes = now.get(Calendar.MINUTE);

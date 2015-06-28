@@ -66,8 +66,8 @@ public class MainActivity extends BaseActivity {
         viewPager.setAdapter(adapter);
     }
 
-    private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    private void initToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
     }
 
