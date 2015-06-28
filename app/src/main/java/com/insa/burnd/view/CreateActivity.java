@@ -14,22 +14,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
-import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.R;
 import com.insa.burnd.network.Connexion;
 import com.insa.burnd.network.SessionController;
+import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.utils.BaseActivity;
 import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.MainActivity.MainActivity;
-import com.strohwitwer.awesomevalidation.AwesomeValidation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.Calendar;
-
-import static com.strohwitwer.awesomevalidation.ValidationStyle.UNDERLABEL;
 
 public class CreateActivity extends BaseActivity implements Connexion.ResponseListener {
     private final CreateActivity activity = this;
@@ -50,7 +47,6 @@ public class CreateActivity extends BaseActivity implements Connexion.ResponseLi
     private int hours;
     private int minutes;
 
-    private AwesomeValidation mAwesomeValidation = new AwesomeValidation(UNDERLABEL);
     final private int MAX_DURATION_PARTY = 12;
 
     @Override

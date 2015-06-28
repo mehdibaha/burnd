@@ -51,5 +51,4 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:3.23.0' // Facebook sdk
     compile 'com.mcxiaoke.volley:library:1.0.1' // Volley Library (handles all network request)
     compile 'com.mcxiaoke.viewpagerindicator:library:2.4.1' // View pager indicator for tabs (tutorial activity)
-    compile 'com.github.thyrlian:AwesomeValidation:61dd2bb' // Form Validation
 }
