@@ -57,8 +57,8 @@ public class Utils {
         return result;
     }
 
-    public static String makeReadableString(String s, int maxCharacters) {
-        return s.substring(1,maxCharacters) + "..." + s.substring(s.length()-1,s.length()-maxCharacters);
+    public static String makeReadable(String s, int maxChars) {
+        return s.substring(0,maxChars) + "..." +s.substring(s.length()-maxChars,s.length());
     }
 
 }

@@ -76,7 +76,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", profilePic='" + profilePic + '\'' +
                 ", gender='" + gender + '\'' +
-                ", accessToken='" + Utils.makeReadableString(accessToken, 10) + '\'' +
+                ", accessToken='" + Utils.makeReadable(accessToken, 5) + '\'' +
                 '}'; // Only giving preview of accesstoken
     }
 
