@@ -67,7 +67,7 @@ public class SplashActivity extends FragmentActivity implements Connexion.Respon
             startActivity(new Intent(this, JoinActivity.class));
             activity.finish();
         } else {
-            Log.d("Splash", "Sending user to LoginActivity");
+            Log.d(TAG, "Splash" + "Sending user to LoginActivity");
             startActivity(new Intent(this, LoginActivity.class));
             activity.finish();
         }

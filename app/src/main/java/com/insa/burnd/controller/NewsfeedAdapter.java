@@ -167,7 +167,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    Log.d("hashtag","hashtag");
+                    Log.d(TAG, "hashtag");
                     setFilter("#music");
                 }
             };
@@ -258,7 +258,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         int down=Integer.parseInt(item.getVotesDown());
 
         holder.progressVote.setProgress(statisticVote(up, down));
-        Log.d("statistic", "" + (statisticVote(up, down)));
+        Log.d(TAG, "statistic" + statisticVote(up, down));
         holder.progressVote.setProgress(50);
         holder.buttonUp.setTag(position);
         holder.buttonUp.setOnClickListener(new View.OnClickListener() {

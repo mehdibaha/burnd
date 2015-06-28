@@ -19,6 +19,7 @@ import com.insa.burnd.R;
 //dont le but est de la bouger de manière "naturelle" vers la direction désirée.
 //Ainsi, il suffit de modifier l'input (Voir méthode update) et le view amènera naturellement la boussole vers l'angle désiré.
 public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateListener{
+    private static final String TAG = "BURND-RedView";
 
     private final ImageView red = this;
     private Bitmap b;
@@ -124,11 +125,11 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
             counter = (int) (TOTAL_DISTANCE/INTERVAL_DISTANCE);
         }
         while(counter<TOTAL_DISTANCE/INTERVAL_DISTANCE){
-            Log.d("Compass", "gonna");
+            Log.d(TAG, "gonna");
             if(counter*INTERVAL_DISTANCE <=distance && distance <= (counter+1)*INTERVAL_DISTANCE){
-                Log.d("Compass","gonna2");
+                Log.d(TAG,"gonna2");
                 if(!valueAn.isRunning()){
-                    Log.d("Compass", "animating");
+                    Log.d(TAG, "Compass" + "animating");
                     valueAn = new ValueAnimator();
                     valueAn.setStartDelay(0);
                     valueAn.setIntValues(color
@@ -196,7 +197,7 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
     public void onAnimationUpdate(ValueAnimator va){
         color = (int) va.getAnimatedValue();
         postInvalidate();
-        Log.d("Color", Integer.toString(Color.red(color)) + " , " + Integer.toString(Color.green(color)) + " , " + Integer.toString(Color.blue(color)));
+        Log.d(TAG, Integer.toString(Color.red(color)) + " , " + Integer.toString(Color.green(color)) + " , " + Integer.toString(Color.blue(color)));
     }
 
 }

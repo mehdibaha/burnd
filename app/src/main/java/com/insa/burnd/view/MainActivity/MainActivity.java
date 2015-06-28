@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.insa.burnd.R;
 import com.insa.burnd.controller.NewsfeedAdapter;
-import com.insa.burnd.syncAdapter.SyncAdapter;
+import com.insa.burnd.sync.SyncAdapter;
 import com.insa.burnd.utils.BaseActivity;
 
 import java.util.ArrayList;
@@ -81,16 +81,16 @@ public class MainActivity extends BaseActivity {
         ContentResolver.setSyncAutomatically(mAccount, AUTHORITY, true);
         //Si le matchSync est inactif, on l'active.
         if(!SyncAdapter.checkSyncs(mAccount, AUTHORITY, "matchSync")){
-            Log.d("matchSync","Constructing Match Notif");
+            Log.d(TAG, "matchSync" + "Constructing Match Notif");
             Bundle b = new Bundle();
             b.putString("reqID","matchSync");
             ContentResolver.addPeriodicSync(
                     mAccount,
                     AUTHORITY,
                     b,
-                    10);
+                    60*10); // every 10 minutes, cause : battery leaks
         }
-        Log.d("Sync","Complete");
+        Log.d(TAG, "Sync" + "Complete");
     }
 
     //méthode récupérée sur les tutos android pour le syncAdapter

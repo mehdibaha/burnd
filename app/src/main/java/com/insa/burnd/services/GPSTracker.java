@@ -1,4 +1,4 @@
-package com.insa.burnd.Gps;
+package com.insa.burnd.services;
 
 
 import android.app.AlertDialog;
@@ -22,6 +22,7 @@ import java.util.Locale;
 
 /* GPS Class to handle all things GPS related */
 public class GPSTracker extends Service implements LocationListener {
+    private static final String TAG = "BURND-GPS";
 
     // saving the context for later use
     private final Context mContext;
@@ -60,9 +61,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     public GPSTracker(Context context) {
         this.mContext = context;
-        mLocationManager = (LocationManager) mContext
-                .getSystemService(LOCATION_SERVICE);
-
+        mLocationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
     }
 
     /**
@@ -145,7 +144,6 @@ public class GPSTracker extends Service implements LocationListener {
     public String getLocationAddress() {
 
         if (isLocationAvailable) {
-
             Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
             // Get the current location from the input parameter list
             // Create a list to contain the result address
@@ -178,8 +176,7 @@ public class GPSTracker extends Service implements LocationListener {
                 String addressText = String.format(
                         "%s, %s, %s",
                         // If there's a street address, add it
-                        address.getMaxAddressLineIndex() > 0 ? address
-                                .getAddressLine(0) : "",
+                        address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
                         // Locality is usually a city
                         address.getLocality(),
                         // The country of the address
@@ -194,7 +191,6 @@ public class GPSTracker extends Service implements LocationListener {
         }
 
     }
-
 
     /**
      * get latitude
@@ -293,9 +289,9 @@ public class GPSTracker extends Service implements LocationListener {
         mAltitude = location.getAltitude();
         mAccuracy = location.getAccuracy();
         mBearing = location.getBearing();
-        Log.d("GPS","Location Changed");
-        Log.d("GPS","Latitude:"+mLatitude);
-        Log.d("GPS","Longitude:"+mLongitude);
+        Log.d(TAG,"Location Changed");
+        Log.d(TAG,"Latitude:"+mLatitude);
+        Log.d(TAG,"Longitude:"+mLongitude);
     }
 
     @Override

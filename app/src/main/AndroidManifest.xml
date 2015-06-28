@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.insa.burnd" >
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -18,7 +17,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="Burnd"
         android:theme="@style/AppTheme" >
-        <service android:name=".syncAdapter.AuthenticatorService" >
+        <service android:name=".sync.AuthenticatorService" >
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -28,7 +27,7 @@
                 android:resource="@xml/authenticator" />
         </service>
         <service
-            android:name=".syncAdapter.SyncService"
+            android:name=".sync.SyncService"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
@@ -40,7 +39,7 @@
         </service>
 
         <provider
-            android:name=".syncAdapter.StubProvider"
+            android:name=".sync.StubProvider"
             android:authorities="com.insa.burnd.provider"
             android:exported="false"
             android:syncable="true" />
@@ -81,7 +80,8 @@
         <!-- Join -->
         <activity
             android:name=".view.JoinActivity"
-            android:label="@string/title_activity_join" />
+            android:label="@string/title_activity_join"
+            android:windowSoftInputMode="adjustNothing" />
 
         <!-- Create -->
         <activity

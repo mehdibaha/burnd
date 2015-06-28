@@ -1,15 +1,13 @@
-package com.insa.burnd.syncAdapter;
+package com.insa.burnd.sync;
 
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
-import com.insa.burnd.R;
 import com.insa.burnd.view.CompassActivity;
 import com.insa.burnd.view.MainActivity.MainActivity;
 

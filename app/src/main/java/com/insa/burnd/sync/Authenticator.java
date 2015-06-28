@@ -1,4 +1,4 @@
-package com.insa.burnd.syncAdapter;
+package com.insa.burnd.sync;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;

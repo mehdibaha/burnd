@@ -16,7 +16,7 @@ import android.widget.ListView;
 import com.insa.burnd.R;
 import com.insa.burnd.network.Connexion;
 import com.insa.burnd.network.SessionController;
-import com.insa.burnd.syncAdapter.SyncAdapter;
+import com.insa.burnd.sync.SyncAdapter;
 import com.insa.burnd.utils.SPManager;
 import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.JoinActivity;
@@ -100,7 +100,7 @@ public class SettingsFragment extends PreferenceFragment implements Connexion.Re
                 }
                 if(!SPManager.loadBoolean(mActivity, "meeting") && SyncAdapter.checkSyncs(MainActivity.getAccount(), MainActivity.AUTHORITY, "matchSync")){
                     ContentResolver.removePeriodicSync(MainActivity.getAccount(), MainActivity.AUTHORITY, SyncAdapter.getBundle(MainActivity.getAccount(), MainActivity.AUTHORITY, "matchSync"));
-                    Log.d("matchSync","Removed");
+                    Log.d(TAG, "matchSync" + "Removed");
                 }
             }
             break;

@@ -5,47 +5,35 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
-import com.insa.burnd.Gps.GPSTracker;
+import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.R;
 import com.insa.burnd.controller.PartyAdapter;
 import com.insa.burnd.models.User;
 import com.insa.burnd.network.Connexion;
 import com.insa.burnd.network.SessionController;
-import com.insa.burnd.network.VolleySingleton;
 import com.insa.burnd.utils.BaseActivity;
-import com.insa.burnd.utils.SPManager;
 import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.MainActivity.MainActivity;
-import com.strohwitwer.awesomevalidation.AwesomeValidation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-
-import static com.strohwitwer.awesomevalidation.ValidationStyle.UNDERLABEL;
 
 public class JoinActivity extends BaseActivity implements Connexion.ResponseListener {
     private EditText etPartyName;
@@ -167,7 +155,7 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
             float accuracy = mGPSService.getAccuracy();
             Log.d(TAG, "Latitude:" + latitude + " | Longitude: " + longitude + " | Accuracy: " + accuracy);
 
-            Utils.showToast(this, mGPSService.getLocationAddress());
+            //Utils.showToast(this, mGPSService.getLocationAddress());
             new Connexion(activity, activity, "searchparty", "Searching...").execute(""+longitude,""+latitude);
         }
 
@@ -234,7 +222,7 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
             }
             else if (message.equals("Search")) {
                 String parties = json.getString("PartiesFound");
-                Log.d("Party Search", parties);
+                Log.d(TAG, "Party Search" + parties);
 
                 ArrayList<String> partylist = new ArrayList<>();
                 ArrayList<String> partylistLocation = new ArrayList<>();

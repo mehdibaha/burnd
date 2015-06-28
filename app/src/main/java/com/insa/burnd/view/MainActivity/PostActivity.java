@@ -130,7 +130,7 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
         byte[] ba = bao.toByteArray();
         String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
 
-        Log.d("base64", "-----" + ba1);
+        Log.d(TAG, "base64" + "-----" + ba1);
 
         new Connexion(this, this, "newpost", "Sending Post...").execute(status, ba1);
     }
@@ -177,8 +177,8 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
         JSONObject json = new JSONObject(response);
         String message = json.getString("message");
         boolean error = json.getBoolean("error");
-        Log.d("response", response);
-        Log.d("message", message);
+        Log.d(TAG, "response" + response);
+        Log.d(TAG, "message" + message);
         if (!error) {
             Utils.showToast(activity, "Post created.");
             startActivity(new Intent(this, MainActivity.class));
@@ -251,7 +251,7 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 100 && resultCode == RESULT_OK) {
-            Log.d("camera result","res");
+            Log.d(TAG, "camera result" + "res");
             picturePath=fileUri.getPath();
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 8;
@@ -259,7 +259,7 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
             imageView2.setImageBitmap(photo);
         }
         else if(requestCode == 200 && resultCode == RESULT_OK) {
-            Log.d("camera video result","video res");
+            Log.d(TAG, "camera video result" + "video res");
             picturePath=fileUri.getPath();
             vidPreview.setVideoPath(picturePath);
             vidPreview.start();
