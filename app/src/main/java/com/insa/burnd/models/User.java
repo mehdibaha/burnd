@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.facebook.model.GraphUser;
 import com.insa.burnd.utils.SPManager;
+import com.insa.burnd.utils.Utils;
 
 /* Class defining a user */
 public class User {
@@ -75,8 +76,8 @@ public class User {
                 ", name='" + name + '\'' +
                 ", profilePic='" + profilePic + '\'' +
                 ", gender='" + gender + '\'' +
-                ", accessToken='" + accessToken + '\'' +
-                '}';
+                ", accessToken='" + Utils.makeReadableString(accessToken, 10) + '\'' +
+                '}'; // Only giving preview of accesstoken
     }
 
     public void saveToMemory(Context ctx) {
