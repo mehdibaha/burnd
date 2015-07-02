@@ -258,7 +258,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         int down=Integer.parseInt(item.getVotesDown());
 
         holder.progressVote.setProgress(statisticVote(up, down));
-        Log.d(TAG, "statistic" + statisticVote(up, down));
+        Log.v(TAG, "statistic" + statisticVote(up, down));
         holder.progressVote.setProgress(50);
         holder.buttonUp.setTag(position);
         holder.buttonUp.setOnClickListener(new View.OnClickListener() {
@@ -319,14 +319,14 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (holder.commentView.getVisibility()==View.GONE) {
             holder.commentView.setVisibility(View.VISIBLE);
-            fragment.hideViews(false);
+            fragment.hideViews();
 
             if (currentapiVersion >= Build.VERSION_CODES.LOLLIPOP)
                 holder.container.setElevation(100);
 
         } else if(holder.commentView.getVisibility()==View.VISIBLE) {
             holder.commentView.setVisibility(View.GONE);
-            fragment.showViews(false);
+            fragment.showViews();
 
             if (currentapiVersion >= Build.VERSION_CODES.LOLLIPOP)
                 holder.container.setElevation(4.0f);
@@ -372,12 +372,12 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
             mCurrentAnimator.cancel();
         }
 
-        activity.getNewsfeedFragment().hideViews(true);
+        fragment.hideViews();
 
         // Load the high-resolution "zoomed-in" image.
         final TouchImageView expandedImageView = (TouchImageView) parentView.findViewById(R.id.expanded_image);
         expandedImageView.setImageUrl(url, imageLoader);
-//        expandedImageView.setImageResource(imageResId);
+        // expandedImageView.setImageResource(imageResId);
 
         // Calculate the starting and ending bounds for the zoomed-in image.
         // This step involves lots of math. Yay, math.
@@ -469,7 +469,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 }
 
                 // Reshowing stuff
-                activity.getNewsfeedFragment().showViews(true);
+                fragment.showViews();
 
                 // Animate the four positioning/sizing properties in parallel,
                 // back to their original values.

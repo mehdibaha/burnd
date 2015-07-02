@@ -8,10 +8,6 @@ import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.support.v4.preference.PreferenceFragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.insa.burnd.R;
 import com.insa.burnd.network.Connexion;
@@ -50,17 +46,6 @@ public class SettingsFragment extends PreferenceFragment implements Connexion.Re
             Preference p = findPreference("date");
             p.setSummary(SPManager.load(mActivity, "date"));
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = super.onCreateView(inflater, container, savedInstanceState);
-
-        ListView listView = (ListView) v.findViewById(android.R.id.list);
-        listView.setPadding(0, Utils.dpToPx(mActivity, 75), 0, 0);
-
-        return v;
     }
 
     @Override

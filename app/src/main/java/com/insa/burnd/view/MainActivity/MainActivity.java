@@ -6,6 +6,8 @@ import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,10 +33,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private static String TAG = "BURND-MainActivity";
-
-    private Adapter adapter;
     private final MainActivity activity = this;
-    private boolean clickedOnSearch;
 
     // Sync Adapter
     public static final String AUTHORITY = "com.insa.burnd.provider"; // Authority of sync adapter's content provider
@@ -42,20 +41,65 @@ public class MainActivity extends BaseActivity {
     public static final String ACCOUNT = "dummyaccount";     // The account name
     private static Account mAccount;
 
+    private Toolbar toolbar;
+    private AppBarLayout appBarLayout;
+    private Adapter adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initToolbar();
 
-        // Setting pager and tabLayout
+        initToolbar();
+        initTabs();
+
+        setupSyncadapter();
+    }
+
+    private void initToolbar(){
+        toolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        setSupportActionBar(toolbar);
+    }
+
+    private void initTabs() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.main_pager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
 
-        setupSyncadapter();
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (position == 0) {
+                    getNewsfeedFragment().showViews();
+                    //turn on scrolling
+                    AppBarLayout.LayoutParams toolbarLayoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+                    toolbarLayoutParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                    toolbar.setLayoutParams(toolbarLayoutParams);
+
+                    CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+                    appBarLayoutParams.setBehavior(new AppBarLayout.Behavior());
+                    appBarLayout.setLayoutParams(appBarLayoutParams);
+                } else {
+                    getNewsfeedFragment().hideViews();
+                    //turn off scrolling
+                    AppBarLayout.LayoutParams toolbarLayoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+                    toolbarLayoutParams.setScrollFlags(0);
+                    toolbar.setLayoutParams(toolbarLayoutParams);
+
+                    CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+                    appBarLayoutParams.setBehavior(null);
+                    appBarLayout.setLayoutParams(appBarLayoutParams);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {}
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -64,11 +108,6 @@ public class MainActivity extends BaseActivity {
         adapter.addFragment(new MeetingFragment(), "Meeting");
         adapter.addFragment(new SettingsFragment(), "Settings");
         viewPager.setAdapter(adapter);
-    }
-
-    private void initToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
-        setSupportActionBar(toolbar);
     }
 
     public NewsfeedFragment getNewsfeedFragment() {
@@ -125,8 +164,7 @@ public class MainActivity extends BaseActivity {
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickedOnSearch = !clickedOnSearch;
-                getNewsfeedFragment().hideViews(clickedOnSearch);
+                getNewsfeedFragment().hideViews();
             }
         });
 
@@ -192,5 +230,4 @@ public class MainActivity extends BaseActivity {
     public static Account getAccount(){
         return mAccount;
     }
-
 }

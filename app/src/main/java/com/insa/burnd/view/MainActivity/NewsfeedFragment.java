@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,7 +20,6 @@ import android.view.animation.DecelerateInterpolator;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.insa.burnd.R;
-import com.insa.burnd.controller.HidingScrollListener;
 import com.insa.burnd.controller.NewsfeedAdapter;
 import com.insa.burnd.models.Newsfeed;
 import com.insa.burnd.network.Connexion;
@@ -37,41 +35,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class NewsfeedFragment extends BaseFragment implements Connexion.ResponseListener {
+    private static String TAG = "BURND-NewsfeedFragment";
+    private final NewsfeedFragment fragment = this;
+    public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
+
     private Newsfeed newsfeed;
-    private NewsfeedAdapter newsfeedAdapter;
-
-    private Toolbar toolbar;
-    private FloatingActionsMenu fam;
-    private SwipeRefreshLayout swipeRefreshLayout;
-
     private boolean askedConnection;
 
-    private final NewsfeedFragment fragment = this;
-    private static String TAG = "BURND-NewsfeedFragment";
-    public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
+    private NewsfeedAdapter newsfeedAdapter;
+    private FloatingActionsMenu  fam;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        toolbar = (Toolbar) mActivity.findViewById(R.id.toolbar_main);
-
-        try {
-            updateNewsfeed();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.d(TAG, "updating Newsfeed");
-
+        updateNewsfeed();
         newsfeedAdapter = new NewsfeedAdapter((MainActivity) mActivity, fragment, newsfeed);
-    }
-
-    /* Requets new newsfeed from a new connexion */
-    public void updateNewsfeed() throws JSONException {
-        Log.d(TAG, "new connexion to get newsfeed");
-        newsfeed = new Newsfeed();
-        askedConnection = true;
-        new Connexion(mActivity, fragment, "checkparty").execute();
     }
 
     @Override
@@ -80,21 +59,17 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
         // Inflate the layout for this fragment
         final View V = inflater.inflate(R.layout.fragment_newsfeed, container, false);
 
-        // The FABS
-        fam = (FloatingActionsMenu) V.findViewById(R.id.multiple_actions);
-        final FloatingActionButton fabPost = (FloatingActionButton) V.findViewById(R.id.fab_post);
-        final FloatingActionButton fabPhoto = (FloatingActionButton) V.findViewById(R.id.fab_photo);
+        initRefresh(V);
+        initFABS(V);
+        initRecyclerView(V);
+        initDimmedBackgroud(V);
 
-        // The rest
-        swipeRefreshLayout = (SwipeRefreshLayout) V.findViewById(R.id.swipe_layout); // SwipeToRefresh
-        final RecyclerView recyclerView = (RecyclerView) V.findViewById(R.id.recyclerView);
-        final View dimmedBackground  =  V.findViewById(R.id.dimmed_background);
+        return V;
+    }
+
+    private void initDimmedBackgroud(View v) {
+        final View dimmedBackground  =  v.findViewById(R.id.dimmed_background);
         dimmedBackground.setVisibility(View.GONE);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        recyclerView.setAdapter(newsfeedAdapter); // Assigns the recyclerview to its adapter
-
-        initRefresh(swipeRefreshLayout); // Setting up refresh process
 
         // TODO Could be a nice addition
         // on back pressed return to un dimmed state
@@ -105,7 +80,6 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
                     fam.collapse();
                 }
                 dimmedBackground.setVisibility(View.GONE);
-
                 return true;
             }
         });
@@ -122,18 +96,18 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
                 dimmedBackground.setVisibility(View.GONE);
             }
         });
+    }
 
-        recyclerView.setOnScrollListener(new HidingScrollListener() {
-            @Override
-            public void onHide() {
-                hideViews(true);
-            }
+    private void initRecyclerView(View v) {
+        final RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        recyclerView.setAdapter(newsfeedAdapter); // Assigns the recyclerview to its adapter
+    }
 
-            @Override
-            public void onShow() {
-                showViews(true);
-            }
-        });
+    private void initFABS(View v) {
+        FloatingActionButton fabPost  = (FloatingActionButton) mActivity.findViewById(R.id.fab_post);
+        FloatingActionButton fabPhoto = (FloatingActionButton) mActivity.findViewById(R.id.fab_photo);
+        fam      = (FloatingActionsMenu) mActivity.findViewById(R.id.multiple_actions);
 
         fabPost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,12 +126,11 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
             }
         });
 
-        return V;
     }
 
-    public void initRefresh(final SwipeRefreshLayout swipeRefreshLayout) {
+    public void initRefresh(View v) {
+        swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_layout);
         swipeRefreshLayout.setProgressViewOffset(false, 0, Utils.dpToPx(mActivity, 100));
-        swipeRefreshLayout.setProgressViewEndTarget(false, Utils.dpToPx(mActivity, 100));
         swipeRefreshLayout.setRefreshing(askedConnection);
         Log.d(TAG, "refresh state : " + String.valueOf(askedConnection));
 
@@ -178,6 +151,20 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
         });
     }
 
+    private void showMediaDialog() {
+        FragmentActivity activity = (FragmentActivity) mActivity;
+        FragmentManager fm = activity.getSupportFragmentManager();
+        MediaDialogFragment mediaDialogFragment = new MediaDialogFragment();
+        mediaDialogFragment.show(fm, "dialog_fragment_media");
+    }
+
+    /* Requets new newsfeed from a new connexion */
+    public void updateNewsfeed() {
+        newsfeed = new Newsfeed();
+        askedConnection = true;
+        new Connexion(mActivity, fragment, "checkparty").execute();
+    }
+
     @Override
     public void requestCompleted(String response) throws JSONException {
         JSONObject json = new JSONObject(response);
@@ -188,7 +175,7 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
         Log.d(TAG, message);
 
         if (!error) {
-            refreshFeedList(response);
+            refreshNewsfeed(response);
         } else if (message.equals("USER_NOT_IN_PARTY")) {
             Utils.showToast(mActivity, "You're not in a party...");
             startActivity(new Intent(mActivity, JoinActivity.class));
@@ -201,31 +188,7 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
         }
     }
 
-    private void showMediaDialog() {
-        FragmentActivity activity = (FragmentActivity) mActivity;
-        FragmentManager fm = activity.getSupportFragmentManager();
-        MediaDialogFragment mediaDialogFragment = new MediaDialogFragment();
-        mediaDialogFragment.show(fm, "dialog_fragment_media");
-    }
-
-    public void hideViews(boolean withToolbar) {
-        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fam.getLayoutParams();
-        int fabBottomMargin = lp.bottomMargin;
-        fam.animate().translationY(fam.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
-
-        if(withToolbar)
-            toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-
-    }
-
-    public void showViews(boolean withToolbar) {
-        fam.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-
-        if(withToolbar)
-            toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-    }
-
-    public void refreshFeedList (String json) throws JSONException {
+    private void refreshNewsfeed (String json) throws JSONException {
         final JSONArray feedArray = Newsfeed.jsonToFeedArray(json);
         if(feedArray.length()!=0) {
             Log.d(TAG, "refresh feed list : " + json);
@@ -243,17 +206,23 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
         });
     }
 
-    public void saveLastPostId(Newsfeed newsfeed) {
+    private void saveLastPostId(Newsfeed newsfeed) {
         String lastPostId = String.valueOf(newsfeed.get(0).getId());
         SPManager.save(mActivity, lastPostId, "LAST_POST_ID"); // Saves last post id
         Log.d(TAG, "saving last post id : " + lastPostId);
     }
 
-    public NewsfeedAdapter getNewsfeedAdapter() {
-        return newsfeedAdapter;
+    public void hideViews() {
+        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fam.getLayoutParams();
+        int fabBottomMargin = lp.bottomMargin;
+        fam.animate().translationY(fam.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
     }
 
-    public Newsfeed getNewsfeed() {
-        return newsfeed;
+    public void showViews() {
+        fam.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+    }
+
+    public NewsfeedAdapter getNewsfeedAdapter() {
+        return newsfeedAdapter;
     }
 }

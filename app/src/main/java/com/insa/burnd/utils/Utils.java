@@ -1,10 +1,13 @@
 package com.insa.burnd.utils;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.insa.burnd.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,4 +64,12 @@ public class Utils {
         return s.substring(0,maxChars) + "..." +s.substring(s.length()-maxChars,s.length());
     }
 
+    public static int getToolbarHeight(Context context) {
+        final TypedArray styledAttributes = context.getTheme().obtainStyledAttributes(
+                new int[]{R.attr.actionBarSize});
+        int toolbarHeight = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+
+        return toolbarHeight;
+    }
 }

@@ -87,12 +87,13 @@ public class MeetingFragment extends BaseFragment implements Connexion.ResponseL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_meeting, container, false);
+
         tView = (TextView) view.findViewById(R.id.textView);
         tView.setText("Loading...");
         tView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(fragment.getActivity(), CompassActivity.class));
+                startActivity(new Intent(mActivity, CompassActivity.class));
             }
         });
         photo = (NetworkImageView) view.findViewById(R.id.profilePic);

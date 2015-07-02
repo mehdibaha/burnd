@@ -92,7 +92,7 @@ public class Connexion {
                     String accessToken = SPManager.load(ctx, "ACCESS_TOKEN");
 
                     if(!TextUtils.isEmpty(userId) && !TextUtils.isEmpty(accessToken)) {
-                        Log.d(TAG, userId + "|" + accessToken.substring(1,10) + "...");
+                        Log.d(TAG, userId + "|" + Utils.makeReadable(accessToken, 5));
                         params.put("user_id", userId);
                         params.put("access_token", accessToken);
                     }
