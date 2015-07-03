@@ -26,7 +26,7 @@ public class Burnd extends Application {
         return appContext;
     }
 
-    public void setAppContext(Context ctx) {
+    private void setAppContext(Context ctx) {
         appContext = ctx;
     }
 }

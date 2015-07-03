@@ -50,5 +50,6 @@ dependencies {
     compile 'com.getbase:floatingactionbutton:1.8.0'  // Floating action button w/ menus
     compile 'com.facebook.android:facebook-android-sdk:3.23.0' // Facebook sdk
     compile 'com.mcxiaoke.volley:library:1.0.1' // Volley Library (handles all network request)
-    compile 'com.mcxiaoke.viewpagerindicator:library:2.4.1' // View pager indicator for tabs (tutorial activity)
+    compile 'com.github.paolorotolo:appintro:2.0.0'
+    compile 'co.trikita:log:1.1.1'
 }

@@ -8,7 +8,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.insa.burnd.R;
 import com.insa.burnd.network.Connexion;
@@ -18,12 +17,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import trikita.log.Log;
+
 /**
  * Handle the transfer of data between a server and an
  * app, using the Android sync adapter framework.
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connexion.ResponseListener{
-    private static final String TAG = "SyncAdapter";
     // Global variables
     // Define a variable to contain a content resolver instance
     ContentResolver mContentResolver;
@@ -67,8 +67,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connexio
             ContentProviderClient provider,
             SyncResult syncResult) {
 
-        if(extras.getString("reqID") != null) {
-            switch(extras.getString("reqID")){
+        String reqID = extras.getString("reqID");
+        if(reqID != null) {
+            switch(reqID) {
                 case "matchSync" :{
                     matchSync();
                 }
@@ -81,7 +82,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connexio
 
     private void matchSync(){
         new Connexion(getContext(), this, "checkmatch").execute();
-        Log.d(TAG,"sync");
+        Log.d("sync");
     }
 
     private void gpsSync(){
@@ -90,7 +91,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connexio
         if(ca != null){
            pos = ca.updateLocation();
         }
-        Log.d(TAG, "sync");
+        Log.d("sync");
     }
 
     public static void killMatch(){
@@ -124,19 +125,19 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connexio
     public void requestCompleted(String response) throws JSONException {
         JSONObject json = new JSONObject(response);
         String id = json.optString("id");
-        Log.d(TAG, "checkID" + id);
+        Log.d("checkID" + id);
         switch(id){
             //We discriminate against the reponse id (sync type) to get the appropriate info (gps, match, etc...)
             case "updatelocation":{
-                Log.d(TAG, "inUpdateLocation");
+                Log.d("inUpdateLocation");
                 JSONArray jArray = json.optJSONArray("location");
                 CompassActivity ca = CompassActivity.getInstance();
-                if(ca != null){
-                    //ca.updateYou(Double.parseDouble(jArray.getString(0)), Double.parseDouble(jArray.getString(1)));
-                }
+                /*if(ca != null){
+                    ca.updateYou(Double.parseDouble(jArray.getString(0)), Double.parseDouble(jArray.getString(1)));
+                }*/
             }
             case "checkmatch":{
-                Log.d(TAG, "in");
+                Log.d("in");
                 String message = json.optString("match");
                 if(!checkedMatch && message.equals("Match!")){
                     Notifier.launch(getContext(), "Explicit: Match!", "You have a match!" , "If you want to meet your match, click here." , R.mipmap.ic_launcher);

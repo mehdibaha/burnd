@@ -3,22 +3,22 @@ package com.insa.burnd.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.animation.AlphaAnimation;
 
 import com.insa.burnd.R;
 import com.insa.burnd.network.Connexion;
 import com.insa.burnd.utils.SPManager;
 import com.insa.burnd.utils.Utils;
+import com.insa.burnd.view.IntroActivity.IntroActivity;
 import com.insa.burnd.view.MainActivity.MainActivity;
-import com.insa.burnd.view.TutorialActivity.TutorialActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import trikita.log.Log;
+
 public class SplashActivity extends FragmentActivity implements Connexion.ResponseListener {
     private final SplashActivity activity = this;
-    private static String TAG = "BURND-SplashActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +26,11 @@ public class SplashActivity extends FragmentActivity implements Connexion.Respon
         setContentView(R.layout.activity_splash);
 
         boolean firstUser = SPManager.load(activity, "FIRST_USER").equals("");
-        Log.d(TAG, String.valueOf(firstUser));
+        Log.d(String.valueOf(firstUser));
 
         this.fadeInViews(firstUser);
         if (firstUser) { // Boolean can be tricky so we use strings.
-            startActivity(new Intent(activity, TutorialActivity.class));
+            startActivity(new Intent(activity, IntroActivity.class));
             activity.finish();
         }
         else
@@ -56,7 +56,7 @@ public class SplashActivity extends FragmentActivity implements Connexion.Respon
         boolean error = json.getBoolean("error");
 
         //Logger.json(response);
-         Log.d(TAG, message);
+         Log.d(message);
 
         if (!error) {
             Utils.showToast(this, "Sending you to party.");
@@ -67,7 +67,7 @@ public class SplashActivity extends FragmentActivity implements Connexion.Respon
             startActivity(new Intent(this, JoinActivity.class));
             activity.finish();
         } else {
-            Log.d(TAG, "Splash" + "Sending user to LoginActivity");
+            Log.d("Sending user to LoginActivity");
             startActivity(new Intent(this, LoginActivity.class));
             activity.finish();
         }

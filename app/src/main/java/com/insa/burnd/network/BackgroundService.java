@@ -4,13 +4,11 @@ package com.insa.burnd.network;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Intent;
-import android.util.Log;
 
 import com.insa.burnd.utils.SPManager;
 import com.insa.burnd.utils.Utils;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +19,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
+
+import trikita.log.Log;
 
 /**
  * @author Maurya Talisetti
@@ -82,18 +82,14 @@ public class BackgroundService extends IntentService  {
         Log.i("FileUpload", "FileUpload: Time : " + d.getTime());
        // upLoadServerUri = upLoadServerUri + "?status=" + status.toString();
 
-        String fileName = selectedImagePath;
-
         HttpURLConnection conn = null;
-        DataOutputStream dos = null;
-        DataInputStream inStream = null;
+        String fileName = selectedImagePath;
         String lineEnd = "\r\n";
         String twoHyphens = "--";
         String boundary = "*****";
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
-        String responseFromServer = "";
 
         File sourceFile = new File(fileName);
 
@@ -103,23 +99,20 @@ public class BackgroundService extends IntentService  {
         }
 
         try { // open a URL connection to the Servlet
-
             FileInputStream fileInputStream = new FileInputStream(sourceFile);
             URL url = new URL(upLoadServerUri);
-            conn = (HttpURLConnection) url.openConnection(); // Open a HTTP
-            // connection to
-            // the URL
+            conn = (HttpURLConnection) url.openConnection();
+            // Open a HTTP connection to the URL
             conn.setDoInput(true); // Allow Inputs
             conn.setDoOutput(true); // Allow Outputs
             conn.setUseCaches(false); // Don't use a Cached Copy
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-            conn.setRequestProperty("Content-Type",
-                    "multipart/form-data;boundary=" + boundary);
+            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
             conn.setRequestProperty("uploaded_file", fileName);
 
-            dos = new DataOutputStream(conn.getOutputStream());
+            DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
             dos.writeBytes(twoHyphens + boundary + lineEnd);
 
             //Adding Parameter name
@@ -135,17 +128,13 @@ public class BackgroundService extends IntentService  {
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
 
-//Adding Parameter
-
+            //Adding Parameter
             dos.writeBytes("Content-Disposition: form-data; name=\"at\"" + lineEnd);
             //dos.writeBytes("Content-Type: text/plain; charset=UTF-8" + lineEnd);
             //dos.writeBytes("Content-Length: " + name.length() + lineEnd);
             dos.writeBytes(lineEnd);
             dos.writeBytes(accessToken); // mobile_no is String variable
             dos.writeBytes(lineEnd);
-
-
-
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
             dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
@@ -195,15 +184,14 @@ public class BackgroundService extends IntentService  {
         }
         // this block will give the response of upload link
         try {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(
-                    conn.getInputStream()));
-
-            String line;
-            while ((line = rd.readLine()) != null) {
-                Log.i("FileUpload", upLoadServerUri+ " FileUpload:RES Message: " + line);
-
+            if(conn != null) {
+                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line;
+                while ((line = rd.readLine()) != null) {
+                    Log.i("FileUpload", upLoadServerUri+ " FileUpload:RES Message: " + line);
+                }
+                rd.close();
             }
-            rd.close();
         } catch (IOException ioex) {
             Log.e("FileUpload", "error: " + ioex.getMessage(), ioex);
         }
@@ -214,8 +202,6 @@ public class BackgroundService extends IntentService  {
         // Function call for notification message..
 
         return serverResponseCode; // like 200 (Ok)
-
-
     } // end upLoad2Server
 
 }

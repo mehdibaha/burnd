@@ -1,15 +1,15 @@
 package com.insa.burnd.network;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.facebook.Session;
 import com.insa.burnd.utils.SPManager;
 
+import trikita.log.Log;
+
 /* Handles Facebook Sessions in general */
 public class SessionController {
     private Context ctx;
-    private static String TAG = "BURND-SessionController";
 
     public SessionController(Context ctx) {
         this.ctx = ctx;
@@ -32,7 +32,7 @@ public class SessionController {
             session.closeAndClearTokenInformation();
             SPManager.clear(ctx);
             SPManager.save(ctx, "false", "FIRST_USER");
-            Log.d(TAG, "Disconnected.");
+            Log.d("Disconnected.");
         }
     }
 

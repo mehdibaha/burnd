@@ -7,7 +7,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +34,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import trikita.log.Log;
+
 public class JoinActivity extends BaseActivity implements Connexion.ResponseListener {
     private EditText etPartyName;
     private EditText etPartyPass;
@@ -43,9 +44,7 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
     private ListView partiesListView;
 
     private PartyAdapter adapter;
-
     private final JoinActivity activity = this;
-    private static String TAG = "BURND-JoinActivity";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -153,7 +152,7 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
             double latitude = mGPSService.getLatitude();
             double longitude = mGPSService.getLongitude();
             float accuracy = mGPSService.getAccuracy();
-            Log.d(TAG, "Latitude:" + latitude + " | Longitude: " + longitude + " | Accuracy: " + accuracy);
+            Log.d("Latitude:" + latitude + " | Longitude: " + longitude + " | Accuracy: " + accuracy);
 
             //Utils.showToast(this, mGPSService.getLocationAddress());
             new Connexion(activity, activity, "searchparty", "Searching...").execute(""+longitude,""+latitude);
@@ -175,7 +174,7 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
                     public void onCompleted(GraphUser user, Response response) {
                         if (user != null) {
                             User myUser = new User(user, accessToken);
-                            Log.d(TAG, myUser.toString());
+                            Log.d(myUser.toString());
                             if(!TextUtils.isEmpty(user.getName())) {
                                 Utils.showToast(activity, "Welcome " + user.getName());
                             }
@@ -185,10 +184,10 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
                     }
                 }).executeAsync();
             } else {
-                Log.e(TAG, "CLOSED_SESSION");
+                Log.e("CLOSED_SESSION");
             }
         } else {
-            Log.e(TAG, "NULL_SESSION");
+            Log.e("NULL_SESSION");
         }
     }
 
@@ -198,8 +197,8 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
         String message = json.getString("message");
         boolean error = json.getBoolean("error");
 
-        Log.d(TAG, response);
-        Log.d(TAG, message);
+        Log.d(response);
+        Log.d(message);
         if (error) {
             if (message.equals("PARTY_NOT_FOUND")) {
                 Utils.showToast(this, "Party not found.");
@@ -213,7 +212,7 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
 
         } else {
             if (message.equals("USER_ALREADY_EXISTS")) {
-                Log.d(TAG, "User already exists.");
+                Log.d("User already exists.");
             }
             else if (message.equals("PARTY_FOUND")) {
                 Utils.showToast(this, "Sending you to party.");
@@ -222,7 +221,7 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
             }
             else if (message.equals("Search")) {
                 String parties = json.getString("PartiesFound");
-                Log.d(TAG, "Party Search" + parties);
+                Log.d("Party Search" + parties);
 
                 ArrayList<String> partylist = new ArrayList<>();
                 ArrayList<String> partylistLocation = new ArrayList<>();

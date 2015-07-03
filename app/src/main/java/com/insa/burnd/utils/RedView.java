@@ -8,19 +8,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.insa.burnd.R;
+
+import trikita.log.Log;
 
 // ImageView used to draw the compass
 //C'est ici qu'on gère toute la dynamique de la boussole(forces de frottement et de rappel, Acc, Vitesse, angle, etc...)
 //dont le but est de la bouger de manière "naturelle" vers la direction désirée.
 //Ainsi, il suffit de modifier l'input (Voir méthode update) et le view amènera naturellement la boussole vers l'angle désiré.
 public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateListener{
-    private static final String TAG = "BURND-RedView";
-
     private final ImageView red = this;
     private Bitmap b;
     private float degrees;
@@ -98,7 +98,7 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
     }
 
     @Override
-    protected void onDraw(Canvas c){
+    protected void onDraw(@NonNull Canvas c){
         c.drawColor(color);
         c.drawCircle(cPosW, cPosH, cR, p);
         c.drawBitmap(b,bPosW,bPosH,null);
@@ -125,11 +125,11 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
             counter = (int) (TOTAL_DISTANCE/INTERVAL_DISTANCE);
         }
         while(counter<TOTAL_DISTANCE/INTERVAL_DISTANCE){
-            Log.d(TAG, "gonna");
+            Log.d("gonna");
             if(counter*INTERVAL_DISTANCE <=distance && distance <= (counter+1)*INTERVAL_DISTANCE){
-                Log.d(TAG,"gonna2");
+                Log.d("gonna2");
                 if(!valueAn.isRunning()){
-                    Log.d(TAG, "Compass" + "animating");
+                    Log.d("Compass" + "animating");
                     valueAn = new ValueAnimator();
                     valueAn.setStartDelay(0);
                     valueAn.setIntValues(color
@@ -197,7 +197,7 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
     public void onAnimationUpdate(ValueAnimator va){
         color = (int) va.getAnimatedValue();
         postInvalidate();
-        Log.d(TAG, Integer.toString(Color.red(color)) + " , " + Integer.toString(Color.green(color)) + " , " + Integer.toString(Color.blue(color)));
+        Log.d(Integer.toString(Color.red(color)) + " , " + Integer.toString(Color.green(color)) + " , " + Integer.toString(Color.blue(color)));
     }
 
 }

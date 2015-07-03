@@ -17,7 +17,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,8 +30,9 @@ import com.insa.burnd.utils.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import trikita.log.Log;
+
 public class MainActivity extends BaseActivity {
-    private static String TAG = "BURND-MainActivity";
     private final MainActivity activity = this;
 
     // Sync Adapter
@@ -120,7 +120,7 @@ public class MainActivity extends BaseActivity {
         ContentResolver.setSyncAutomatically(mAccount, AUTHORITY, true);
         //Si le matchSync est inactif, on l'active.
         if(!SyncAdapter.checkSyncs(mAccount, AUTHORITY, "matchSync")){
-            Log.d(TAG, "matchSync" + "Constructing Match Notif");
+            Log.d("matchSync" + "Constructing Match Notif");
             Bundle b = new Bundle();
             b.putString("reqID","matchSync");
             ContentResolver.addPeriodicSync(
@@ -129,7 +129,7 @@ public class MainActivity extends BaseActivity {
                     b,
                     60*10); // every 10 minutes, cause : battery leaks
         }
-        Log.d(TAG, "Sync" + "Complete");
+        Log.d("Sync Complete");
     }
 
     //méthode récupérée sur les tutos android pour le syncAdapter
@@ -145,7 +145,7 @@ public class MainActivity extends BaseActivity {
         if (accountManager.addAccountExplicitly(newAccount, null, null))
             return newAccount;
         else {
-            Log.d(TAG, "error creating account");
+            Log.d("error creating account");
             return newAccount;
         }
     }

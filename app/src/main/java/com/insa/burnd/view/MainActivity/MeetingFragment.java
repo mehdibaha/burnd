@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +25,10 @@ import com.insa.burnd.view.CompassActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import trikita.log.Log;
+
 
 public class MeetingFragment extends BaseFragment implements Connexion.ResponseListener {
-    private static String TAG = "BURND-MeetingFragment";
-
     private int numMessages = 0;
     private final MeetingFragment fragment = this;
     private NetworkImageView photo;
@@ -54,7 +53,7 @@ public class MeetingFragment extends BaseFragment implements Connexion.ResponseL
         boolean error = json.getBoolean("error");
         boolean stop = json.getBoolean("stop");
 
-        Log.d(TAG, response);
+        Log.d(response);
 
         if (!error) {
             photo.setEnabled(true);

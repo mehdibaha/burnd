@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/tutorial_4"
     android:orientation="vertical"
-    tools:context="com.insa.burnd.view.TutorialActivity.TutorialFragment4">
+    tools:context="com.insa.burnd.view.IntroActivity.SlideFragment4">
 
     <LinearLayout
         android:layout_width="275dp"

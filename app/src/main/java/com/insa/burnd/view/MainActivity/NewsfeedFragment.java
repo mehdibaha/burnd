@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,8 +33,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import trikita.log.Log;
+
 public class NewsfeedFragment extends BaseFragment implements Connexion.ResponseListener {
-    private static String TAG = "BURND-NewsfeedFragment";
     private final NewsfeedFragment fragment = this;
     public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
 
@@ -54,17 +54,84 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+        if (swipeRefreshLayout!=null) {
+            swipeRefreshLayout.setRefreshing(false);
+            swipeRefreshLayout.destroyDrawingCache();
+            swipeRefreshLayout.clearAnimation();
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View V = inflater.inflate(R.layout.fragment_newsfeed, container, false);
 
+        // Passing View object to methods who need it
         initRefresh(V);
-        initFABS(V);
+        initFABS();
         initRecyclerView(V);
         initDimmedBackgroud(V);
 
         return V;
+    }
+
+    private void initRefresh(View v) {
+        swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_layout);
+        if(askedConnection) {
+            swipeRefreshLayout.setProgressViewOffset(false, 0, Utils.dpToPx(mActivity, 50));
+            swipeRefreshLayout.setRefreshing(true);
+        }
+        Log.d("refresh state : " + String.valueOf(askedConnection));
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setProgressViewOffset(false, 0, 0);
+                swipeRefreshLayout.setRefreshing(true);
+                Log.d("user asked for refresh");
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String lastPostId = SPManager.load(mActivity, "LAST_POST_ID");
+                        Log.d(lastPostId);
+                        new Connexion(mActivity, fragment, "checkparty").execute(lastPostId);
+                    }
+                });
+            }
+        });
+    }
+
+    private void initFABS() {
+        FloatingActionButton fabPost  = (FloatingActionButton) mActivity.findViewById(R.id.fab_post);
+        FloatingActionButton fabPhoto = (FloatingActionButton) mActivity.findViewById(R.id.fab_photo);
+        fam      = (FloatingActionsMenu) mActivity.findViewById(R.id.multiple_actions);
+
+        fabPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("POST");
+                Intent intent = new Intent(mActivity, PostActivity.class);
+                intent.putExtra(EXTRA_MESSAGE, "post");
+                startActivity(intent);
+            }
+        });
+
+        fabPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMediaDialog();
+            }
+        });
+    }
+
+    private void initRecyclerView(View v) {
+        final RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        recyclerView.setAdapter(newsfeedAdapter); // Assigns the recyclerview to its adapter
     }
 
     private void initDimmedBackgroud(View v) {
@@ -98,59 +165,6 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
         });
     }
 
-    private void initRecyclerView(View v) {
-        final RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        recyclerView.setAdapter(newsfeedAdapter); // Assigns the recyclerview to its adapter
-    }
-
-    private void initFABS(View v) {
-        FloatingActionButton fabPost  = (FloatingActionButton) mActivity.findViewById(R.id.fab_post);
-        FloatingActionButton fabPhoto = (FloatingActionButton) mActivity.findViewById(R.id.fab_photo);
-        fam      = (FloatingActionsMenu) mActivity.findViewById(R.id.multiple_actions);
-
-        fabPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "POST");
-                Intent intent = new Intent(mActivity, PostActivity.class);
-                intent.putExtra(EXTRA_MESSAGE, "post");
-                startActivity(intent);
-            }
-        });
-
-        fabPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showMediaDialog();
-            }
-        });
-
-    }
-
-    public void initRefresh(View v) {
-        swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_layout);
-        swipeRefreshLayout.setProgressViewOffset(false, 0, Utils.dpToPx(mActivity, 100));
-        swipeRefreshLayout.setRefreshing(askedConnection);
-        Log.d(TAG, "refresh state : " + String.valueOf(askedConnection));
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                Log.d(TAG, "user asked for refresh");
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String lastPostId = SPManager.load(mActivity, "LAST_POST_ID");
-                        Log.d(TAG, lastPostId);
-                        new Connexion(mActivity, fragment, "checkparty").execute(lastPostId);
-                    }
-                });
-            }
-        });
-    }
-
     private void showMediaDialog() {
         FragmentActivity activity = (FragmentActivity) mActivity;
         FragmentManager fm = activity.getSupportFragmentManager();
@@ -171,8 +185,8 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
         String message = json.getString("message");
         boolean error = json.getBoolean("error");
 
-        Log.d(TAG, response);
-        Log.d(TAG, message);
+        Log.v(response);
+        Log.d(message);
 
         if (!error) {
             refreshNewsfeed(response);
@@ -191,7 +205,7 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
     private void refreshNewsfeed (String json) throws JSONException {
         final JSONArray feedArray = Newsfeed.jsonToFeedArray(json);
         if(feedArray.length()!=0) {
-            Log.d(TAG, "refresh feed list : " + json);
+            Log.v("refresh feed list : " + json);
             newsfeed.update(feedArray); // Update newsfeed
             saveLastPostId(newsfeed);
         }
@@ -209,7 +223,7 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
     private void saveLastPostId(Newsfeed newsfeed) {
         String lastPostId = String.valueOf(newsfeed.get(0).getId());
         SPManager.save(mActivity, lastPostId, "LAST_POST_ID"); // Saves last post id
-        Log.d(TAG, "saving last post id : " + lastPostId);
+        Log.d("saving last post id : " + lastPostId);
     }
 
     public void hideViews() {

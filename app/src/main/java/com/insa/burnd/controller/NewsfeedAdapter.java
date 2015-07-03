@@ -17,7 +17,6 @@ import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,12 +42,12 @@ import com.insa.burnd.network.VolleySingleton;
 import com.insa.burnd.view.MainActivity.MainActivity;
 import com.insa.burnd.view.MainActivity.NewsfeedFragment;
 
+import trikita.log.Log;
+
 // Sous-classe d'un adapter classique, qui remplit un layout de feeditems,
 // à partir d'une liste de FeedItem (classe FeedItem => utile)
 
 public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHolder> {
-
-    private static String TAG = "BURND-NewsfeedAdapter";
     private MainActivity activity;
     private NewsfeedFragment fragment;
     private Newsfeed newsfeed;
@@ -78,7 +77,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
     public void flushFilter() {
         visibleNewsfeed.clear();
         visibleNewsfeed.addAll(newsfeed);
-        Log.d(TAG, newsfeed.toString());
+        Log.d(newsfeed.toString());
         notifyDataSetChanged();
     }
 
@@ -167,14 +166,14 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    Log.d(TAG, "hashtag");
+                    Log.d("hashtag");
                     setFilter("#music");
                 }
             };
             ss.setSpan(clickableSpan, status.indexOf(35), status.indexOf(35)+6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }else{
-            //holder.container.setCardBackgroundColor(Color.WHITE);
-        }
+        } /* else{
+            holder.container.setCardBackgroundColor(Color.WHITE);
+        } */
 
         // Converting timestamp into x ago format
         long timeStampLong;
@@ -202,7 +201,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         holder.profilePic.setImageUrl(item.getUser().getProfilePic(), imageLoader);
 
         // Feed image
-        if (!item.getImge().equals("")) {
+        if (!TextUtils.isEmpty(item.getImge())) {
             holder.feedImageView.setImageUrl(item.getImge(), imageLoader);
             holder.feedImageView.setVisibility(View.VISIBLE);
             holder.feedImageView
@@ -220,17 +219,16 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 @Override
                 public void onClick(View view) {
                     zoomImageFromThumb(holder.feedImageView, item.getId());
-                    Log.d(TAG, "" + item.getId());
+                    Log.d(String.valueOf(item.getId()));
                 }
             });
         } else {
             holder.feedImageView.setVisibility(View.GONE);
         }
 
-        if (!item.getVideo().equals("")) {
+        if (!TextUtils.isEmpty(item.getVideo())) {
             String url="http://burnd.cles-facil.fr/video/";
             Uri video= Uri.parse(item.getVideo());
-            // Uri video=Uri.parse("http://www.androidbegin.com/tutorial/AndroidCommercial.3gp");
             Log.i("video",url+item.getVideo());
             holder.feedVideoView.setVisibility(View.VISIBLE);
             holder.feedVideoView.setVideoURI(video);
@@ -258,7 +256,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         int down=Integer.parseInt(item.getVotesDown());
 
         holder.progressVote.setProgress(statisticVote(up, down));
-        Log.v(TAG, "statistic" + statisticVote(up, down));
+        // Log.d("statistic" + statisticVote(up, down));
         holder.progressVote.setProgress(50);
         holder.buttonUp.setTag(position);
         holder.buttonUp.setOnClickListener(new View.OnClickListener() {

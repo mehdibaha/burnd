@@ -48,22 +48,22 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
-        <!-- Tutorial -->
+        <!-- Intro -->
         <activity
-            android:name=".view.TutorialActivity.TutorialActivity"
-            android:label="Tutorial"
-            android:noHistory="true"
-            android:theme="@style/TutorialTheme" />
+            android:name=".view.IntroActivity.IntroActivity"
+            android:noHistory="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <!-- Splash -->
         <activity
             android:name=".view.SplashActivity"
             android:noHistory="true" >
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
 

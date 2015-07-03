@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.insa.burnd.R;
@@ -12,14 +11,12 @@ import com.insa.burnd.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import trikita.log.Log;
+
 /* Common practice class to handle various methods (conversions, string operations...) */
 public class Utils {
 
-    private static final String TAG = "BURND-Utils" ;
-
-    public Utils() {
-
-    }
+    private Utils() {}
 
     public static float pxToDp(final Context context, final float px) {
         return px / context.getResources().getDisplayMetrics().density;
@@ -41,9 +38,9 @@ public class Utils {
 
         // if network is NOT available networkInfo will be null, or check if we are connected
         if(networkInfo != null)
-            Log.d(TAG, "User connection state : " + String.valueOf(networkInfo.isConnected()));
+            Log.d("User connection state : " + String.valueOf(networkInfo.isConnected()));
         else
-            Log.d(TAG, "Null network");
+            Log.d("Null network");
         return networkInfo != null && networkInfo.isConnected();
     }
 

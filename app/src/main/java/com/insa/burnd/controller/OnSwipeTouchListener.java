@@ -6,9 +6,7 @@ import android.view.View;
 
 /* Class to listen on swipe gestures on views */
 public class OnSwipeTouchListener implements View.OnTouchListener {
-
     private final GestureDetector gestureDetector = new GestureDetector(new GestureListener());
-    private static String TAG = "BURND-OnSwipeTouchListener";
 
     public boolean onTouch(final View view, final MotionEvent motionEvent) {
         return gestureDetector.onTouchEvent(motionEvent);
@@ -26,7 +24,6 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            boolean result = false;
             try {
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
@@ -50,7 +47,7 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
-            return result;
+            return false;
         }
     }
 

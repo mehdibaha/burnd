@@ -10,10 +10,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,9 +40,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import trikita.log.Log;
+
 public class PostActivity extends BaseActivity implements Connexion.ResponseListener {
     public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
-    private static String TAG = "BURND-POSTACTIVITY";
     private EditText etStatus;
 
     private Uri fileUri;
@@ -129,7 +130,7 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
         byte[] ba = bao.toByteArray();
         String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
 
-        Log.d(TAG, "base64" + "-----" + ba1);
+        Log.v("base64" + "-----" + ba1);
 
         new Connexion(this, this, "newpost", "Sending Post...").execute(status, ba1);
     }
@@ -176,8 +177,8 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
         JSONObject json = new JSONObject(response);
         String message = json.getString("message");
         boolean error = json.getBoolean("error");
-        Log.d(TAG, "response" + response);
-        Log.d(TAG, "message" + message);
+        Log.v("response" + response);
+        Log.d("message" + message);
         if (!error) {
             Utils.showToast(activity, "Post created.");
             startActivity(new Intent(this, MainActivity.class));
@@ -241,7 +242,7 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
         // get the file url
@@ -250,7 +251,7 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 100 && resultCode == RESULT_OK) {
-            Log.d(TAG, "camera result" + "res");
+            Log.d("camera result" + "res");
             picturePath=fileUri.getPath();
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 8;
@@ -258,7 +259,7 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
             imageView2.setImageBitmap(photo);
         }
         else if(requestCode == 200 && resultCode == RESULT_OK) {
-            Log.d(TAG, "camera video result" + "video res");
+            Log.d("camera video result" + "video res");
             picturePath=fileUri.getPath();
             vidPreview.setVideoPath(picturePath);
             vidPreview.start();

@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.preference.DialogPreference;
 import android.preference.Preference;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 
@@ -19,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+
+import trikita.log.Log;
 
 /* Class to handle Dates settings */
 public class DatePreference extends DialogPreference implements Connexion.ResponseListener {
@@ -40,7 +42,8 @@ public class DatePreference extends DialogPreference implements Connexion.Respon
     }
 
     @Override
-    protected void onBindDialogView(View v) {
+    protected void onBindDialogView(@NonNull View v) {
+        super.onBindDialogView(v);
         dp = (DatePicker) v.findViewById(R.id.dp);
         if (Build.VERSION.SDK_INT >= 11) {
             dp.setCalendarViewShown(false);
@@ -91,8 +94,8 @@ public class DatePreference extends DialogPreference implements Connexion.Respon
         String message = json.getString("message");
         boolean error = json.getBoolean("error");
 
-        Log.d(TAG, response);
-        Log.d(TAG, message);
+        Log.d(response);
+        Log.d(message);
 
         if (!error)
                 Utils.showToast(ctx, "Age updated.");

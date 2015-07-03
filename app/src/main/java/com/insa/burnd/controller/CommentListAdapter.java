@@ -17,8 +17,6 @@ import com.insa.burnd.network.VolleySingleton;
 
 /* Class to bind the commentList to its listView */
 public class CommentListAdapter extends ArrayAdapter<Comment> {
-
-    private static String TAG = "BURND-CommentListAdapter";
     private ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
 
     private static class ViewHolder {

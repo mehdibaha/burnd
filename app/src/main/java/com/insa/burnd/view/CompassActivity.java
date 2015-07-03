@@ -12,13 +12,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.R;
 import com.insa.burnd.network.Connexion;
+import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.sync.SyncAdapter;
 import com.insa.burnd.utils.RedView;
 import com.insa.burnd.view.MainActivity.MainActivity;
@@ -28,6 +27,8 @@ import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import trikita.log.Log;
 
 
 public class CompassActivity extends Activity implements SensorEventListener, Connexion.ResponseListener{
@@ -54,9 +55,6 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
     private volatile boolean running = true;
     private volatile Thread gpsThread;
     private static volatile CompassActivity instance;
-    private static String TAG = "BURND-CompassActivity";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +66,7 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
         compBundle.putString("reqID", "gpsSync");
         setContentView(R.layout.activity_compass);
         rv = (RedView) findViewById(R.id.redView);
-        Log.d(TAG, "redish" + rv.toString());
+        Log.d("redish" + rv.toString());
         Button startButton = (Button) findViewById(R.id.startButton);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,9 +92,9 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
         gpsThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG, "Thread1");
+                Log.d("Thread1");
                 while(running){
-                    Log.d(TAG, "Thread1");
+                    Log.d("Thread1");
                     ContentResolver.requestSync(MainActivity.getAccount(), MainActivity.AUTHORITY, compBundle);
                     try{
                         Thread.sleep(COMPASS_FREQ);
@@ -153,22 +151,22 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
         SensorManager.getRotationMatrix(rot, null, accState, magState);
         //On calcule la déviation par rapport au nord.
         SensorManager.getOrientation(rot, result);
-        Log.d(TAG, "posState1" + "myLat : " + Double.toString(myLat));
-        Log.d(TAG, "posState2" + "myLon : " + Double.toString(myLon));
-        Log.d(TAG, "posState3" + "yourLat : " + Double.toString(yourLat));
-        Log.d(TAG, "posState4" + "yourLon : " + Double.toString(yourLon));
+        Log.d("posState1" + "myLat : " + Double.toString(myLat));
+        Log.d("posState2" + "myLon : " + Double.toString(myLon));
+        Log.d("posState3" + "yourLat : " + Double.toString(yourLat));
+        Log.d("posState4" + "yourLon : " + Double.toString(yourLon));
         //On calcule la distance entre les deux personnes, ainsi que la direction qui est stockée dans direction[1].
         Location.distanceBetween(myLat, myLon, yourLat, yourLon, distance);
         rv.updateDistance(distance[0]);
         if(result[0]- Math.toRadians(distance[1]) > Math.PI){
             rv.updateBearing(/*declination +*/ result[0]- (float) Math.toRadians(distance[1]) - (float)(2*Math.PI));
-            Log.d(TAG, "Bearing" + Double.toString(/*declination +*/ result[0]- (float) Math.toRadians(distance[1]) - (float)(2*Math.PI)));
+            Log.d("Bearing" + Double.toString(/*declination +*/ result[0]- (float) Math.toRadians(distance[1]) - (float)(2*Math.PI)));
         }else if(result[0]- Math.toRadians(distance[1]) < -Math.PI){
             rv.updateBearing(/*declination +*/ result[0]- (float) Math.toRadians(distance[1]) + (float)(2*Math.PI));
-            Log.d(TAG, "Bearing" + Double.toString(/*declination +*/ result[0]- Math.toRadians(distance[1]) + (float)(2*Math.PI)));
+            Log.d("Bearing" + Double.toString(/*declination +*/ result[0]- Math.toRadians(distance[1]) + (float)(2*Math.PI)));
         }else{
             rv.updateBearing(/*declination +*/ result[0]- (float) Math.toRadians(distance[1]));
-            Log.d(TAG, "Bearing" + Double.toString(/*declination +*/ result[0]- Math.toRadians(distance[1])));
+            Log.d("Bearing" + Double.toString(/*declination +*/ result[0]- Math.toRadians(distance[1])));
         }
         //Si on n'envoie que result[0], la boussole pointe vers le nord.
     }
@@ -188,7 +186,7 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
 
     //Ceci est la fonction appelée par le SyncAdapter pour mettre à jour les positions.
     public double[] updateLocation(){
-        Log.d(TAG, "updateLoc" + "updating");
+        Log.d("updateLoc" + "updating");
         double[] d = new double[2];
         runOnUiThread(new Runnable() {
             @Override
@@ -196,7 +194,7 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
                 GPSTracker gps = new GPSTracker(ctx);
                 gps.getLocation();
                 if(!gps.isLocationAvailable()) {
-                    Log.d(TAG, "gps" + "fail");
+                    Log.d("gps" + "fail");
                 } else {
                     myLat = gps.getLocation().getLatitude();
                     myLon = gps.getLocation().getLongitude();
@@ -217,7 +215,7 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
                     rv.stopSearch();
                 }
             });
-            Log.d(TAG, "updateLoc" + "notUpdated");
+            Log.d("updateLoc" + "notUpdated");
         }
         return d;
     }

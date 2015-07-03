@@ -24,8 +24,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -34,10 +34,10 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.OverScroller;
 import android.widget.Scroller;
 
+import trikita.log.Log;
+
 /* Extends Android ImageView to include pinch zooming, panning, fling and double tap zoom. */
 public class TouchImageView extends ExpandedImageView {
-    private static String TAG = "BURND-TouchImageView";
-
     // SuperMin and SuperMax multipliers. Determine how much the image can be
     // zoomed below or above the zoom boundaries, before animating back to the
     // min/max zoom boundary.
@@ -270,7 +270,7 @@ public class TouchImageView extends ExpandedImageView {
         super.onRestoreInstanceState(state);
     }
 
-    @Override
+    @Override @NonNull
     protected void onDraw(Canvas canvas) {
         onDrawReady = true;
         imageRenderedAtLeastOnce = true;
@@ -788,10 +788,7 @@ public class TouchImageView extends ExpandedImageView {
 
         @Override
         public boolean onDoubleTapEvent(MotionEvent e) {
-            if(doubleTapListener != null) {
-                return doubleTapListener.onDoubleTapEvent(e);
-            }
-            return false;
+            return doubleTapListener != null && doubleTapListener.onDoubleTapEvent(e);
         }
     }
 
@@ -1262,6 +1259,6 @@ public class TouchImageView extends ExpandedImageView {
     private void printMatrixInfo() {
         float[] n = new float[9];
         matrix.getValues(n);
-        Log.d(TAG, "Scale: " + n[Matrix.MSCALE_X] + " TransX: " + n[Matrix.MTRANS_X] + " TransY: " + n[Matrix.MTRANS_Y]);
+        Log.d("Scale: " + n[Matrix.MSCALE_X] + " TransX: " + n[Matrix.MTRANS_X] + " TransY: " + n[Matrix.MTRANS_Y]);
     }
 }

@@ -3,7 +3,6 @@ package com.insa.burnd.network;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -18,6 +17,8 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.util.Map;
 
+import trikita.log.Log;
+
 /* Class used to make ALL network requests to the API */
 public class Connexion {
     private ResponseListener rListener;
@@ -25,7 +26,6 @@ public class Connexion {
     private ProgressDialog dialog;
     private String loadingMessage;
     private String url = "http://burnd.cles-facil.fr/index.php/";
-    private static String TAG = "BURND-Connexion";
 
     // Différentes surcharges (dialog personnalisé ou non)
     public Connexion(Context ctx, ResponseListener rListener, String apiFunction) {
@@ -45,7 +45,7 @@ public class Connexion {
     public void execute(final String... arg0) {
         if(!Utils.isInternetAvailable(ctx)) {
             Utils.showToast(ctx, "Internet is not available.");
-            Log.d(TAG, "No internet.");
+            Log.d("No internet.");
         }
         else {
             if (dialog != null) {
@@ -77,7 +77,7 @@ public class Connexion {
 
                 @Override
                 protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<String, String>();
+                    Map<String, String> params = new HashMap<>();
                     for (int i = 0; i < arg0.length; i++)
                         params.put("req_" + i, arg0[i]); // Convention de nommage pour la REST API : "req_i"
                     return params;
@@ -85,14 +85,14 @@ public class Connexion {
 
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
+                    Map<String, String> params = new HashMap<>();
                     params.put("Content-Type", "application/x-www-form-urlencoded");
 
                     String userId = SPManager.load(ctx, "USER_ID");
                     String accessToken = SPManager.load(ctx, "ACCESS_TOKEN");
 
                     if(!TextUtils.isEmpty(userId) && !TextUtils.isEmpty(accessToken)) {
-                        Log.d(TAG, userId + "|" + Utils.makeReadable(accessToken, 5));
+                        Log.d(userId + "|" + Utils.makeReadable(accessToken, 5));
                         params.put("user_id", userId);
                         params.put("access_token", accessToken);
                     }

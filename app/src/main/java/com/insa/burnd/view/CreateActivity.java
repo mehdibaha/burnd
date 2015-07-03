@@ -8,7 +8,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,8 +27,9 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.util.Calendar;
 
+import trikita.log.Log;
+
 public class CreateActivity extends BaseActivity implements Connexion.ResponseListener {
-    private static String TAG = "BURND-CreateActivity";
     private final CreateActivity activity = this;
 
     private EditText etPartyName;
@@ -189,7 +189,7 @@ public class CreateActivity extends BaseActivity implements Connexion.ResponseLi
         String message = json.getString("message");
         boolean error = json.getBoolean("error");
 
-        Log.d(TAG, message);
+        Log.d(message);
 
         if (!error) {
             Utils.showToast(this, "Party created.");

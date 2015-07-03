@@ -3,6 +3,7 @@ package com.insa.burnd.view.MainActivity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,7 @@ public class MediaDialogFragment extends DialogFragment {
         // Empty constructor required for DialogFragment
     }
 
-    @Override
+    @Override @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
 
@@ -28,10 +29,10 @@ public class MediaDialogFragment extends DialogFragment {
         return dialog;
     }
 
-    @Override
+    @Override @NonNull
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View V = inflater.inflate(R.layout.dialog_fragment_media, container);
+        View V = inflater.inflate(R.layout.fragment_dialog_media, container);
 
         Button buttonPicture = (Button) V.findViewById(R.id.button_picture);
         buttonPicture.setOnClickListener(new View.OnClickListener() {

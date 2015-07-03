@@ -13,7 +13,6 @@ import com.insa.burnd.R;
 import java.util.ArrayList;
 
 public class PartyAdapter extends BaseAdapter {
-    private static String TAG = "BURND-PartyAdapter";
     private Context ctx;
 
     private ArrayList<String> partiesList;

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.support.v4.preference.PreferenceFragment;
-import android.util.Log;
 
 import com.insa.burnd.R;
 import com.insa.burnd.network.Connexion;
@@ -22,11 +21,12 @@ import com.insa.burnd.view.SplashActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import trikita.log.Log;
+
 
 public class SettingsFragment extends PreferenceFragment implements Connexion.ResponseListener, Preference.OnPreferenceChangeListener {
     private Activity mActivity;
     private final SettingsFragment fragment = this;
-    private static String TAG = "BURND-SettingsFragment";
 
     @Override
     public void onAttach(Activity activity) {
@@ -85,27 +85,27 @@ public class SettingsFragment extends PreferenceFragment implements Connexion.Re
                 }
                 if(!SPManager.loadBoolean(mActivity, "meeting") && SyncAdapter.checkSyncs(MainActivity.getAccount(), MainActivity.AUTHORITY, "matchSync")){
                     ContentResolver.removePeriodicSync(MainActivity.getAccount(), MainActivity.AUTHORITY, SyncAdapter.getBundle(MainActivity.getAccount(), MainActivity.AUTHORITY, "matchSync"));
-                    Log.d(TAG, "matchSync" + "Removed");
+                    Log.d("matchSync removed");
                 }
             }
             break;
             case "first_user": {
                 SPManager.remove(mActivity, "FIRST_USER");
                 Utils.showToast(mActivity, "You became a first user.");
-                Log.d(TAG, "first_user");
+                Log.d("first_user");
             }
             break;
             case "leave_party": {
                 Utils.showToast(mActivity, "You left party.");
                 new Connexion(mActivity, fragment, "leaveparty","Leaving Party...").execute();
-                Log.d(TAG, "leave_party");
+                Log.d("leave_party");
             }
             break;
             case "logout": {
                 Utils.showToast(mActivity, "You logged out.");
                 new SessionController(mActivity).disconnectFB();
                 startActivity(new Intent(mActivity, LoginActivity.class));
-                Log.d(TAG, "logout");
+                Log.d("logout");
             }
             case "clear_cache": {
                 Utils.showToast(mActivity, "Cache cleared.");
@@ -122,8 +122,8 @@ public class SettingsFragment extends PreferenceFragment implements Connexion.Re
         String message = json.getString("message");
         boolean error = json.getBoolean("error");
 
-        Log.d(TAG, response);
-        Log.d(TAG, message);
+        Log.d(response);
+        Log.d(message);
 
         if (!error) {
             if(message.equals("SEX_PREF_INSERTED") || message.equals("SEX_INSERTED")){

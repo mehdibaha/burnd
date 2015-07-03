@@ -2,7 +2,6 @@ package com.insa.burnd.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +13,9 @@ import com.facebook.widget.LoginButton;
 import com.insa.burnd.R;
 import com.insa.burnd.utils.BaseFragment;
 
-public class LoginFragment extends BaseFragment {
+import trikita.log.Log;
 
-    private static String TAG = "BURND-LoginFragment";
+public class LoginFragment extends BaseFragment {
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -89,7 +88,7 @@ public class LoginFragment extends BaseFragment {
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
-            Log.d(TAG, "Logged in...");
+            Log.d("Logged in...");
             Intent i = new Intent(mActivity, JoinActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);

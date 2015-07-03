@@ -14,16 +14,15 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import trikita.log.Log;
+
 /* GPS Class to handle all things GPS related */
 public class GPSTracker extends Service implements LocationListener {
-    private static final String TAG = "BURND-GPS";
-
     // saving the context for later use
     private final Context mContext;
 
@@ -147,7 +146,7 @@ public class GPSTracker extends Service implements LocationListener {
             Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
             // Get the current location from the input parameter list
             // Create a list to contain the result address
-            List<Address> addresses = null;
+            List<Address> addresses;
             try {
 				/*
 				 * Return 1 address.
@@ -289,9 +288,9 @@ public class GPSTracker extends Service implements LocationListener {
         mAltitude = location.getAltitude();
         mAccuracy = location.getAccuracy();
         mBearing = location.getBearing();
-        Log.d(TAG,"Location Changed");
-        Log.d(TAG,"Latitude:"+mLatitude);
-        Log.d(TAG,"Longitude:"+mLongitude);
+        Log.d("Location Changed");
+        Log.d("Latitude:"+mLatitude);
+        Log.d("Longitude:"+mLongitude);
     }
 
     @Override
