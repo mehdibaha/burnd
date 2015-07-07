@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
         initToolbar();
         initTabs();
 
-        setupSyncadapter();
+        //setupSyncadapter();
     }
 
     private void initToolbar(){
@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity {
                     mAccount,
                     AUTHORITY,
                     b,
-                    60*10); // every 10 minutes, cause : battery leaks
+                    60);
         }
         Log.d("Sync Complete");
     }
