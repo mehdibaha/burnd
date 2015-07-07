@@ -20,7 +20,7 @@ import java.util.Map;
 import trikita.log.Log;
 
 /* Class used to make ALL network requests to the API */
-public class Connexion {
+public class Connection {
     private ResponseListener rListener;
     private Context ctx;
     private ProgressDialog dialog;
@@ -28,7 +28,7 @@ public class Connexion {
     private String url = "http://burnd.cles-facil.fr/index.php/";
 
     // Différentes surcharges (dialog personnalisé ou non)
-    public Connexion(Context ctx, ResponseListener rListener, String apiFunction) {
+    public Connection(Context ctx, ResponseListener rListener, String apiFunction) {
         this.ctx = ctx;
         this.rListener = rListener;
         this.url = url + apiFunction + "/"; // Important: The slash after the apiFunction
@@ -36,7 +36,7 @@ public class Connexion {
     }
 
     // Surcharge du constructeur
-    public Connexion(Context ctx, ResponseListener rListener, String apiFunction, String loadingMessage) {
+    public Connection(Context ctx, ResponseListener rListener, String apiFunction, String loadingMessage) {
         this(ctx, rListener, apiFunction); // Classe.
         this.loadingMessage = loadingMessage;
         this.dialog = new ProgressDialog(ctx);
@@ -71,7 +71,7 @@ public class Connexion {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     if (dialog != null) dialog.dismiss();
-                    Log.e("Connexion", error.toString());
+                    Log.e("Connection", error.toString());
                 }
             }) {
 

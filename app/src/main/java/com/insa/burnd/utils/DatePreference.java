@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.DatePicker;
 
 import com.insa.burnd.R;
-import com.insa.burnd.network.Connexion;
+import com.insa.burnd.network.Connection;
 import com.insa.burnd.view.MainActivity.MainActivity;
 import com.insa.burnd.view.SplashActivity;
 
@@ -23,7 +23,7 @@ import java.util.Calendar;
 import trikita.log.Log;
 
 /* Class to handle Dates settings */
-public class DatePreference extends DialogPreference implements Connexion.ResponseListener {
+public class DatePreference extends DialogPreference implements Connection.ResponseListener {
     private String curVal;
     private String defVal;
     private DatePicker dp;
@@ -67,7 +67,7 @@ public class DatePreference extends DialogPreference implements Connexion.Respon
             updateVal();
             if (!persVal.equals(curVal)) { // Only change if birthday is different
                 persistString(curVal);
-                new Connexion(ctx, this, "insertage", "Updating age...").execute(SPManager.load(ctx, "date"));
+                new Connection(ctx, this, "insertage", "Updating age...").execute(SPManager.load(ctx, "date"));
             }
         }
     }

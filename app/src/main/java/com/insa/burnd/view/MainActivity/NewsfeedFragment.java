@@ -21,7 +21,7 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.insa.burnd.R;
 import com.insa.burnd.controller.NewsfeedAdapter;
 import com.insa.burnd.models.Newsfeed;
-import com.insa.burnd.network.Connexion;
+import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.SessionController;
 import com.insa.burnd.utils.BaseFragment;
 import com.insa.burnd.utils.SPManager;
@@ -35,7 +35,7 @@ import org.json.JSONObject;
 
 import trikita.log.Log;
 
-public class NewsfeedFragment extends BaseFragment implements Connexion.ResponseListener {
+public class NewsfeedFragment extends BaseFragment implements Connection.ResponseListener {
     private final NewsfeedFragment fragment = this;
     public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
 
@@ -98,7 +98,7 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
                     public void run() {
                         String lastPostId = SPManager.load(mActivity, "LAST_POST_ID");
                         Log.d(lastPostId);
-                        new Connexion(mActivity, fragment, "checkparty").execute(lastPostId);
+                        new Connection(mActivity, fragment, "checkparty").execute(lastPostId);
                     }
                 });
             }
@@ -176,7 +176,7 @@ public class NewsfeedFragment extends BaseFragment implements Connexion.Response
     public void updateNewsfeed() {
         newsfeed = new Newsfeed();
         askedConnection = true;
-        new Connexion(mActivity, fragment, "checkparty").execute();
+        new Connection(mActivity, fragment, "checkparty").execute();
     }
 
     @Override

@@ -10,7 +10,7 @@ import android.content.SyncResult;
 import android.os.Bundle;
 
 import com.insa.burnd.R;
-import com.insa.burnd.network.Connexion;
+import com.insa.burnd.network.Connection;
 import com.insa.burnd.view.CompassActivity;
 
 import org.json.JSONArray;
@@ -23,7 +23,7 @@ import trikita.log.Log;
  * Handle the transfer of data between a server and an
  * app, using the Android sync adapter framework.
  */
-public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connexion.ResponseListener{
+public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connection.ResponseListener{
     // Global variables
     // Define a variable to contain a content resolver instance
     ContentResolver mContentResolver;
@@ -81,12 +81,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connexio
     }
 
     private void matchSync(){
-        new Connexion(getContext(), this, "checkmatch").execute();
+        new Connection(getContext(), this, "checkmatch").execute();
         Log.d("sync");
     }
 
     private void gpsSync(){
-        new Connexion(getContext(), this, "updatelocation").execute(Double.toString(pos[0]),Double.toString(pos[1]));
+        new Connection(getContext(), this, "updatelocation").execute(Double.toString(pos[0]),Double.toString(pos[1]));
         CompassActivity ca = CompassActivity.getInstance();
         if(ca != null){
            pos = ca.updateLocation();

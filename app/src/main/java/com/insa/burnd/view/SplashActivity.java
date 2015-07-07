@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.animation.AlphaAnimation;
 
 import com.insa.burnd.R;
-import com.insa.burnd.network.Connexion;
+import com.insa.burnd.network.Connection;
 import com.insa.burnd.utils.SPManager;
 import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.IntroActivity.IntroActivity;
@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 import trikita.log.Log;
 
-public class SplashActivity extends FragmentActivity implements Connexion.ResponseListener {
+public class SplashActivity extends FragmentActivity implements Connection.ResponseListener {
     private final SplashActivity activity = this;
 
     @Override
@@ -34,7 +34,7 @@ public class SplashActivity extends FragmentActivity implements Connexion.Respon
             activity.finish();
         }
         else
-            new Connexion(activity, activity, "checkparty").execute();
+            new Connection(activity, activity, "checkparty").execute();
 
     }
 

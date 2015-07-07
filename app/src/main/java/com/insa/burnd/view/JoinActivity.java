@@ -21,7 +21,7 @@ import com.facebook.model.GraphUser;
 import com.insa.burnd.R;
 import com.insa.burnd.controller.PartyAdapter;
 import com.insa.burnd.models.User;
-import com.insa.burnd.network.Connexion;
+import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.SessionController;
 import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.utils.BaseActivity;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 
 import trikita.log.Log;
 
-public class JoinActivity extends BaseActivity implements Connexion.ResponseListener {
+public class JoinActivity extends BaseActivity implements Connection.ResponseListener {
     private EditText etPartyName;
     private EditText etPartyPass;
     private TextInputLayout tilPartyName;
@@ -68,7 +68,7 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
                 String partyPass = etPartyPass.getText().toString();
 
                 if (!TextUtils.isEmpty(partyName) && !TextUtils.isEmpty(partyPass)) {
-                    new Connexion(activity, activity, "joinparty", "Loading...").execute(partyName, partyPass);
+                    new Connection(activity, activity, "joinparty", "Loading...").execute(partyName, partyPass);
                 }
                 else {
                     if(TextUtils.isEmpty(partyName))
@@ -155,7 +155,7 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
             Log.d("Latitude:" + latitude + " | Longitude: " + longitude + " | Accuracy: " + accuracy);
 
             //Utils.showToast(this, mGPSService.getLocationAddress());
-            new Connexion(activity, activity, "searchparty", "Searching...").execute(""+longitude,""+latitude);
+            new Connection(activity, activity, "searchparty", "Searching...").execute(""+longitude,""+latitude);
         }
 
         // make sure you close the gps after using it. Save user's battery power
@@ -179,7 +179,7 @@ public class JoinActivity extends BaseActivity implements Connexion.ResponseList
                                 Utils.showToast(activity, "Welcome " + user.getName());
                             }
                             myUser.saveToMemory(activity);
-                            new Connexion(activity, activity, "createuser").execute(myUser.getName(), myUser.getGender());
+                            new Connection(activity, activity, "createuser").execute(myUser.getName(), myUser.getGender());
                         }
                     }
                 }).executeAsync();

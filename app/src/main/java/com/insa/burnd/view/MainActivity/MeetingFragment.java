@@ -16,7 +16,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.insa.burnd.R;
 import com.insa.burnd.controller.OnSwipeTouchListener;
-import com.insa.burnd.network.Connexion;
+import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.VolleySingleton;
 import com.insa.burnd.utils.BaseFragment;
 import com.insa.burnd.utils.Utils;
@@ -28,7 +28,7 @@ import org.json.JSONObject;
 import trikita.log.Log;
 
 
-public class MeetingFragment extends BaseFragment implements Connexion.ResponseListener {
+public class MeetingFragment extends BaseFragment implements Connection.ResponseListener {
     private int numMessages = 0;
     private final MeetingFragment fragment = this;
     private NetworkImageView photo;
@@ -40,7 +40,7 @@ public class MeetingFragment extends BaseFragment implements Connexion.ResponseL
         super.onCreate(savedInstanceState);
         if (imageLoader == null)
             imageLoader = VolleySingleton.getInstance().getImageLoader();
-        new Connexion(mActivity, fragment, "getprofile").execute();
+        new Connection(mActivity, fragment, "getprofile").execute();
     }
 
     @Override
@@ -64,11 +64,11 @@ public class MeetingFragment extends BaseFragment implements Connexion.ResponseL
 
             photo.setOnTouchListener(new OnSwipeTouchListener() {
                 public void onSwipeTop() {
-                    new Connexion(mActivity, fragment, "swipeup", "Like").execute(id);
+                    new Connection(mActivity, fragment, "swipeup", "Like").execute(id);
                 }
 
                 public void onSwipeBottom() {
-                    new Connexion(mActivity, fragment, "swipedown", "Nope").execute(id);
+                    new Connection(mActivity, fragment, "swipedown", "Nope").execute(id);
                 }
             });
             tView.setText(name + " | " + age);

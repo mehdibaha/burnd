@@ -25,7 +25,7 @@ import android.widget.VideoView;
 
 import com.insa.burnd.R;
 import com.insa.burnd.network.BackgroundService;
-import com.insa.burnd.network.Connexion;
+import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.SessionController;
 import com.insa.burnd.utils.BaseActivity;
 import com.insa.burnd.utils.Utils;
@@ -42,7 +42,7 @@ import java.util.Locale;
 
 import trikita.log.Log;
 
-public class PostActivity extends BaseActivity implements Connexion.ResponseListener {
+public class PostActivity extends BaseActivity implements Connection.ResponseListener {
     public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
     private EditText etStatus;
 
@@ -132,7 +132,7 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
 
         Log.v("base64" + "-----" + ba1);
 
-        new Connexion(this, this, "newpost", "Sending Post...").execute(status, ba1);
+        new Connection(this, this, "newpost", "Sending Post...").execute(status, ba1);
     }
 
     private void uploadVideo(String picturePath, String status){
@@ -142,7 +142,7 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
         startService(intent);
         String filename=picturePath.substring(picturePath.lastIndexOf("/")+1);
         Log.i("video",filename);
-        new Connexion(this, this, "uploadvideo", "").execute(status,"http://burnd.net63.net/asselman/uploads/"+filename);
+        new Connection(this, this, "uploadvideo", "").execute(status,"http://burnd.net63.net/asselman/uploads/"+filename);
 
     }
     @Override
@@ -162,7 +162,7 @@ public class PostActivity extends BaseActivity implements Connexion.ResponseList
                     // Video
                 }
                 else
-                    new Connexion(this, this, "newpost","Sending Post...").execute(status);
+                    new Connection(this, this, "newpost","Sending Post...").execute(status);
 
                 Utils.showToast(this, "Post sent with love.");
                 return true;

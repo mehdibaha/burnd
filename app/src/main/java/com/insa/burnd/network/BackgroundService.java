@@ -45,7 +45,7 @@ public class BackgroundService extends IntentService  {
         status = intent.getExtras().getString("status");
         selectedImagePath = intent.getExtras().getString("selectedImagePath");
         doFileUpload();
-       // new Connexion(this, this, "uploadvideo", "").execute(status,"http://burnd.net63.net/asselman/uploads/"+selectedImagePath);
+       // new Connection(this, this, "uploadvideo", "").execute(status,"http://burnd.net63.net/asselman/uploads/"+selectedImagePath);
     }
 
     @Override

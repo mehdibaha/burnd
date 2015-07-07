@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.insa.burnd.R;
-import com.insa.burnd.network.Connexion;
+import com.insa.burnd.network.Connection;
 import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.sync.SyncAdapter;
 import com.insa.burnd.utils.RedView;
@@ -31,7 +31,7 @@ import java.util.TimerTask;
 import trikita.log.Log;
 
 
-public class CompassActivity extends Activity implements SensorEventListener, Connexion.ResponseListener{
+public class CompassActivity extends Activity implements SensorEventListener, Connection.ResponseListener{
     private volatile RedView rv;
     private SensorManager sM;
     private Sensor mS;
@@ -49,7 +49,7 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
     private static final long COMPASS_FREQ = 8000;
     private static final long MEET_DURATION = 7*60000;
     private Context ctx = this;
-    private Connexion.ResponseListener rListener = this;
+    private Connection.ResponseListener rListener = this;
     private Timer timer;
     private Bundle compBundle;
     private volatile boolean running = true;
@@ -87,7 +87,7 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
         accState = new float[3];
         magState = new float[3];
         rot = new float[9];
-        new Connexion(this,this, "activatematch").execute();
+        new Connection(this,this, "activatematch").execute();
         //Cette thread appelle régulièrement le gpsSync durant toute la durée du match actif pour mettre à jour la position.
         gpsThread = new Thread(new Runnable() {
             @Override
@@ -124,7 +124,7 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
                 gpsThread = null;
                 instance = null;
                 SyncAdapter.killMatch();
-                new Connexion(ctx, rListener, "killmatch").execute();
+                new Connection(ctx, rListener, "killmatch").execute();
             }
         };
         timer = new Timer();

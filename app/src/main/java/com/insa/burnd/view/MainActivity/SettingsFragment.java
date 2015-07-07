@@ -9,7 +9,7 @@ import android.preference.PreferenceScreen;
 import android.support.v4.preference.PreferenceFragment;
 
 import com.insa.burnd.R;
-import com.insa.burnd.network.Connexion;
+import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.SessionController;
 import com.insa.burnd.sync.SyncAdapter;
 import com.insa.burnd.utils.SPManager;
@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import trikita.log.Log;
 
 
-public class SettingsFragment extends PreferenceFragment implements Connexion.ResponseListener, Preference.OnPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragment implements Connection.ResponseListener, Preference.OnPreferenceChangeListener {
     private Activity mActivity;
     private final SettingsFragment fragment = this;
 
@@ -53,16 +53,16 @@ public class SettingsFragment extends PreferenceFragment implements Connexion.Re
         switch(preference.getKey()){
             case "you": {
                 if (newValue.equals("1")) {
-                    new Connexion(mActivity, this, "insertsex", "Updating sex preference...").execute("m");
+                    new Connection(mActivity, this, "insertsex", "Updating sex preference...").execute("m");
                 } else if (newValue.equals("2")) {
-                    new Connexion(mActivity, this, "insertsex", "Updating sex preference...").execute("f");
+                    new Connection(mActivity, this, "insertsex", "Updating sex preference...").execute("f");
                 }
             }
             case "them":{
                 if(newValue.equals("1")){
-                    new Connexion(mActivity, this, "insertsexpreferance", "Updating sex preference...").execute("m");
+                    new Connection(mActivity, this, "insertsexpreferance", "Updating sex preference...").execute("m");
                 }else if(newValue.equals("2")) {
-                    new Connexion(mActivity, this, "insertsexpreferance", "Updating sex preference...").execute("f");
+                    new Connection(mActivity, this, "insertsexpreferance", "Updating sex preference...").execute("f");
                 }
             }
         }
@@ -97,7 +97,7 @@ public class SettingsFragment extends PreferenceFragment implements Connexion.Re
             break;
             case "leave_party": {
                 Utils.showToast(mActivity, "You left party.");
-                new Connexion(mActivity, fragment, "leaveparty","Leaving Party...").execute();
+                new Connection(mActivity, fragment, "leaveparty","Leaving Party...").execute();
                 Log.d("leave_party");
             }
             break;

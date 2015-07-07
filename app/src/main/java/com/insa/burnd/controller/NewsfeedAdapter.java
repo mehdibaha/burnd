@@ -37,7 +37,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.insa.burnd.R;
 import com.insa.burnd.models.FeedItem;
 import com.insa.burnd.models.Newsfeed;
-import com.insa.burnd.network.Connexion;
+import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.VolleySingleton;
 import com.insa.burnd.view.MainActivity.MainActivity;
 import com.insa.burnd.view.MainActivity.NewsfeedFragment;
@@ -304,7 +304,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         holder.buttonSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Connexion(activity, fragment, "comment" ,"Commenting").execute(holder.etComment.getText().toString(), String.valueOf(item.getId()));
+                new Connection(activity, fragment, "comment" ,"Commenting").execute(holder.etComment.getText().toString(), String.valueOf(item.getId()));
             }
         });
 
@@ -332,7 +332,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
     }
 
     public void changeVote(FeedItem item, String flag) {
-        new Connexion(activity, fragment, "vote", "Voting...").execute(String.valueOf(item.getId()), flag);
+        new Connection(activity, fragment, "vote", "Voting...").execute(String.valueOf(item.getId()), flag);
     }
 
     public int statisticVote(int p,int n) {

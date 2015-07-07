@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.insa.burnd.R;
-import com.insa.burnd.network.Connexion;
+import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.SessionController;
 import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.utils.BaseActivity;
@@ -29,7 +29,7 @@ import java.util.Calendar;
 
 import trikita.log.Log;
 
-public class CreateActivity extends BaseActivity implements Connexion.ResponseListener {
+public class CreateActivity extends BaseActivity implements Connection.ResponseListener {
     private final CreateActivity activity = this;
 
     private EditText etPartyName;
@@ -42,7 +42,7 @@ public class CreateActivity extends BaseActivity implements Connexion.ResponseLi
     private double latitude = 0;
     private double longitude = 0;
 
-    private Calendar now;
+    private Calendar now ;
     private int hours;
     private int minutes;
 
@@ -69,7 +69,7 @@ public class CreateActivity extends BaseActivity implements Connexion.ResponseLi
                 if (!TextUtils.isEmpty(partyName) && !TextUtils.isEmpty(partyPass)) {
                     try {
                         if (validTime(partyTime, MAX_DURATION_PARTY))
-                            new Connexion(activity, activity, "createparty").execute(partyName, partyPass, partyTime, location, "" + longitude, "" + latitude);
+                            new Connection(activity, activity, "createparty").execute(partyName, partyPass, partyTime, location, "" + longitude, "" + latitude);
                         else
                             Utils.showToast(activity, "Party can't be more than 12 hours from now.");
                     } catch (ParseException e) {
