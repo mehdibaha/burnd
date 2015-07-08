@@ -51,6 +51,7 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:3.23.0' // Facebook sdk
     compile 'com.mcxiaoke.volley:library:1.0.1' // Volley Library (handles all network request)
     compile 'com.github.paolorotolo:appintro:2.0.0'
-    compile 'co.trikita:log:1.1.1'
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'co.trikita:log:1.1.1'
+
 }
