@@ -25,15 +25,18 @@ import com.insa.burnd.view.CompassActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import trikita.log.Log;
 
 
 public class MeetingFragment extends BaseFragment implements Connection.ResponseListener {
-    private int numMessages = 0;
     private final MeetingFragment fragment = this;
-    private NetworkImageView photo;
     private ImageLoader imageLoader;
-    private TextView tView;
+    @Bind(R.id.profilePic) NetworkImageView photo;
+    @Bind(R.id.textView) TextView tView;
+    private int numMessages = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,24 +86,25 @@ public class MeetingFragment extends BaseFragment implements Connection.Response
         }
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_meeting, container, false);
-
-        tView = (TextView) view.findViewById(R.id.textView);
-        tView.setText("Loading...");
-        tView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(mActivity, CompassActivity.class));
-            }
-        });
-        photo = (NetworkImageView) view.findViewById(R.id.profilePic);
-
-        return view;
+    @OnClick(R.id.textView)
+    public void clickLoading() {
+        startActivity(new Intent(mActivity, CompassActivity.class));
     }
 
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_meeting, container, false);
+        ButterKnife.bind(this, v);
 
+        tView.setText("Loading...");
+        return v;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 
     public void displayNotification() {
         // Invoking the default notification service

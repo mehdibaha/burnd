@@ -10,8 +10,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -34,75 +32,59 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
 import trikita.log.Log;
 
 public class JoinActivity extends BaseActivity implements Connection.ResponseListener {
-    private EditText etPartyName;
-    private EditText etPartyPass;
-    private TextInputLayout tilPartyName;
-    private TextInputLayout tilPartyPass;
-    private ListView partiesListView;
-
-    private PartyAdapter adapter;
     private final JoinActivity activity = this;
+    private PartyAdapter adapter;
+
+    @Bind(R.id.parties_listView) ListView partiesListView;
+    @Bind(R.id.edittext_join_party_name) EditText etPartyName;
+    @Bind(R.id.edittext_join_party_pass) EditText etPartyPass;
+    @Bind(R.id.til_join_party_name) TextInputLayout tilPartyName;
+    @Bind(R.id.til_join_party_pass) TextInputLayout tilPartyPass;
+    @Bind(R.id.toolbar_join) Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
+        ButterKnife.bind(this);
 
         initToolbar();
-
-        // Join Party Form
-        etPartyName = (EditText) findViewById(R.id.edittext_join_party_name);
-        etPartyPass = (EditText) findViewById(R.id.edittext_join_party_pass);
         etPartyPass.setTypeface(Typeface.DEFAULT);
-        tilPartyName = (TextInputLayout) findViewById(R.id.til_join_party_name);
-        tilPartyPass = (TextInputLayout) findViewById(R.id.til_join_party_pass);
-
-        Button button1 = (Button) findViewById(R.id.button_join_join);
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String partyName = etPartyName.getText().toString();
-                String partyPass = etPartyPass.getText().toString();
-
-                if (!TextUtils.isEmpty(partyName) && !TextUtils.isEmpty(partyPass)) {
-                    new Connection(activity, activity, "joinparty", "Loading...").execute(partyName, partyPass);
-                }
-                else {
-                    if(TextUtils.isEmpty(partyName))
-                        tilPartyName.setError("Name can't be empty");
-                    if(TextUtils.isEmpty(partyPass))
-                        tilPartyPass.setError("Pass can't be empty");
-                }
-            }
-        });
-
-        partiesListView = (ListView) findViewById(R.id.parties_listView);
-        partiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                etPartyName.setText(adapter.getPartiesList().get(position));
-                partiesListView.setVisibility(View.GONE);
-            }
-        });
-
-        Button buttonGPS = (Button) findViewById(R.id.button_join_gps);
-        buttonGPS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchGPS();
-            }
-        });
 
         setupSession();
     }
 
-    private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_join);
-        setSupportActionBar(toolbar);
+    @OnClick(R.id.button_join_join)
+    public void joinParty() {
+        String partyName = etPartyName.getText().toString();
+        String partyPass = etPartyPass.getText().toString();
 
+        if (!TextUtils.isEmpty(partyName) && !TextUtils.isEmpty(partyPass)) {
+            new Connection(activity, activity, "joinparty", "Loading...").execute(partyName, partyPass);
+        }
+        else {
+            if(TextUtils.isEmpty(partyName))
+                tilPartyName.setError("Name can't be empty");
+            if(TextUtils.isEmpty(partyPass))
+                tilPartyPass.setError("Pass can't be empty");
+        }
+    }
+
+    @OnItemClick(R.id.parties_listView)
+    public void showParties(int position) {
+        etPartyName.setText(adapter.getPartiesList().get(position));
+        partiesListView.setVisibility(View.GONE);
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
         if(ab!=null)
             ab.setTitle("Join a party");
@@ -137,7 +119,8 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
     }
 
     // Search party buton
-    private void searchGPS() {
+    @OnClick(R.id.button_join_gps)
+    public void searchGPS() {
         GPSTracker mGPSService = new GPSTracker(this);
         mGPSService.getLocation();
 
@@ -161,8 +144,6 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
         // make sure you close the gps after using it. Save user's battery power
         mGPSService.closeGPS();
     }
-
-
 
     private void setupSession() {
         Session session = new SessionController(activity).getFacebookSession(); // Retrieving fb session

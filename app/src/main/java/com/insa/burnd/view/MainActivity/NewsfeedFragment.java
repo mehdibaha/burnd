@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.insa.burnd.R;
 import com.insa.burnd.controller.NewsfeedAdapter;
@@ -33,18 +32,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import trikita.log.Log;
 
 public class NewsfeedFragment extends BaseFragment implements Connection.ResponseListener {
     private final NewsfeedFragment fragment = this;
     public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
 
+    private NewsfeedAdapter newsfeedAdapter;
+
+    @Bind(R.id.multiple_actions) FloatingActionsMenu fam;
+    @Bind(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.recyclerView) RecyclerView recyclerView;
+    @Bind(R.id.dimmed_background) View dimmedBackground;
+
     private Newsfeed newsfeed;
     private boolean askedConnection;
-
-    private NewsfeedAdapter newsfeedAdapter;
-    private FloatingActionsMenu  fam;
-    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,33 +59,27 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
-        if (swipeRefreshLayout!=null) {
-            swipeRefreshLayout.setRefreshing(false);
-            swipeRefreshLayout.destroyDrawingCache();
-            swipeRefreshLayout.clearAnimation();
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View V = inflater.inflate(R.layout.fragment_newsfeed, container, false);
+        final View v = inflater.inflate(R.layout.fragment_newsfeed, container, false);
+        ButterKnife.bind(this, v);
+        ButterKnife.bind(mActivity);
 
-        // Passing View object to methods who need it
-        initRefresh(V);
-        initFABS();
-        initRecyclerView(V);
-        initDimmedBackgroud(V);
+        initRefresh();
+        initRecyclerView();
+        initDimmedBackgroud();
 
-        return V;
+        return v;
     }
 
-    private void initRefresh(View v) {
-        swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_layout);
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    private void initRefresh() {
         if(askedConnection) {
             swipeRefreshLayout.setProgressViewOffset(false, 0, Utils.dpToPx(mActivity, 50));
             swipeRefreshLayout.setRefreshing(true);
@@ -105,37 +104,20 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
         });
     }
 
-    private void initFABS() {
-        FloatingActionButton fabPost  = (FloatingActionButton) mActivity.findViewById(R.id.fab_post);
-        FloatingActionButton fabPhoto = (FloatingActionButton) mActivity.findViewById(R.id.fab_photo);
-        fam      = (FloatingActionsMenu) mActivity.findViewById(R.id.multiple_actions);
-
-        fabPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("POST");
-                Intent intent = new Intent(mActivity, PostActivity.class);
-                intent.putExtra(EXTRA_MESSAGE, "post");
-                startActivity(intent);
-            }
-        });
-
-        fabPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showMediaDialog();
-            }
-        });
+    @OnClick(R.id.fab_post)
+    public void sendPost() {
+        Log.d("POST");
+        Intent intent = new Intent(mActivity, PostActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, "post");
+        startActivity(intent);
     }
 
-    private void initRecyclerView(View v) {
-        final RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+    private void initRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerView.setAdapter(newsfeedAdapter); // Assigns the recyclerview to its adapter
     }
 
-    private void initDimmedBackgroud(View v) {
-        final View dimmedBackground  =  v.findViewById(R.id.dimmed_background);
+    private void initDimmedBackgroud() {
         dimmedBackground.setVisibility(View.GONE);
 
         // TODO Could be a nice addition
@@ -165,7 +147,8 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
         });
     }
 
-    private void showMediaDialog() {
+    @OnClick(R.id.fab_photo)
+    public void showMediaDialog() {
         FragmentActivity activity = (FragmentActivity) mActivity;
         FragmentManager fm = activity.getSupportFragmentManager();
         MediaDialogFragment mediaDialogFragment = new MediaDialogFragment();

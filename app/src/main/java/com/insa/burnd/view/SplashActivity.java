@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.animation.AlphaAnimation;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.insa.burnd.R;
 import com.insa.burnd.network.Connection;
@@ -11,14 +13,20 @@ import com.insa.burnd.utils.SPManager;
 import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.IntroActivity.IntroActivity;
 import com.insa.burnd.view.MainActivity.MainActivity;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.Bind;
 import trikita.log.Log;
 
 public class SplashActivity extends FragmentActivity implements Connection.ResponseListener {
     private final SplashActivity activity = this;
+
+    @Bind(R.id.progress_wheel) ProgressWheel progressWheel;
+    @Bind(R.id.textView5) TextView textView;
+    @Bind(R.id.logo_image) ImageView logoImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +52,9 @@ public class SplashActivity extends FragmentActivity implements Connection.Respo
         AlphaAnimation fadeIn = new AlphaAnimation(0.0f , 1.0f );
         fadeIn.setDuration(duration);
         fadeIn.setFillAfter(true);
-        findViewById(R.id.progress_wheel).startAnimation(fadeIn);
-        findViewById(R.id.textView5).startAnimation(fadeIn);
-        findViewById(R.id.logo_image).startAnimation(fadeIn);
+        progressWheel.startAnimation(fadeIn);
+        textView.startAnimation(fadeIn);
+        logoImage.startAnimation(fadeIn);
     }
 
     @Override

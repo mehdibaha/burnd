@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 
 import com.insa.burnd.R;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MediaDialogFragment extends DialogFragment {
     public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
@@ -29,31 +31,32 @@ public class MediaDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    @OnClick(R.id.button_picture)
+    public void clickPicture() {
+        Intent intent = new Intent(getActivity(), PostActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, "picture");
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.button_video)
+    public void clickVideo() {
+        Intent intent = new Intent(getActivity(), PostActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, "camera");
+        startActivity(intent);
+    }
+
     @Override @NonNull
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View V = inflater.inflate(R.layout.fragment_dialog_media, container);
+        View v = inflater.inflate(R.layout.fragment_dialog_media, container);
+        ButterKnife.bind(this, v);
 
-        Button buttonPicture = (Button) V.findViewById(R.id.button_picture);
-        buttonPicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PostActivity.class);
-                intent.putExtra(EXTRA_MESSAGE, "picture");
-                startActivity(intent);
-            }
-        });
+        return v;
+    }
 
-        Button buttonVideo = (Button) V.findViewById(R.id.button_video);
-        buttonVideo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PostActivity.class);
-                intent.putExtra(EXTRA_MESSAGE, "camera");
-                startActivity(intent);
-            }
-        });
-
-        return V;
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }
