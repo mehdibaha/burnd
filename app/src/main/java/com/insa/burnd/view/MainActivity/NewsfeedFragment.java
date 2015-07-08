@@ -34,22 +34,22 @@ import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import trikita.log.Log;
+
+import static butterknife.ButterKnife.findById;
 
 public class NewsfeedFragment extends BaseFragment implements Connection.ResponseListener {
     private final NewsfeedFragment fragment = this;
     public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
 
     private NewsfeedAdapter newsfeedAdapter;
+    private Newsfeed newsfeed;
+    private boolean askedConnection;
 
-    @Bind(R.id.multiple_actions) FloatingActionsMenu fam;
+    private FloatingActionsMenu fam;
     @Bind(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.recyclerView) RecyclerView recyclerView;
     @Bind(R.id.dimmed_background) View dimmedBackground;
-
-    private Newsfeed newsfeed;
-    private boolean askedConnection;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,9 +63,9 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_newsfeed, container, false);
-        ButterKnife.bind(this, v);
-        ButterKnife.bind(mActivity);
+        ButterKnife.bind(fragment, v);
 
+        initFABS();
         initRefresh();
         initRecyclerView();
         initDimmedBackgroud();
@@ -73,10 +73,22 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
         return v;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
+    private void initFABS() {
+        fam = findById(mActivity, R.id.multiple_actions);
+
+        findById(mActivity, R.id.fab_post).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendPost();
+            }
+        });
+
+        findById(mActivity, R.id.fab_photo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMediaDialog();
+            }
+        });
     }
 
     private void initRefresh() {
@@ -104,12 +116,18 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
         });
     }
 
-    @OnClick(R.id.fab_post)
     public void sendPost() {
         Log.d("POST");
         Intent intent = new Intent(mActivity, PostActivity.class);
         intent.putExtra(EXTRA_MESSAGE, "post");
         startActivity(intent);
+    }
+
+    public void showMediaDialog() {
+        FragmentActivity activity = (FragmentActivity) mActivity;
+        FragmentManager fm = activity.getSupportFragmentManager();
+        MediaDialogFragment mediaDialogFragment = new MediaDialogFragment();
+        mediaDialogFragment.show(fm, "dialog_fragment_media");
     }
 
     private void initRecyclerView() {
@@ -147,12 +165,14 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
         });
     }
 
-    @OnClick(R.id.fab_photo)
-    public void showMediaDialog() {
-        FragmentActivity activity = (FragmentActivity) mActivity;
-        FragmentManager fm = activity.getSupportFragmentManager();
-        MediaDialogFragment mediaDialogFragment = new MediaDialogFragment();
-        mediaDialogFragment.show(fm, "dialog_fragment_media");
+    public void hideViews() {
+        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fam.getLayoutParams();
+        int fabBottomMargin = lp.bottomMargin;
+        fam.animate().translationY(fam.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
+    }
+
+    public void showViews() {
+        fam.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     /* Requets new newsfeed from a new connexion */
@@ -207,16 +227,6 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
         String lastPostId = String.valueOf(newsfeed.get(0).getId());
         SPManager.save(mActivity, lastPostId, "LAST_POST_ID"); // Saves last post id
         Log.d("saving last post id : " + lastPostId);
-    }
-
-    public void hideViews() {
-        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fam.getLayoutParams();
-        int fabBottomMargin = lp.bottomMargin;
-        fam.animate().translationY(fam.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
-    }
-
-    public void showViews() {
-        fam.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     public NewsfeedAdapter getNewsfeedAdapter() {

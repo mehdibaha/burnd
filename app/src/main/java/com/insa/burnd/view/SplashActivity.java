@@ -2,13 +2,13 @@ package com.insa.burnd.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.insa.burnd.R;
 import com.insa.burnd.network.Connection;
+import com.insa.burnd.utils.BaseActivity;
 import com.insa.burnd.utils.SPManager;
 import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.IntroActivity.IntroActivity;
@@ -19,9 +19,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import trikita.log.Log;
 
-public class SplashActivity extends FragmentActivity implements Connection.ResponseListener {
+public class SplashActivity extends BaseActivity implements Connection.ResponseListener {
     private final SplashActivity activity = this;
 
     @Bind(R.id.progress_wheel) ProgressWheel progressWheel;
@@ -32,6 +33,7 @@ public class SplashActivity extends FragmentActivity implements Connection.Respo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        ButterKnife.bind(activity);
 
         boolean firstUser = SPManager.load(activity, "FIRST_USER").equals("");
         Log.d(String.valueOf(firstUser));

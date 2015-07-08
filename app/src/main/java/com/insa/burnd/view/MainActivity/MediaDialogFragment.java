@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MediaDialogFragment extends DialogFragment {
+    private final MediaDialogFragment dialog = this;
     public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
 
     public MediaDialogFragment() {
@@ -31,6 +32,15 @@ public class MediaDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    @Override @NonNull
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_dialog_media, container);
+        ButterKnife.bind(dialog, v);
+
+        return v;
+    }
+
     @OnClick(R.id.button_picture)
     public void clickPicture() {
         Intent intent = new Intent(getActivity(), PostActivity.class);
@@ -43,15 +53,6 @@ public class MediaDialogFragment extends DialogFragment {
         Intent intent = new Intent(getActivity(), PostActivity.class);
         intent.putExtra(EXTRA_MESSAGE, "camera");
         startActivity(intent);
-    }
-
-    @Override @NonNull
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_dialog_media, container);
-        ButterKnife.bind(this, v);
-
-        return v;
     }
 
     @Override

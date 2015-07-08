@@ -61,7 +61,7 @@ public class PostActivity extends BaseActivity implements Connection.ResponseLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-        ButterKnife.bind(this);
+        ButterKnife.bind(activity);
 
         initToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE); // Show keyboard

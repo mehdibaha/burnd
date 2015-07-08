@@ -53,11 +53,10 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
-        ButterKnife.bind(this);
+        ButterKnife.bind(activity);
 
         initToolbar();
         etPartyPass.setTypeface(Typeface.DEFAULT);
-
         setupSession();
     }
 
@@ -97,27 +96,6 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        if (id == R.id.action_logout) {
-            Utils.showToast(this, "You logged out.");
-            new SessionController(this).disconnectFB();
-            startActivity(new Intent(this, LoginActivity.class));
-            return true;
-        }
-        else if(id == R.id.action_create_party) {
-            startActivity(new Intent(activity, CreateActivity.class));
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     // Search party buton
     @OnClick(R.id.button_join_gps)
     public void searchGPS() {
@@ -143,6 +121,29 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
 
         // make sure you close the gps after using it. Save user's battery power
         mGPSService.closeGPS();
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.action_logout) {
+            Utils.showToast(this, "You logged out.");
+            new SessionController(this).disconnectFB();
+            startActivity(new Intent(this, LoginActivity.class));
+            return true;
+        }
+        else if(id == R.id.action_create_party) {
+            startActivity(new Intent(activity, CreateActivity.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupSession() {

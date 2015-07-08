@@ -34,16 +34,34 @@ import trikita.log.Log;
 public class MeetingFragment extends BaseFragment implements Connection.ResponseListener {
     private final MeetingFragment fragment = this;
     private ImageLoader imageLoader;
+
+    private int numMessages = 0;
+
     @Bind(R.id.profilePic) NetworkImageView photo;
     @Bind(R.id.textView) TextView tView;
-    private int numMessages = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        new Connection(mActivity, fragment, "getprofile").execute();
+    }
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_meeting, container, false);
+        ButterKnife.bind(fragment, v);
+
         if (imageLoader == null)
             imageLoader = VolleySingleton.getInstance().getImageLoader();
-        new Connection(mActivity, fragment, "getprofile").execute();
+
+        tView.setText("Loading...");
+        return v;
+    }
+
+    @OnClick(R.id.textView)
+    public void clickLoading() {
+        startActivity(new Intent(mActivity, CompassActivity.class));
     }
 
     @Override
@@ -84,26 +102,6 @@ public class MeetingFragment extends BaseFragment implements Connection.Response
             } else
                 Utils.showToast(mActivity, "Sorry, the server was unable to process your request.");
         }
-    }
-
-    @OnClick(R.id.textView)
-    public void clickLoading() {
-        startActivity(new Intent(mActivity, CompassActivity.class));
-    }
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_meeting, container, false);
-        ButterKnife.bind(this, v);
-
-        tView.setText("Loading...");
-        return v;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
     public void displayNotification() {

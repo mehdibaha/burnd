@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import trikita.log.Log;
 
@@ -51,6 +52,7 @@ public class CreateActivity extends BaseActivity implements Connection.ResponseL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
+        ButterKnife.bind(activity);
 
         initToolbar();
         setButtonToCurrentTime();
