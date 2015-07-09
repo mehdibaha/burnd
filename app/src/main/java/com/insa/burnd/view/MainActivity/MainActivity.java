@@ -57,7 +57,6 @@ public class MainActivity extends BaseActivity {
 
         setupViewPager();
         setupTabs();
-
         //setupSyncadapter();
     }
 

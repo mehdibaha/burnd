@@ -217,8 +217,10 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
             @Override
             public void run() {
                 askedConnection = false;
-                swipeRefreshLayout.setRefreshing(false);
-                newsfeedAdapter.refresh();
+                if(swipeRefreshLayout != null && newsfeedAdapter != null) {
+                    swipeRefreshLayout.setRefreshing(false);
+                    newsfeedAdapter.refresh();
+                }
             }
         });
     }

@@ -61,6 +61,7 @@ public class Connection {
                 public void onResponse(String response) {
                     if (dialog != null) dialog.dismiss();
                     try {
+                        if(rListener != null)
                         rListener.requestCompleted(response);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -101,6 +102,8 @@ public class Connection {
                 }
             };
 
+            // Setting tag to request to cancel it if context == null
+            stringRequest.setTag(ctx.getClass().toString());
             stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             VolleySingleton.getInstance().addToRequestQueue(stringRequest);
         }
