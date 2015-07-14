@@ -2,16 +2,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background_login"
-    >
+    android:background="@color/primary">
 
-    <com.facebook.widget.LoginButton
-        android:id="@+id/authButton"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="57dp"
-        android:layout_alignParentTop="true"
+        android:text="Burnd"
+        android:gravity="center"
+        android:id="@+id/textView5"
+        android:textColor="@color/white"
+        android:textSize="70sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="110dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reinvent the way you party"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/textView5"
         android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="110dp">
+
+        <com.facebook.widget.LoginButton
+            android:id="@+id/authButton"
+            style="@style/fb_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
 
 </RelativeLayout>

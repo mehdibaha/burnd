@@ -74,14 +74,13 @@
         </activity>
         <activity
             android:name=".view.LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
+            android:label="@string/title_activity_login" />
 
         <!-- Join -->
         <activity
             android:name=".view.JoinActivity"
             android:label="@string/title_activity_join"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"/>
 
         <!-- Create -->
         <activity
@@ -97,6 +96,7 @@
         <activity
             android:name=".view.MainActivity.MainActivity"
             android:screenOrientation="portrait" >
+
 
         </activity>
 

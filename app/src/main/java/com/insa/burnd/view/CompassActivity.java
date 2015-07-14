@@ -12,8 +12,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import com.insa.burnd.R;
 import com.insa.burnd.network.Connection;
@@ -28,11 +26,13 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import trikita.log.Log;
 
 
 public class CompassActivity extends Activity implements SensorEventListener, Connection.ResponseListener{
-    private volatile RedView rv;
     private SensorManager sM;
     private Sensor mS;
     private Sensor aS;
@@ -56,6 +56,8 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
     private volatile Thread gpsThread;
     private static volatile CompassActivity instance;
 
+    @Bind(R.id.redView) volatile RedView rv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,22 +67,10 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
         compBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         compBundle.putString("reqID", "gpsSync");
         setContentView(R.layout.activity_compass);
-        rv = (RedView) findViewById(R.id.redView);
+        ButterKnife.bind(this);
+
         Log.d("redish" + rv.toString());
-        Button startButton = (Button) findViewById(R.id.startButton);
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rv.startSearch();
-            }
-        });
-        Button stopButton = (Button) findViewById(R.id.stopButton);
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rv.stopSearch();
-            }
-        });
+
         sM = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mS = sM.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         aS = sM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -129,6 +119,16 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
         };
         timer = new Timer();
         timer.schedule(tt, MEET_DURATION);
+    }
+
+    @OnClick(R.id.startButton)
+    public void startButton() {
+        rv.startSearch();
+    }
+
+    @OnClick(R.id.stopButton)
+    public void stopButton() {
+        rv.stopSearch();
     }
 
     public static CompassActivity getInstance(){

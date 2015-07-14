@@ -31,3 +31,5 @@ proguard/
 # Other
 *.jks
 *.svn/
+
+app/app.iml

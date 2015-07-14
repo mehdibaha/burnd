@@ -27,10 +27,10 @@
         android:background="#ca000000" />
 
     <View
+        android:id="@+id/dimmed_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dimmed_background_color"
-        android:id="@+id/dimmed_background" >
+        android:background="@color/dimmed_background_color">
     </View>
 
 </RelativeLayout>

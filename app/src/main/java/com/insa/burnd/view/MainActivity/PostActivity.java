@@ -40,28 +40,31 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import trikita.log.Log;
 
 public class PostActivity extends BaseActivity implements Connection.ResponseListener {
     public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
-    private EditText etStatus;
-
-    private Uri fileUri;
     private final PostActivity activity = this;
 
+    private Uri fileUri;
     private String picturePath;
-    private ImageView imageView2;
-    private VideoView vidPreview;
     private int camera;
+
+    @Bind(R.id.toolbar_post) Toolbar toolbar;
+    @Bind(R.id.edittext_post) EditText etStatus;
+    @Bind(R.id.imageView2) ImageView imageView2;
+    @Bind(R.id.videoPreview) VideoView vidPreview;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+        ButterKnife.bind(activity);
 
         initToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE); // Show keyboard
-        etStatus = (EditText) findViewById(R.id.edittext_post);
 
         manageMediaFromIntent(getIntent());
     }
@@ -69,7 +72,6 @@ public class PostActivity extends BaseActivity implements Connection.ResponseLis
     private void manageMediaFromIntent(Intent intent) {
         Intent it;
         if(intent.getStringExtra(EXTRA_MESSAGE).equals("picture")) {
-            imageView2 = (ImageView) findViewById(R.id.imageView2);
             imageView2.setVisibility(View.VISIBLE);
             camera=1;
             if (getApplicationContext().getPackageManager().hasSystemFeature(
@@ -84,7 +86,6 @@ public class PostActivity extends BaseActivity implements Connection.ResponseLis
         }
 
         else if(intent.getStringExtra(EXTRA_MESSAGE).equals("camera")){
-            vidPreview = (VideoView) findViewById(R.id.videoPreview);
             vidPreview.setVisibility(View.VISIBLE);
             camera=2;
             if (getApplicationContext().getPackageManager().hasSystemFeature(
@@ -102,9 +103,7 @@ public class PostActivity extends BaseActivity implements Connection.ResponseLis
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_post);
         setSupportActionBar(toolbar);
-
         final ActionBar ab = getSupportActionBar();
         if(ab!=null) {
             ab.setTitle("Create a new post");
@@ -236,8 +235,7 @@ public class PostActivity extends BaseActivity implements Connection.ResponseLis
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        // save file url in bundle as it will be null on screen orientation
-        // changes
+        // save file url in bundle as it will be null on screen orientation changes
         outState.putParcelable("file_uri", fileUri);
     }
 

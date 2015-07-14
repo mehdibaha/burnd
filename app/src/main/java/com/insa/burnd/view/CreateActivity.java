@@ -2,13 +2,11 @@ package com.insa.burnd.view;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -27,98 +25,70 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.util.Calendar;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import trikita.log.Log;
 
 public class CreateActivity extends BaseActivity implements Connection.ResponseListener {
     private final CreateActivity activity = this;
 
-    private EditText etPartyName;
-    private EditText etPartyPass;
-    private TextInputLayout tilPartyName;
-    private TextInputLayout tilPartyPass;
-    private Button buttonTime;
-    private EditText etLocation;
+    @Bind(R.id.edittext_create_party_name) EditText etPartyName;
+    @Bind(R.id.edittext_create_party_pass) EditText etPartyPass;
+    @Bind(R.id.til_create_party_name) TextInputLayout tilPartyName;
+    @Bind(R.id.til_create_party_pass) TextInputLayout tilPartyPass;
+    @Bind(R.id.edittext_location) EditText etLocation;
+    @Bind(R.id.toolbar_create) Toolbar toolbar;
+    @Bind(R.id.time) Button buttonTime;
 
+    final private int MAX_DURATION_PARTY = 12;
     private double latitude = 0;
     private double longitude = 0;
-
     private Calendar now ;
     private int hours;
     private int minutes;
-
-    final private int MAX_DURATION_PARTY = 12;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
+        ButterKnife.bind(activity);
 
         initToolbar();
-        initViews();
         setButtonToCurrentTime();
+    }
 
-        Button buttonCreate = (Button) findViewById(R.id.button_create);
-        buttonCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String partyName = etPartyName.getText().toString();
-                String partyPass = etPartyPass.getText().toString();
-                String partyTime = buttonTime.getText().toString();
-                String location = etLocation.getText().toString();
+    @OnClick(R.id.button_create)
+    public void createParty() {
+        String partyName = etPartyName.getText().toString();
+        String partyPass = etPartyPass.getText().toString();
+        String partyTime = buttonTime.getText().toString();
+        String location = etLocation.getText().toString();
 
-                if (!TextUtils.isEmpty(partyName) && !TextUtils.isEmpty(partyPass)) {
-                    try {
-                        if (validTime(partyTime, MAX_DURATION_PARTY))
-                            new Connection(activity, activity, "createparty").execute(partyName, partyPass, partyTime, location, "" + longitude, "" + latitude);
-                        else
-                            Utils.showToast(activity, "Party can't be more than 12 hours from now.");
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    if(TextUtils.isEmpty(partyName))
-                        tilPartyName.setError("Name can't be empty");
-                    if(TextUtils.isEmpty(partyPass))
-                        tilPartyPass.setError("Pass can't be empty");
-                }
+        if (!TextUtils.isEmpty(partyName) && !TextUtils.isEmpty(partyPass)) {
+            try {
+                if (validTime(partyTime, MAX_DURATION_PARTY))
+                    new Connection(activity, activity, "createparty").execute(partyName, partyPass, partyTime, location, "" + longitude, "" + latitude);
+                else
+                    Utils.showToast(activity, "Party can't be more than 12 hours from now.");
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        });
-
-        buttonTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTimer();
-            }
-        });
-
-        Button buttonLocaton = (Button) findViewById(R.id.button_location);
-        buttonLocaton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GPSLocateParty();
-            }
-        });
+        } else {
+            if(TextUtils.isEmpty(partyName))
+                tilPartyName.setError("Name can't be empty");
+            if(TextUtils.isEmpty(partyPass))
+                tilPartyPass.setError("Pass can't be empty");
+        }
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create);
         setSupportActionBar(toolbar);
-
         final ActionBar ab = getSupportActionBar();
         if(ab!=null) {
             ab.setTitle("Create a party");
             ab.setDisplayHomeAsUpEnabled(true);
         }
-    }
-
-    private void initViews() {
-        etPartyName = (EditText) findViewById(R.id.edittext_create_party_name);
-        etPartyPass = (EditText) findViewById(R.id.edittext_create_party_pass);
-        etPartyPass.setTypeface(Typeface.DEFAULT);
-        etLocation = (EditText) findViewById(R.id.edittext_location);
-        tilPartyName = (TextInputLayout) findViewById(R.id.til_create_party_name);
-        tilPartyPass = (TextInputLayout) findViewById(R.id.til_create_party_pass);
-        buttonTime = (Button) findViewById(R.id.time);
     }
 
     private void setButtonToCurrentTime() {
@@ -128,7 +98,8 @@ public class CreateActivity extends BaseActivity implements Connection.ResponseL
         buttonTime.setText(hours + ":" + minutes);
     }
 
-    private void GPSLocateParty() {
+    @OnClick(R.id.button_location)
+    public void GPSLocateParty() {
         GPSTracker mGPSService = new GPSTracker(this);
         mGPSService.getLocation();
 
@@ -155,7 +126,8 @@ public class CreateActivity extends BaseActivity implements Connection.ResponseL
          mGPSService.closeGPS();
     }
 
-    private void showTimer() {
+    @OnClick(R.id.time)
+    public void showTimer() {
         TimePickerDialog mTimePicker = new TimePickerDialog(activity, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {

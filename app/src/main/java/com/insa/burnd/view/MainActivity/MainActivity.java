@@ -30,10 +30,13 @@ import com.insa.burnd.utils.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import trikita.log.Log;
 
 public class MainActivity extends BaseActivity {
     private final MainActivity activity = this;
+    private Adapter adapter;
 
     // Sync Adapter
     public static final String AUTHORITY = "com.insa.burnd.provider"; // Authority of sync adapter's content provider
@@ -41,33 +44,32 @@ public class MainActivity extends BaseActivity {
     public static final String ACCOUNT = "dummyaccount";     // The account name
     private static Account mAccount;
 
-    private Toolbar toolbar;
-    private AppBarLayout appBarLayout;
-    private Adapter adapter;
+    @Bind(R.id.toolbar_main) Toolbar toolbar;
+    @Bind(R.id.appbar) AppBarLayout appBarLayout;
+    @Bind(R.id.main_pager) ViewPager viewPager;
+    @Bind(R.id.tabs) TabLayout tabLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(activity);
 
-        initToolbar();
-        initTabs();
-
+        setupViewPager();
+        setupTabs();
         //setupSyncadapter();
     }
 
-    private void initToolbar(){
-        toolbar = (Toolbar) findViewById(R.id.toolbar_main);
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        setSupportActionBar(toolbar);
+    private void setupViewPager() {
+        adapter = new Adapter(getSupportFragmentManager());
+        adapter.addFragment(new NewsfeedFragment(), "Newsfeed");
+        adapter.addFragment(new MeetingFragment(), "Meeting");
+        adapter.addFragment(new SettingsFragment(), "Settings");
+        viewPager.setAdapter(adapter);
     }
 
-    private void initTabs() {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.main_pager);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        setupViewPager(viewPager);
+    private void setupTabs() {
         tabLayout.setupWithViewPager(viewPager);
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -95,19 +97,13 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
-            public void onPageSelected(int position) {}
+            public void onPageSelected(int position) {
+            }
 
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new NewsfeedFragment(), "Newsfeed");
-        adapter.addFragment(new MeetingFragment(), "Meeting");
-        adapter.addFragment(new SettingsFragment(), "Settings");
-        viewPager.setAdapter(adapter);
     }
 
     public NewsfeedFragment getNewsfeedFragment() {

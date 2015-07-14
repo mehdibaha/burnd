@@ -13,18 +13,20 @@ import com.facebook.widget.LoginButton;
 import com.insa.burnd.R;
 import com.insa.burnd.utils.BaseFragment;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import trikita.log.Log;
 
 public class LoginFragment extends BaseFragment {
 
+    @Bind(R.id.authButton) LoginButton authButton;
+    private UiLifecycleHelper uiHelper;
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
             onSessionStateChange(session, state, exception);
         }
     };
-
-    private UiLifecycleHelper uiHelper;
 
     public LoginFragment() {
         //empty
@@ -78,12 +80,12 @@ public class LoginFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View V = inflater.inflate(R.layout.fragment_login, container, false);
+        View v = inflater.inflate(R.layout.fragment_login, container, false);
+        ButterKnife.bind(fragment, v);
 
-        LoginButton authButton = (LoginButton) V.findViewById(R.id.authButton);
         authButton.setFragment(this);
 
-        return V;
+        return v;
     }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
