@@ -17,6 +17,11 @@
         <item name="android:textColorPrimary">@color/primary_text</item>
     </style>
 
+    <style name="fb_login_button">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
     <style name="menu_labels_style">
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/icons</item>

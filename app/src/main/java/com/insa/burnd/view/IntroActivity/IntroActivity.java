@@ -18,7 +18,6 @@ public class IntroActivity extends AppIntro2 {
         addSlide(new SlideFragment1(), Burnd.getAppContext());
         addSlide(new SlideFragment2(), Burnd.getAppContext());
         addSlide(new SlideFragment3(), Burnd.getAppContext());
-        addSlide(new SlideFragment4(), Burnd.getAppContext());
 
         setFadeAnimation();
     }
