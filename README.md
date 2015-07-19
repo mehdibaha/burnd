@@ -1,4 +1,4 @@
-# Burnd
+# Burnd (burnd.cles-facil.fr/index.html)
 
 Burnd can be used in different kinds of celebrations and private gatherings to bring together hundreds of people.
 
