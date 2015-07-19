@@ -1,4 +1,4 @@
-# Burnd (burnd.cles-facil.fr/index.html)
+# Burnd
 
 Burnd can be used in different kinds of celebrations and private gatherings to bring together hundreds of people.
 
@@ -16,4 +16,4 @@ Our app aims to introduce a new type of communication in these situations, not b
 Once you join a party, you have access to several services :
 - The main one being the newsfeed bringing together photos, videos and posts of all kinds of other "partiers".
 - You may even meet some new people there, by liking/disliking people in your party.
-- The innovative aspect of this application is that the entire party is completely deleted the next day.
+- The innovative aspect of this application is that the entire party is completely destroyed the next day.
