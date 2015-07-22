@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import com.insa.burnd.network.VolleySingleton;
 
 import butterknife.ButterKnife;
-import trikita.log.Log;
 
 /* With this Base Class, we can access to parent activity of fragment very easily */
 public abstract class BaseFragment extends Fragment {
@@ -28,7 +27,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(mActivity.getClass().toString());
         VolleySingleton.getInstance().getRequestQueue().cancelAll(getClass().toString());
     }
 }

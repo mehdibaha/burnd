@@ -12,15 +12,13 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.insa.burnd.R;
+import com.insa.burnd.models.ApiResponse;
 import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.SessionController;
 import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.utils.BaseActivity;
 import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.MainActivity.MainActivity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.Calendar;
@@ -68,7 +66,7 @@ public class CreateActivity extends BaseActivity implements Connection.ResponseL
         if (!TextUtils.isEmpty(partyName) && !TextUtils.isEmpty(partyPass)) {
             try {
                 if (validTime(partyTime, MAX_DURATION_PARTY))
-                    new Connection(activity, activity, "createparty").execute(partyName, partyPass, partyTime, location, "" + longitude, "" + latitude);
+                    new Connection(activity, activity, "createparty", "Creating party...").execute(partyName, partyPass, partyTime, location, "" + longitude, "" + latitude);
                 else
                     Utils.showToast(activity, "Party can't be more than 12 hours from now.");
             } catch (ParseException e) {
@@ -156,19 +154,17 @@ public class CreateActivity extends BaseActivity implements Connection.ResponseL
     }
 
     @Override
-    public void requestCompleted(String response) throws JSONException {
-        JSONObject json = new JSONObject(response);
-        String message = json.getString("message");
-        boolean error = json.getBoolean("error");
-
-        Log.d(message);
+    public void requestCompleted(ApiResponse ar) {
+        String message = ar.getMessage();
+        boolean error = ar.isError();
+        Log.d(ar.toString());
 
         if (!error) {
             Utils.showToast(this, "Party created.");
             startActivity(new Intent(this, MainActivity.class));
             activity.finish();
         } else if (message.equals("PARTY_FAILED")) {
-            Utils.showToast(this, "Post failed.");
+            Utils.showToast(this, "Party creation failed.");
         } else {
             Utils.showToast(this, "Access denied.");
             new SessionController(this).disconnectFB();

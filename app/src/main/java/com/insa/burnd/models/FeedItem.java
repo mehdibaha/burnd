@@ -2,16 +2,16 @@ package com.insa.burnd.models;
 
 /* Class defining a feed item from a newsfeed */
 public class FeedItem {
-
     private int id;
+    private long timestamp;
+    private int votesUp;
+    private int votesDown;
+
     private String status;
     private String image;
-    private String video="";
-    private User user;
-    private String timeStamp;
-    private String votesUp;
-    private String votesDown;
+    private String video;
 
+    private User user;
     private CommentList commentList;
 
     public FeedItem() {
@@ -25,11 +25,43 @@ public class FeedItem {
         this.id = id;
     }
 
-    public String getImge() {
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public int getVotesUp() {
+        return votesUp;
+    }
+
+    public void setVotesUp(int votesUp) {
+        this.votesUp = votesUp;
+    }
+
+    public int getVotesDown() {
+        return votesDown;
+    }
+
+    public void setVotesDown(int votesDown) {
+        this.votesDown = votesDown;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getImage() {
         return image;
     }
 
-    public void setImge(String image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -41,36 +73,12 @@ public class FeedItem {
         this.video = video;
     }
 
-    public String getStatus() {
-        return status;
+    public User getUser() {
+        return user;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getVotesDown() {
-        return votesDown;
-    }
-
-    public void setVotesDown(String votesDown) {
-        this.votesDown = votesDown;
-    }
-
-    public String getVotesUp() {
-        return votesUp;
-    }
-
-    public void setVotesUp(String votesUp) {
-        this.votesUp = votesUp;
-    }
-
-    public String getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public CommentList getCommentList() {
@@ -81,11 +89,10 @@ public class FeedItem {
         this.commentList = commentList;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    @Override
+    public String toString() {
+        return "FeedItem{" +
+                "id=" + id +
+                '}';
     }
 }

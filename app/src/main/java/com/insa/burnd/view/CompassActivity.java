@@ -14,14 +14,12 @@ import android.location.Location;
 import android.os.Bundle;
 
 import com.insa.burnd.R;
+import com.insa.burnd.models.ApiResponse;
 import com.insa.burnd.network.Connection;
 import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.sync.SyncAdapter;
 import com.insa.burnd.utils.RedView;
 import com.insa.burnd.view.MainActivity.MainActivity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -226,10 +224,11 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
     }
 
     @Override
-    public void requestCompleted(String response) throws JSONException {
-        JSONObject json = new JSONObject(response);
-        String id = json.getString("id");
-        if(id.equals("killmatch")){
+    public void requestCompleted(ApiResponse ar) {
+        String message = ar.getMessage();
+        Log.d(ar.toString());
+
+        if(message.equals("killmatch")){
             startActivity(new Intent(this, MainActivity.class));
             this.finish();
         }

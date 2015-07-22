@@ -1,7 +1,6 @@
 package com.insa.burnd.models;
 
 /* Class defining a comment from a feed item*/
-
 public class Comment {
     private int id;
     private String status;
@@ -32,5 +31,12 @@ public class Comment {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                '}';
     }
 }

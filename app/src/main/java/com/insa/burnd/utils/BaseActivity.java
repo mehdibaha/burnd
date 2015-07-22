@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.insa.burnd.network.VolleySingleton;
 
 import butterknife.ButterKnife;
-import trikita.log.Log;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -24,7 +23,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(getClass().toString());
         VolleySingleton.getInstance().getRequestQueue().cancelAll(getClass().toString());
     }
 

@@ -17,7 +17,8 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.insa.burnd.R;
-import com.insa.burnd.controller.PartyAdapter;
+import com.insa.burnd.controller.PartyListAdapter;
+import com.insa.burnd.models.ApiResponse;
 import com.insa.burnd.models.User;
 import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.SessionController;
@@ -25,12 +26,6 @@ import com.insa.burnd.services.GPSTracker;
 import com.insa.burnd.utils.BaseActivity;
 import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.MainActivity.MainActivity;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,7 +35,7 @@ import trikita.log.Log;
 
 public class JoinActivity extends BaseActivity implements Connection.ResponseListener {
     private final JoinActivity activity = this;
-    private PartyAdapter adapter;
+    private PartyListAdapter adapter;
 
     @Bind(R.id.parties_listView) ListView partiesListView;
     @Bind(R.id.edittext_join_party_name) EditText etPartyName;
@@ -66,7 +61,8 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
         String partyPass = etPartyPass.getText().toString();
 
         if (!TextUtils.isEmpty(partyName) && !TextUtils.isEmpty(partyPass)) {
-            new Connection(activity, activity, "joinparty", "Loading...").execute(partyName, partyPass);
+            Log.d("partyname" + partyName + "partypass" + partyPass);
+            new Connection(activity, activity, "joinparty", "Searching for party...").execute(partyName, partyPass);
         }
         else {
             if(TextUtils.isEmpty(partyName))
@@ -78,7 +74,7 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
 
     @OnItemClick(R.id.parties_listView)
     public void showParties(int position) {
-        etPartyName.setText(adapter.getPartiesList().get(position));
+        etPartyName.setText(adapter.getPartyList().get(position).getName());
         partiesListView.setVisibility(View.GONE);
     }
 
@@ -116,7 +112,7 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
             Log.d("Latitude:" + latitude + " | Longitude: " + longitude + " | Accuracy: " + accuracy);
 
             //Utils.showToast(this, mGPSService.getLocationAddress());
-            new Connection(activity, activity, "searchparty", "Searching...").execute(""+longitude,""+latitude);
+            new Connection(activity, activity, "searchparty", "Searching near parties...").execute(""+longitude,""+latitude);
         }
 
         // make sure you close the gps after using it. Save user's battery power
@@ -155,8 +151,12 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
                     @Override
                     public void onCompleted(GraphUser user, Response response) {
                         if (user != null) {
-                            User myUser = new User(user, accessToken);
-                            Log.d(myUser.toString());
+                            User myUser = new User.UserBuilder()
+                                    .setName(user.getName())
+                                    .setAccessToken(accessToken)
+                                    .setGender(user.asMap().get("gender").toString())
+                                    .setUserId(user.getId())
+                                    .build();
                             if(!TextUtils.isEmpty(user.getName())) {
                                 Utils.showToast(activity, "Welcome " + user.getName());
                             }
@@ -174,13 +174,11 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
     }
 
     @Override
-    public void requestCompleted(String response) throws JSONException {
-        JSONObject json = new JSONObject(response);
-        String message = json.getString("message");
-        boolean error = json.getBoolean("error");
+    public void requestCompleted(ApiResponse ar) {
+        String message = ar.getMessage();
+        boolean error = ar.isError();
+        Log.d(ar.toString());
 
-        Log.d(response);
-        Log.d(message);
         if (error) {
             if (message.equals("PARTY_NOT_FOUND")) {
                 Utils.showToast(this, "Party not found.");
@@ -202,30 +200,9 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
                 activity.finish();
             }
             else if (message.equals("Search")) {
-                String parties = json.getString("PartiesFound");
-                Log.d("Party Search" + parties);
-
-                ArrayList<String> partylist = new ArrayList<>();
-                ArrayList<String> partylistLocation = new ArrayList<>();
-
-                try {
-                    // Locate the NodeList name
-                    JSONArray jsonarray = json.getJSONArray("PartiesFound");
-                    for (int i = 0; i < jsonarray.length(); i++) {
-                        JSONObject json2 = jsonarray.getJSONObject(i);
-
-                        partylist.add(json2.optString("party"));
-                        partylistLocation.add(json2.optString("location"));
-                    }
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
-                }
-
-                adapter = new PartyAdapter(activity, partylist, partylistLocation);
+                adapter = new PartyListAdapter(activity, ar.getPartyList());
                 partiesListView.setAdapter(adapter);
                 partiesListView.setVisibility(View.VISIBLE);
-
             }
         }
     }

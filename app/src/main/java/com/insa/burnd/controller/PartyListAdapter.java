@@ -9,20 +9,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.insa.burnd.R;
+import com.insa.burnd.models.PartyList;
 
-import java.util.ArrayList;
-
-public class PartyAdapter extends BaseAdapter {
+public class PartyListAdapter extends BaseAdapter {
     private Context ctx;
+    private PartyList partyList;
 
-    private ArrayList<String> partiesList;
-    private ArrayList<String> partiesLocation;
-
-    public PartyAdapter(Context ctx, ArrayList<String> partiesList, ArrayList<String> partiesLocation) {
+    public PartyListAdapter(Context ctx, PartyList partyList) {
         super();
         this.ctx = ctx;
-        this.partiesList = partiesList;
-        this.partiesLocation = partiesLocation;
+        this.partyList = partyList;
     }
 
     private static class ViewHolder {
@@ -48,21 +44,18 @@ public class PartyAdapter extends BaseAdapter {
             holder = (ViewHolder) v.getTag();
         }
 
-        // Sets username in textview
-        if(!TextUtils.isEmpty(partiesList.get(position))) {
-            holder.partyName.setText(partiesList.get(position));
-        }
-
-        // Checking for empty status message
-        if(!TextUtils.isEmpty(partiesLocation.get(position))) {
-            holder.partyLocation.setText(partiesLocation.get(position));
+        String partyName = partyList.get(position).getName();
+        String partyPass = partyList.get(position).getAdress();
+        if(!TextUtils.isEmpty(partyName) && !TextUtils.isEmpty(partyPass)) {
+            holder.partyName.setText(partyName);
+            holder.partyLocation.setText(partyPass);
         }
 
         return v;
     }
 
     public int getCount() {
-        return partiesList.size();
+        return partyList.size();
     }
 
     public Object getItem(int arg0) {
@@ -73,8 +66,7 @@ public class PartyAdapter extends BaseAdapter {
         return position;
     }
 
-    public ArrayList<String> getPartiesList() {
-        return partiesList;
+    public PartyList getPartyList() {
+        return partyList;
     }
-
 }

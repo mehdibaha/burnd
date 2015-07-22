@@ -155,14 +155,11 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final FeedItem item = visibleNewsfeed.get(position);
-        String status=item.getStatus();
+        String status = item.getStatus();
         SpannableString ss = new SpannableString(status);
         // Sets username i textview
         holder.username.setText(item.getUser().getName());
         if (item.getStatus().toLowerCase().contains("#music")) {
-            //holder.container.setCardBackgroundColor(Color.argb(90, 10, 128, 209));
-            //holder.timestamp.setTextColor(Color.WHITE);
-
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
@@ -171,16 +168,11 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 }
             };
             ss.setSpan(clickableSpan, status.indexOf(35), status.indexOf(35)+6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        } /* else{
-            holder.container.setCardBackgroundColor(Color.WHITE);
-        } */
+        }
 
         // Converting timestamp into x ago format
-        long timeStampLong;
-        if (item.getTimeStamp() != null) {
-            timeStampLong = Long.parseLong(item.getTimeStamp());
-            //timeStampLong = item.getTimeStamp().getTime();
-            CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(timeStampLong,
+        if (item.getTimestamp() != 0) {
+            CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(item.getTimestamp(),
                     System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
             holder.timestamp.setText(timeAgo);
         } else {
@@ -201,8 +193,8 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         holder.profilePic.setImageUrl(item.getUser().getProfilePic(), imageLoader);
 
         // Feed image
-        if (!TextUtils.isEmpty(item.getImge())) {
-            holder.feedImageView.setImageUrl(item.getImge(), imageLoader);
+        if (!TextUtils.isEmpty(item.getImage())) {
+            holder.feedImageView.setImageUrl(item.getImage(), imageLoader);
             holder.feedImageView.setVisibility(View.VISIBLE);
             holder.feedImageView
                     .setResponseObserver(new FeedImageView.ResponseObserver() {
@@ -219,7 +211,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 @Override
                 public void onClick(View view) {
                     zoomImageFromThumb(holder.feedImageView, item.getId());
-                    Log.d(String.valueOf(item.getId()));
+                    Log.v(String.valueOf(item.getId()));
                 }
             });
         } else {
@@ -229,7 +221,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         if (!TextUtils.isEmpty(item.getVideo())) {
             String url="http://burnd.cles-facil.fr/video/";
             Uri video= Uri.parse(item.getVideo());
-            Log.i("video",url+item.getVideo());
+            Log.v("video",url+item.getVideo());
             holder.feedVideoView.setVisibility(View.VISIBLE);
             holder.feedVideoView.setVideoURI(video);
             holder.feedVideoView.start();
@@ -252,8 +244,8 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         // Votes
         holder.votes.setText(item.getVotesUp() + " | " + item.getVotesDown());
 
-        int up= Integer.parseInt(item.getVotesUp());
-        int down=Integer.parseInt(item.getVotesDown());
+        int up = item.getVotesUp();
+        int down = item.getVotesDown();
 
         holder.progressVote.setProgress(statisticVote(up, down));
         // Log.d("statistic" + statisticVote(up, down));

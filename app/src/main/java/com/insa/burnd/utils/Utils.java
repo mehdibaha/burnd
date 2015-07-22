@@ -8,9 +8,6 @@ import android.widget.Toast;
 
 import com.insa.burnd.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import trikita.log.Log;
 
 /* Common practice class to handle various methods (conversions, string operations...) */
@@ -38,23 +35,10 @@ public class Utils {
 
         // if network is NOT available networkInfo will be null, or check if we are connected
         if(networkInfo != null)
-            Log.d("User connection state : " + String.valueOf(networkInfo.isConnected()));
+            Log.v("Is internet ? : " + String.valueOf(networkInfo.isConnected()));
         else
-            Log.d("Null network");
+            Log.e("Null network");
         return networkInfo != null && networkInfo.isConnected();
-    }
-
-    /* Concatenates json arrays at a specific index */
-    public static JSONArray concatArray(JSONArray arr1, JSONArray arr2, int mergeIndex)
-            throws JSONException {
-        JSONArray result = new JSONArray();
-        for (int i = 0; i < arr1.length(); i++) {
-            result.put(arr1.get(i));
-        }
-        for (int i = mergeIndex; i < arr2.length(); i++) {
-            result.put(arr2.get(i));
-        }
-        return result;
     }
 
     public static String makeReadable(String s, int maxChars) {

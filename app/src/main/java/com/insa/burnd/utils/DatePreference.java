@@ -11,16 +11,12 @@ import android.view.View;
 import android.widget.DatePicker;
 
 import com.insa.burnd.R;
+import com.insa.burnd.models.ApiResponse;
 import com.insa.burnd.network.Connection;
 import com.insa.burnd.view.MainActivity.MainActivity;
 import com.insa.burnd.view.SplashActivity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Calendar;
-
-import trikita.log.Log;
 
 /* Class to handle Dates settings */
 public class DatePreference extends DialogPreference implements Connection.ResponseListener {
@@ -89,13 +85,9 @@ public class DatePreference extends DialogPreference implements Connection.Respo
     }
 
     @Override
-    public void requestCompleted(String response) throws JSONException {
-        JSONObject json = new JSONObject(response);
-        String message = json.getString("message");
-        boolean error = json.getBoolean("error");
-
-        Log.d(response);
-        Log.d(message);
+    public void requestCompleted(ApiResponse sr) {
+        String message = sr.getMessage();
+        boolean error = sr.isError();
 
         if (!error)
                 Utils.showToast(ctx, "Age updated.");

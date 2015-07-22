@@ -24,15 +24,13 @@ import android.widget.ImageView;
 import android.widget.VideoView;
 
 import com.insa.burnd.R;
+import com.insa.burnd.models.ApiResponse;
 import com.insa.burnd.network.BackgroundService;
 import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.SessionController;
 import com.insa.burnd.utils.BaseActivity;
 import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.LoginActivity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -171,13 +169,13 @@ public class PostActivity extends BaseActivity implements Connection.ResponseLis
                 return super.onOptionsItemSelected(item);
         }
     }
+
     @Override
-    public void requestCompleted(String response) throws JSONException {
-        JSONObject json = new JSONObject(response);
-        String message = json.getString("message");
-        boolean error = json.getBoolean("error");
-        Log.v("response" + response);
-        Log.d("message" + message);
+    public void requestCompleted(ApiResponse ar) {
+        String message = ar.getMessage();
+        boolean error = ar.isError();
+        Log.d(ar.toString());
+
         if (!error) {
             Utils.showToast(activity, "Post created.");
             startActivity(new Intent(this, MainActivity.class));

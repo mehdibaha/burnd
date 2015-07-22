@@ -16,14 +16,13 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.insa.burnd.R;
 import com.insa.burnd.controller.OnSwipeTouchListener;
+import com.insa.burnd.models.ApiResponse;
+import com.insa.burnd.models.MeetingResponse;
 import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.VolleySingleton;
 import com.insa.burnd.utils.BaseFragment;
 import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.CompassActivity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,7 +33,6 @@ import trikita.log.Log;
 public class MeetingFragment extends BaseFragment implements Connection.ResponseListener {
     private final MeetingFragment fragment = this;
     private ImageLoader imageLoader;
-
     private int numMessages = 0;
 
     @Bind(R.id.profilePic) NetworkImageView photo;
@@ -65,24 +63,21 @@ public class MeetingFragment extends BaseFragment implements Connection.Response
     }
 
     @Override
-    public void requestCompleted(String response) throws JSONException {
-        JSONObject json = new JSONObject(response);
-        final String id = json.getString("iduser2");
-        String match = json.getString("match");
-        String age = json.getString("age_user2");
-        String name = json.getString("name");
-        boolean error = json.getBoolean("error");
-        boolean stop = json.getBoolean("stop");
-
-        Log.d(response);
+    public void requestCompleted(ApiResponse sr) {
+        MeetingResponse mr = sr.getMeetingResponse();
+        boolean error = sr.isError();
+        boolean stop = mr.isStop();
+        int age = mr.getAge();
+        final String id = mr.getId();
+        String match = mr.getMatch();
+        String name = mr.getName();
+        Log.d(mr.toString());
 
         if (!error) {
+            if(match.equals("Match!")) displayNotification();
+            tView.setText(name + " | " + age);
             photo.setEnabled(true);
             photo.setImageUrl("https://graph.facebook.com/" + id + "/picture?type=large", imageLoader);
-
-            if(match.equals("Match!"))
-                displayNotification();
-
             photo.setOnTouchListener(new OnSwipeTouchListener() {
                 public void onSwipeTop() {
                     new Connection(mActivity, fragment, "swipeup", "Like").execute(id);
@@ -92,8 +87,6 @@ public class MeetingFragment extends BaseFragment implements Connection.Response
                     new Connection(mActivity, fragment, "swipedown", "Nope").execute(id);
                 }
             });
-            tView.setText(name + " | " + age);
-
         } else {
             if(stop){
                 photo.setImageUrl("http://burnd.cles-facil.fr/uploads/seen_everyone.png", imageLoader);

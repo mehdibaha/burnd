@@ -9,6 +9,7 @@ import android.preference.PreferenceScreen;
 import android.support.v4.preference.PreferenceFragment;
 
 import com.insa.burnd.R;
+import com.insa.burnd.models.ApiResponse;
 import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.SessionController;
 import com.insa.burnd.sync.SyncAdapter;
@@ -17,9 +18,6 @@ import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.JoinActivity;
 import com.insa.burnd.view.LoginActivity;
 import com.insa.burnd.view.SplashActivity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import trikita.log.Log;
 
@@ -53,9 +51,9 @@ public class SettingsFragment extends PreferenceFragment implements Connection.R
         switch(preference.getKey()){
             case "you": {
                 if (newValue.equals("1")) {
-                    new Connection(mActivity, this, "insertsex", "Updating sex preference...").execute("m");
+                    new Connection(mActivity, this, "insertsex").execute("m");
                 } else if (newValue.equals("2")) {
-                    new Connection(mActivity, this, "insertsex", "Updating sex preference...").execute("f");
+                    new Connection(mActivity, this, "insertsex").execute("f");
                 }
             }
             case "them":{
@@ -117,13 +115,10 @@ public class SettingsFragment extends PreferenceFragment implements Connection.R
     }
 
     @Override
-    public void requestCompleted(String response) throws JSONException {
-        JSONObject json = new JSONObject(response);
-        String message = json.getString("message");
-        boolean error = json.getBoolean("error");
-
-        Log.d(response);
-        Log.d(message);
+    public void requestCompleted(ApiResponse ar) {
+        String message = ar.getMessage();
+        boolean error = ar.isError();
+        Log.d(ar.toString());
 
         if (!error) {
             if(message.equals("SEX_PREF_INSERTED") || message.equals("SEX_INSERTED")){

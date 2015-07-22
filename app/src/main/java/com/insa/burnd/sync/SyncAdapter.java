@@ -9,13 +9,9 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
 
-import com.insa.burnd.R;
+import com.insa.burnd.models.ApiResponse;
 import com.insa.burnd.network.Connection;
 import com.insa.burnd.view.CompassActivity;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import trikita.log.Log;
 
@@ -122,8 +118,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connecti
     }
 
     @Override
-    public void requestCompleted(String response) throws JSONException {
-        JSONObject json = new JSONObject(response);
+    public void requestCompleted(ApiResponse sr) {
+        /*
         String id = json.optString("id");
         Log.d("checkID" + id);
         switch(id){
@@ -134,7 +130,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connecti
                 CompassActivity ca = CompassActivity.getInstance();
                 /*if(ca != null){
                     ca.updateYou(Double.parseDouble(jArray.getString(0)), Double.parseDouble(jArray.getString(1)));
-                }*/
+                }
             }
             case "checkmatch":{
                 Log.d("in");
@@ -144,6 +140,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connecti
                     checkedMatch = true;
                 }
             }
-        }
+        }*/
     }
 }

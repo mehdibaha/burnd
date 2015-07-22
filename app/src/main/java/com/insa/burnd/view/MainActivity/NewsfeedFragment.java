@@ -19,6 +19,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.insa.burnd.R;
 import com.insa.burnd.controller.NewsfeedAdapter;
+import com.insa.burnd.models.ApiResponse;
 import com.insa.burnd.models.Newsfeed;
 import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.SessionController;
@@ -28,10 +29,6 @@ import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.JoinActivity;
 import com.insa.burnd.view.LoginActivity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import trikita.log.Log;
@@ -39,11 +36,10 @@ import trikita.log.Log;
 import static butterknife.ButterKnife.findById;
 
 public class NewsfeedFragment extends BaseFragment implements Connection.ResponseListener {
-    private final NewsfeedFragment fragment = this;
     public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
-
+    private final NewsfeedFragment fragment = this;
     private NewsfeedAdapter newsfeedAdapter;
-    private Newsfeed newsfeed;
+    private Newsfeed mNewsfeed;
     private boolean askedConnection;
 
     private FloatingActionsMenu fam;
@@ -55,7 +51,7 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         updateNewsfeed();
-        newsfeedAdapter = new NewsfeedAdapter((MainActivity) mActivity, fragment, newsfeed);
+        newsfeedAdapter = new NewsfeedAdapter((MainActivity) mActivity, fragment, mNewsfeed);
     }
 
     @Override
@@ -96,7 +92,7 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
             swipeRefreshLayout.setProgressViewOffset(false, 0, Utils.dpToPx(mActivity, 50));
             swipeRefreshLayout.setRefreshing(true);
         }
-        Log.d("refresh state : " + String.valueOf(askedConnection));
+        Log.v("refresh state : " + String.valueOf(askedConnection));
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -177,22 +173,19 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
 
     /* Requets new newsfeed from a new connexion */
     public void updateNewsfeed() {
-        newsfeed = new Newsfeed();
+        mNewsfeed = new Newsfeed();
         askedConnection = true;
         new Connection(mActivity, fragment, "checkparty").execute();
     }
 
     @Override
-    public void requestCompleted(String response) throws JSONException {
-        JSONObject json = new JSONObject(response);
-        String message = json.getString("message");
-        boolean error = json.getBoolean("error");
-
-        Log.v(response);
-        Log.d(message);
+    public void requestCompleted(ApiResponse ar) {
+        String message = ar.getMessage();
+        boolean error = ar.isError();
+        Log.d(ar.toString());
 
         if (!error) {
-            refreshNewsfeed(response);
+            refreshNewsfeed(ar.getNewsfeed());
         } else if (message.equals("USER_NOT_IN_PARTY")) {
             Utils.showToast(mActivity, "You're not in a party...");
             startActivity(new Intent(mActivity, JoinActivity.class));
@@ -205,12 +198,10 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
         }
     }
 
-    private void refreshNewsfeed (String json) throws JSONException {
-        final JSONArray feedArray = Newsfeed.jsonToFeedArray(json);
-        if(feedArray.length()!=0) {
-            Log.v("refresh feed list : " + json);
-            newsfeed.update(feedArray); // Update newsfeed
-            saveLastPostId(newsfeed);
+    private void refreshNewsfeed (Newsfeed newsfeed) {
+        if(newsfeed.size()!=0) {
+            mNewsfeed.update(newsfeed); // Update newsfeed
+            mNewsfeed.saveLastPostId(mActivity);
         }
 
         new Handler().post(new Runnable() {
@@ -223,12 +214,6 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
                 }
             }
         });
-    }
-
-    private void saveLastPostId(Newsfeed newsfeed) {
-        String lastPostId = String.valueOf(newsfeed.get(0).getId());
-        SPManager.save(mActivity, lastPostId, "LAST_POST_ID"); // Saves last post id
-        Log.d("saving last post id : " + lastPostId);
     }
 
     public NewsfeedAdapter getNewsfeedAdapter() {

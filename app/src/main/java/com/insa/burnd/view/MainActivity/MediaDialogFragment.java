@@ -16,8 +16,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MediaDialogFragment extends DialogFragment {
-    private final MediaDialogFragment dialog = this;
     public final static String EXTRA_MESSAGE = "com.insa.burnd.text.MESSAGE";
+    private final MediaDialogFragment dialog = this;
 
     public MediaDialogFragment() {
         // Empty constructor required for DialogFragment
