@@ -198,7 +198,8 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
                 startActivity(new Intent(this, MainActivity.class));
                 activity.finish();
             }
-            else if (message.equals("Search")) {
+            else if (message.equals("PARTIES_FOUND")) {
+                Log.d(ar.getPartyList().toString());
                 adapter = new PartyListAdapter(activity, ar.getPartyList());
                 partiesListView.setAdapter(adapter);
                 partiesListView.setVisibility(View.VISIBLE);
