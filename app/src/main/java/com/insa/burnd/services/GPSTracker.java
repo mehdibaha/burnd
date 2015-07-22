@@ -288,9 +288,7 @@ public class GPSTracker extends Service implements LocationListener {
         mAltitude = location.getAltitude();
         mAccuracy = location.getAccuracy();
         mBearing = location.getBearing();
-        Log.d("Location Changed");
-        Log.d("Latitude:"+mLatitude);
-        Log.d("Longitude:"+mLongitude);
+        Log.d("Latitude:" + mLatitude + " | Longitude: " + mLongitude + " | Accuracy: " + mAccuracy);
     }
 
     @Override

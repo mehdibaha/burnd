@@ -109,7 +109,6 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
             double latitude = mGPSService.getLatitude();
             double longitude = mGPSService.getLongitude();
             float accuracy = mGPSService.getAccuracy();
-            Log.d("Latitude:" + latitude + " | Longitude: " + longitude + " | Accuracy: " + accuracy);
 
             //Utils.showToast(this, mGPSService.getLocationAddress());
             new Connection(activity, activity, "searchparty", "Searching near parties...").execute(""+longitude,""+latitude);
