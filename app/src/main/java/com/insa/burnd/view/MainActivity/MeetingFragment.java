@@ -78,7 +78,7 @@ public class MeetingFragment extends BaseFragment implements Connection.Response
             tView.setText(name + " | " + age);
             photo.setEnabled(true);
             photo.setImageUrl("https://graph.facebook.com/" + id + "/picture?type=large", imageLoader);
-            photo.setOnTouchListener(new OnSwipeTouchListener() {
+            photo.setOnTouchListener(new OnSwipeTouchListener(mActivity) {
                 public void onSwipeTop() {
                     new Connection(mActivity, fragment, "swipeup", "Like").execute(id);
                 }

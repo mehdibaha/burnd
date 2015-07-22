@@ -1,15 +1,23 @@
 package com.insa.burnd.controller;
 
+import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-/* Class to listen on swipe gestures on views */
+/**
+ * Detects left and right swipes across a view.
+ */
 public class OnSwipeTouchListener implements View.OnTouchListener {
-    private final GestureDetector gestureDetector = new GestureDetector(new GestureListener());
 
-    public boolean onTouch(final View view, final MotionEvent motionEvent) {
-        return gestureDetector.onTouchEvent(motionEvent);
+    private final GestureDetector gestureDetector;
+
+    public OnSwipeTouchListener(Context context) {
+        gestureDetector = new GestureDetector(context, new GestureListener());
+    }
+
+    public boolean onTouch(View v, MotionEvent event) {
+        return gestureDetector.onTouchEvent(event);
     }
 
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
