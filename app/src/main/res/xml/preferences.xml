@@ -44,6 +44,6 @@
 
     </PreferenceCategory>
 
-    <Preference android:title="Leave the Party" android:key="leave_party"/>
+    <Preference android:title="Leave the party" android:key="leave_party"/>
     <Preference android:title="Logout" android:key="logout"/>
 </PreferenceScreen>
