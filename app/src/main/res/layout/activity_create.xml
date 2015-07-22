@@ -92,7 +92,6 @@
             android:background="@color/primary"
             android:textColor="@color/white"
             android:textSize="30sp"
-            android:text="18:44"
             android:layout_below="@id/set_time"
             android:layout_centerHorizontal="true" />
 

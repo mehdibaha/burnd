@@ -9,7 +9,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:text="Example application"
         android:textSize="20sp" />
     <TextView
         android:id="@+id/secondLine"
@@ -17,6 +16,5 @@
         android:layout_height="26dip"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:text="Description"
         android:textSize="12sp" />
 </LinearLayout>

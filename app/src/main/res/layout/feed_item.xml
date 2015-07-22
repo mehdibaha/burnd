@@ -120,10 +120,8 @@
                 android:id="@+id/textview_votes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.00"
-                android:text="0"
-                android:paddingEnd="@dimen/feed_item_padding_left_right"
-                android:paddingStart="@dimen/feed_item_padding_left_right" />
+                android:paddingRight="@dimen/feed_item_padding_left_right"
+                android:paddingLeft="@dimen/feed_item_padding_left_right" />
 
             <View
                 android:layout_height="fill_parent"
