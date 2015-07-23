@@ -68,7 +68,7 @@ public class ApiResponseDeserializer implements JsonDeserializer<ApiResponse> {
             item.setId(feedObj.get("post_id").getAsInt());
             item.setImage(feedObj.get("image").getAsString());
             item.setStatus(feedObj.get("status").getAsString());
-            item.setTimestamp(feedObj.get("timestamp").getAsLong());
+            item.setTimestamp(feedObj.get("timestamp").getAsString());
             item.setVotesUp(feedObj.get("vote_up").getAsInt());
             item.setVotesDown(feedObj.get("vote_down").getAsInt());
             item.setVideo(feedObj.get("video").getAsString());

@@ -13,10 +13,11 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.insa.burnd.models.ApiResponseDeserializer;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
+
+import trikita.log.Log;
 
 /**
  * Volley GET request which parses JSON server response into Java object.
@@ -39,23 +40,25 @@ public class GsonRequest<T> extends Request<T> {
         super(Method.POST, url, errorListener);
         this.setRetryPolicy(getCustomRetryPolicy());
         this.responseClass = responseClass;
-        this.gson = new GsonBuilder().registerTypeAdapter(responseClass, new ApiResponseDeserializer()).create();
+        this.gson = new GsonBuilder().create();
         this.headers = headers;
         this.params = params;
         this.listener = listener;
     }
 
     private RetryPolicy getCustomRetryPolicy() {
-        return new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        return new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 3, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
     }
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
+        Log.d(headers.toString());
         return headers != null ? headers : super.getHeaders();
     }
 
     @Override
     public Map<String, String> getParams() throws AuthFailureError {
+        Log.d(params.toString());
         return params != null ? params : super.getParams();
     }
 
