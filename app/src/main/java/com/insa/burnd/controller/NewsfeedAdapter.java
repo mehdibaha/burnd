@@ -157,8 +157,11 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         final FeedItem item = visibleNewsfeed.get(position);
         String status = item.getStatus();
         SpannableString ss = new SpannableString(status);
-        // Sets username i textview
-        holder.username.setText(item.getUser().getName());
+
+        if (!TextUtils.isEmpty(item.getUser().getName())) {
+            holder.username.setText(item.getUser().getName());
+        }
+
         if (item.getStatus().toLowerCase().contains("#music")) {
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
@@ -171,8 +174,10 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         }
 
         // Converting timestamp into x ago format
-        if (item.getTimestamp() != 0) {
-            CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(item.getTimestamp(),
+        long timeStampLong;
+        if (item.getTimestamp() != null) {
+            timeStampLong = Long.parseLong(item.getTimestamp());
+            CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(timeStampLong,
                     System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
             holder.timestamp.setText(timeAgo);
         } else {
@@ -190,7 +195,9 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         }
 
         // user profile pic
-        holder.profilePic.setImageUrl(item.getUser().getProfilePic(), imageLoader);
+        if (!TextUtils.isEmpty(item.getUser().getProfilePic())) {
+            holder.profilePic.setImageUrl(item.getUser().getProfilePic(), imageLoader);
+        }
 
         // Feed image
         if (!TextUtils.isEmpty(item.getImage())) {
@@ -297,6 +304,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 new Connection(activity, fragment, "comment" ,"Commenting").execute(holder.etComment.getText().toString(), String.valueOf(item.getId()));
+                holder.etComment.getText().clear();
             }
         });
 
@@ -306,6 +314,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
     // Expands the comment view and show the list of comments
     @TargetApi(21)
     public void viewComments(ViewHolder holder, FeedItem item) {
+        holder.etComment.getText().clear();
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (holder.commentView.getVisibility()==View.GONE) {
             holder.commentView.setVisibility(View.VISIBLE);
