@@ -99,13 +99,13 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
             public void onRefresh() {
                 swipeRefreshLayout.setProgressViewOffset(false, 0, 0);
                 swipeRefreshLayout.setRefreshing(true);
-                Log.d("user asked for refresh");
+                Log.d("User asking for refresh");
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
                         String lastPostId = SPManager.load(mActivity, "LAST_POST_ID");
-                        Log.d(lastPostId);
-                        new Connection(mActivity, fragment, "checkparty").execute(lastPostId);
+                        Log.v(lastPostId);
+                        new Connection(mActivity, fragment, "checkparty").execute("true", lastPostId);
                     }
                 });
             }
@@ -175,7 +175,7 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
     public void updateNewsfeed() {
         mNewsfeed = new Newsfeed();
         askedConnection = true;
-        new Connection(mActivity, fragment, "checkparty").execute();
+        new Connection(mActivity, fragment, "checkparty").execute("true");
     }
 
     @Override
