@@ -112,7 +112,6 @@ public class MeetingFragment extends BaseFragment implements Connection.Response
         Intent resultIntent = new Intent(mActivity, CompassActivity.class);
         int notificationId = 111;
         resultIntent.putExtra("notificationId", notificationId);
-        //TODO put extra iduser2
 
         //This ensures that navigating backward from the Activity leads out of the app to Home page
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(mActivity);

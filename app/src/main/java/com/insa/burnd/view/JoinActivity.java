@@ -19,6 +19,7 @@ import com.facebook.model.GraphUser;
 import com.insa.burnd.R;
 import com.insa.burnd.controller.PartyListAdapter;
 import com.insa.burnd.models.ApiResponse;
+import com.insa.burnd.models.PartyList;
 import com.insa.burnd.models.User;
 import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.SessionController;
@@ -36,6 +37,7 @@ import trikita.log.Log;
 public class JoinActivity extends BaseActivity implements Connection.ResponseListener {
     private final JoinActivity activity = this;
     private PartyListAdapter adapter;
+    private PartyList partyList;
 
     @Bind(R.id.parties_listView) ListView partiesListView;
     @Bind(R.id.edittext_join_party_name) EditText etPartyName;
@@ -74,7 +76,7 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
 
     @OnItemClick(R.id.parties_listView)
     public void showParties(int position) {
-        etPartyName.setText(adapter.getPartyList().get(position).getName());
+        etPartyName.setText(partyList.get(position).getName());
         partiesListView.setVisibility(View.GONE);
     }
 
@@ -199,7 +201,8 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
                 activity.finish();
             }
             else if (message.equals("PARTIES_FOUND")) {
-                adapter = new PartyListAdapter(activity, ar.getPartyList());
+                partyList = ar.getPartyList();
+                adapter = new PartyListAdapter(activity, partyList);
                 partiesListView.setAdapter(adapter);
                 partiesListView.setVisibility(View.VISIBLE);
             }

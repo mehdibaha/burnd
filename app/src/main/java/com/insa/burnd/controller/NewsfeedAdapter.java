@@ -42,6 +42,8 @@ import com.insa.burnd.network.VolleySingleton;
 import com.insa.burnd.view.MainActivity.MainActivity;
 import com.insa.burnd.view.MainActivity.NewsfeedFragment;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import trikita.log.Log;
 
 // Sous-classe d'un adapter classique, qui remplit un layout de feeditems,
@@ -93,50 +95,30 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
 
     /* Assigns every view from feeditem.xml to a view in NewsfeedAdapter */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        protected CardView container;
-        protected TextView username;
-        protected TextView timestamp;
-        protected TextView statusMsg;
-        protected NetworkImageView profilePic;
-        protected TextView votes;
-        protected Button buttonUp;
-        protected Button buttonDown;
+        @Bind(R.id.feeditem_container) CardView container;
+        @Bind(R.id.username) TextView username;
+        @Bind(R.id.timestamp) TextView timestamp;
+        @Bind(R.id.txtStatusMsg) TextView statusMsg;
+        @Bind(R.id.profilePic) NetworkImageView profilePic;
+        @Bind(R.id.textview_votes) TextView votes;
+        @Bind(R.id.button_up) Button buttonUp;
+        @Bind(R.id.button_down) Button buttonDown;
 
-        protected final FeedImageView feedImageView;
-        protected final VideoView feedVideoView;
+        // WARNING : feedImage1, due to conflict. It has to be the same in xml layouts.
+        @Bind(R.id.feedImage1) FeedImageView feedImageView;
+        @Bind(R.id.videoView) VideoView feedVideoView;
 
-        protected TextView noCommentsMessage;
-        protected Button buttonShowComments;
-        protected LinearLayout commentView;
-        protected ListView commentsListView;
-        protected EditText etComment;
-        protected Button buttonSendComment;
-
-        protected ProgressBar progressVote;
+        @Bind(R.id.button_show_comments) Button buttonShowComments;
+        @Bind(R.id.no_comments_message) TextView noCommentsMessage;
+        @Bind(R.id.commentView) LinearLayout commentView;
+        @Bind(R.id.comments_listView) ListView commentsListView;
+        @Bind(R.id.et_comment) EditText etComment;
+        @Bind(R.id.button_send_comment) Button buttonSendComment;
+        @Bind(R.id.progressv) ProgressBar progressVote;
 
         public ViewHolder(View v) {
             super(v);
-
-            container = (CardView) v.findViewById(R.id.feeditem_container);
-            username = (TextView) v.findViewById(R.id.username);
-            timestamp = (TextView) v.findViewById(R.id.timestamp);
-            statusMsg = (TextView) v.findViewById(R.id.txtStatusMsg);
-            profilePic = (NetworkImageView) v.findViewById(R.id.profilePic);
-            votes = (TextView) v.findViewById(R.id.textview_votes);
-            buttonUp = (Button) v.findViewById(R.id.button_up);
-            buttonDown = (Button) v.findViewById(R.id.button_down);
-
-            // WARNING : feedImage1, due to conflict. It has to be the same in xml layouts.
-            feedImageView = (FeedImageView) v.findViewById(R.id.feedImage1);
-            feedVideoView = (VideoView) v.findViewById(R.id.videoView);
-
-            buttonShowComments = (Button) v.findViewById(R.id.button_show_comments);
-            noCommentsMessage = (TextView) v.findViewById(R.id.no_comments_message);
-            commentView = (LinearLayout) v.findViewById(R.id.commentView);
-            commentsListView = (ListView) v.findViewById(R.id.comments_listView);
-            etComment = (EditText) v.findViewById(R.id.et_comment);
-            buttonSendComment = (Button) v.findViewById(R.id.button_send_comment);
-            progressVote=(ProgressBar) v.findViewById(R.id.progressv);
+            ButterKnife.bind(this, v);
         }
 
     }

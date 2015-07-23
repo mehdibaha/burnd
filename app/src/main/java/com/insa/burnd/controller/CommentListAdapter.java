@@ -15,43 +15,43 @@ import com.insa.burnd.models.Comment;
 import com.insa.burnd.models.CommentList;
 import com.insa.burnd.network.VolleySingleton;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /* Class to bind the commentList to its listView */
 public class CommentListAdapter extends ArrayAdapter<Comment> {
     private ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
+    private Context ctx;
 
-    private static class ViewHolder {
-        protected TextView username;
-        protected TextView statusMsg;
-        protected NetworkImageView profilePic;
+    public static class ViewHolder {
+        @Bind(R.id.comment_username) TextView username;
+        @Bind(R.id.comment_status) TextView statusMsg;
+        @Bind(R.id.comment_profilePic) NetworkImageView profilePic;
+
+        public ViewHolder(View v) {
+            ButterKnife.bind(this, v);
+        }
     }
 
-    public CommentListAdapter(Context context, CommentList commentList) {
-        super(context, R.layout.feed_item, commentList);
+    public CommentListAdapter(Context ctx, CommentList commentList) {
+        super(ctx, R.layout.feed_item, commentList);
+        this.ctx = ctx;
     }
 
     @Override
     public View getView(int position, View v, ViewGroup parent) {
         // Get the data item for this position
         Comment comment = getItem(position);
+
         // Check if an existing view is being reused, otherwise inflate the view
-
         ViewHolder holder;
-
         if (v == null) {
-            holder = new ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            v = inflater.inflate(R.layout.comment_item, parent, false);
-
-            holder.username = (TextView) v.findViewById(R.id.comment_username);
-            holder.statusMsg = (TextView) v.findViewById(R.id.comment_status);
-            holder.profilePic = (NetworkImageView) v.findViewById(R.id.comment_profilePic);
-
+            v = LayoutInflater.from(ctx).inflate(R.layout.comment_item, parent, false);
+            holder = new ViewHolder(v);
             v.setTag(holder);
-
         } else {
             holder = (ViewHolder) v.getTag();
         }
-
 
         // Sets username in textview
         if(!TextUtils.isEmpty(comment.getUser().getName())) {
