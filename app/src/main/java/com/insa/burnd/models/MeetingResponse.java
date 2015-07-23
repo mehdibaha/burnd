@@ -14,7 +14,7 @@ public class MeetingResponse {
     @SerializedName("stop")
     private boolean stop;
 
-    public MeetingResponse() {}
+    public MeetingResponse() { }
 
     public String getId() {
         return id;
