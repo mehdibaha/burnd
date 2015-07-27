@@ -13,26 +13,23 @@
         android:layout_height="500dp"
         tools:ignore="ContentDescription" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@color/primary"
+        android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:id="@+id/linearLayout">
 
         <Button
-            android:id="@+id/startButton"
-            android:layout_width="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/start_button"/>
+            android:text="Start !"
+            android:textColor="@color/white"
+            android:id="@+id/button_start_stop"/>
 
-        <Button
-            android:id="@+id/stopButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/stop_button" />
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

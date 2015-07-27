@@ -12,6 +12,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.widget.Button;
 
 import com.insa.burnd.R;
 import com.insa.burnd.models.ApiResponse;
@@ -55,6 +56,7 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
     private static volatile CompassActivity instance;
 
     @Bind(R.id.redView) volatile RedView rv;
+    @Bind(R.id.button_start_stop) Button ssButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +69,6 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
         setContentView(R.layout.activity_compass);
         ButterKnife.bind(this);
 
-        Log.d("redish" + rv.toString());
-
         sM = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mS = sM.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         aS = sM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -80,9 +80,7 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
         gpsThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d("Thread1");
                 while(running){
-                    Log.d("Thread1");
                     ContentResolver.requestSync(MainActivity.getAccount(), MainActivity.AUTHORITY, compBundle);
                     try{
                         Thread.sleep(COMPASS_FREQ);
@@ -100,7 +98,9 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        rv.stopSearch();
+                        if(rv.getSearch()){
+                            rv.startStopSearch();
+                        }
                     }
                 });
                 myLat = 0;
@@ -119,14 +119,14 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
         timer.schedule(tt, MEET_DURATION);
     }
 
-    @OnClick(R.id.startButton)
-    public void startButton() {
-        rv.startSearch();
-    }
-
-    @OnClick(R.id.stopButton)
-    public void stopButton() {
-        rv.stopSearch();
+    @OnClick(R.id.button_start_stop)
+    public void startStopButton(){
+        rv.startStopSearch();
+        if(rv.getSearch()){
+            ssButton.setText("Stop !");
+        }else{
+            ssButton.setText("Start !");
+        }
     }
 
     public static CompassActivity getInstance(){
@@ -147,26 +147,11 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
             System.arraycopy(event.values, 0, magState, 0, 3);
         }
         SensorManager.getRotationMatrix(rot, null, accState, magState);
-        //On calcule la déviation par rapport au nord.
         SensorManager.getOrientation(rot, result);
-        Log.d("posState1" + "myLat : " + Double.toString(myLat));
-        Log.d("posState2" + "myLon : " + Double.toString(myLon));
-        Log.d("posState3" + "yourLat : " + Double.toString(yourLat));
-        Log.d("posState4" + "yourLon : " + Double.toString(yourLon));
         //On calcule la distance entre les deux personnes, ainsi que la direction qui est stockée dans direction[1].
-        Location.distanceBetween(myLat, myLon, yourLat, yourLon, distance);
+        //Location.distanceBetween(myLat, myLon, yourLat, yourLon, distance);
+        rv.updateBearing(result[0]);
         rv.updateDistance(distance[0]);
-        if(result[0]- Math.toRadians(distance[1]) > Math.PI){
-            rv.updateBearing(/*declination +*/ result[0]- (float) Math.toRadians(distance[1]) - (float)(2*Math.PI));
-            Log.d("Bearing" + Double.toString(/*declination +*/ result[0]- (float) Math.toRadians(distance[1]) - (float)(2*Math.PI)));
-        }else if(result[0]- Math.toRadians(distance[1]) < -Math.PI){
-            rv.updateBearing(/*declination +*/ result[0]- (float) Math.toRadians(distance[1]) + (float)(2*Math.PI));
-            Log.d("Bearing" + Double.toString(/*declination +*/ result[0]- Math.toRadians(distance[1]) + (float)(2*Math.PI)));
-        }else{
-            rv.updateBearing(/*declination +*/ result[0]- (float) Math.toRadians(distance[1]));
-            Log.d("Bearing" + Double.toString(/*declination +*/ result[0]- Math.toRadians(distance[1])));
-        }
-        //Si on n'envoie que result[0], la boussole pointe vers le nord.
     }
 
     @Override
@@ -184,7 +169,6 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
 
     //Ceci est la fonction appelée par le SyncAdapter pour mettre à jour les positions.
     public double[] updateLocation(){
-        Log.d("updateLoc" + "updating");
         double[] d = new double[2];
         runOnUiThread(new Runnable() {
             @Override
@@ -192,7 +176,6 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
                 GPSTracker gps = new GPSTracker(ctx);
                 gps.getLocation();
                 if(!gps.isLocationAvailable()) {
-                    Log.d("gps" + "fail");
                 } else {
                     myLat = gps.getLocation().getLatitude();
                     myLon = gps.getLocation().getLongitude();
@@ -210,10 +193,11 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    rv.stopSearch();
+                    if(rv.getSearch()){
+                        rv.startStopSearch();
+                    }
                 }
             });
-            Log.d("updateLoc" + "notUpdated");
         }
         return d;
     }
@@ -226,8 +210,6 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
     @Override
     public void requestCompleted(ApiResponse ar) {
         String message = ar.getMessage();
-        Log.d(ar.toString());
-
         if(message.equals("killmatch")){
             startActivity(new Intent(this, MainActivity.class));
             this.finish();

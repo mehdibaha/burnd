@@ -34,10 +34,10 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
     private float aAcc;
     private float aVel;
     private float ang;
-    private final float elastFactor = 2;
-    private final float friction = 5;
+    private final float elastFactor = 10;
+    private final float friction = 2;
     private float force;
-    private final float mass = 50;
+    private final float mass = 5;
     private boolean search;
     private final double dt = 0.001;
     private ValueAnimator valueAn;
@@ -125,11 +125,8 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
             counter = (int) (TOTAL_DISTANCE/INTERVAL_DISTANCE);
         }
         while(counter<TOTAL_DISTANCE/INTERVAL_DISTANCE){
-            Log.d("gonna");
             if(counter*INTERVAL_DISTANCE <=distance && distance <= (counter+1)*INTERVAL_DISTANCE){
-                Log.d("gonna2");
                 if(!valueAn.isRunning()){
-                    Log.d("Compass" + "animating");
                     valueAn = new ValueAnimator();
                     valueAn.setStartDelay(0);
                     valueAn.setIntValues(color
@@ -148,45 +145,45 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
 
 
     //Cette fonction est invoquée lorsque l'on appuie sur start
-    public void startSearch(){
-        search = true;
-        //On recalcule régulièrement les paramètres dynamiques.
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                while(search){
-                    force = -elastFactor*(degrees+ (float)Math.toRadians(red.getRotation())) - friction*aVel;
-                    aAcc = force/mass;
-                    aVel += aAcc*dt;
-                    ang += aVel*dt;
-                    try{
-                        Thread.sleep((long)0.2);
-                    }catch(InterruptedException e){
-                        e.printStackTrace();
-                    }
-                    red.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            updateRotation();
+    public void startStopSearch(){
+        if(!search){
+            search = true;
+            //On recalcule régulièrement les paramètres dynamiques.
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    while(search){
+                        force = -elastFactor*(degrees+ (float)Math.toRadians(red.getRotation())) - friction*aVel;
+                        aAcc = force/mass;
+                        aVel += aAcc*dt;
+                        ang += aVel*dt;
+                        Log.d("Angle : " , ang);
+                        try{
+                            Thread.sleep(1);
+                        }catch(InterruptedException e){
+                            e.printStackTrace();
                         }
-                    });
+                        red.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateRotation();
+                            }
+                        });
+                    }
                 }
-            }
-        };
-        Thread calcThread = new Thread(runnable);
-        calcThread.setPriority(Thread.MIN_PRIORITY);
-        calcThread.start();
-    }
-
-    //Cette fonction est invoquée lorsque l'on appuie sur stop
-    public void stopSearch(){
-        search = false;
-        force = 0;
-        aAcc = 0;
-        aVel = 0;
-        ang = 0;
-        color = INITIAL_COLOR;
-        invalidate();
+            };
+            Thread calcThread = new Thread(runnable);
+            calcThread.setPriority(Thread.MIN_PRIORITY);
+            calcThread.start();
+        }else{
+            search = false;
+            force = 0;
+            aAcc = 0;
+            aVel = 0;
+            ang = 0;
+            color = INITIAL_COLOR;
+            invalidate();
+        }
     }
 
     private void updateRotation(){
@@ -197,7 +194,9 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
     public void onAnimationUpdate(ValueAnimator va){
         color = (int) va.getAnimatedValue();
         postInvalidate();
-        Log.d(Integer.toString(Color.red(color)) + " , " + Integer.toString(Color.green(color)) + " , " + Integer.toString(Color.blue(color)));
     }
 
+    public Boolean getSearch(){
+        return search;
+    }
 }
