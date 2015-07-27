@@ -65,7 +65,6 @@ public class MeetingFragment extends BaseFragment implements Connection.Response
 
     @Override
     public void requestCompleted(ApiResponse sr) {
-        String message = sr.getMessage();
         boolean error = sr.isError();
         MeetingResponse mr = sr.getMeetingResponse();
         Log.d(sr.toString());
