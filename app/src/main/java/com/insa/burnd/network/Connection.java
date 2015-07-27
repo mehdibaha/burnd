@@ -37,14 +37,14 @@ public class Connection {
         setCustomMessage(loadingMessage);
     }
 
-    public void execute(final String... arg0) {
+    public void execute(final String... params) {
         if(!Utils.isInternetAvailable(ctx)) {
             Utils.showToast(ctx, "Internet is not available.");
             Log.d("No internet.");
         }
         else {
             if (dialog != null) dialog.show();
-            this.setParams(arg0);
+            this.setParams(params);
             makeRequest();
         }
     }
