@@ -1,15 +1,20 @@
 package com.insa.burnd.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class MeetingResponse {
+    @SerializedName("iduser2")
     private String id;
+    @SerializedName("match")
     private String match;
+    @SerializedName("age_user2")
     private int age;
+    @SerializedName("name")
     private String name;
+    @SerializedName("stop")
     private boolean stop;
 
-    public MeetingResponse() {
-        super();
-    }
+    public MeetingResponse() { }
 
     public String getId() {
         return id;

@@ -1,10 +1,17 @@
 package com.insa.burnd.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ApiResponse {
+    @SerializedName("error")
     private boolean error;
+    @SerializedName("message")
     private String message;
+    @SerializedName("party_list")
     private PartyList partyList;
+    @SerializedName("newsfeed")
     private Newsfeed newsfeed;
+    @SerializedName("meeting")
     private MeetingResponse meetingResponse;
 
     public ApiResponse() {}

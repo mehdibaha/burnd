@@ -92,20 +92,18 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
             swipeRefreshLayout.setProgressViewOffset(false, 0, Utils.dpToPx(mActivity, 50));
             swipeRefreshLayout.setRefreshing(true);
         }
-        Log.v("refresh state : " + String.valueOf(askedConnection));
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setProgressViewOffset(false, 0, 0);
                 swipeRefreshLayout.setRefreshing(true);
-                Log.d("user asked for refresh");
+                Log.v("User asking for refresh");
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
                         String lastPostId = SPManager.load(mActivity, "LAST_POST_ID");
-                        Log.d(lastPostId);
-                        new Connection(mActivity, fragment, "checkparty").execute(lastPostId);
+                        Log.v(lastPostId);
+                        new Connection(mActivity, fragment, "checkparty").execute("true", lastPostId);
                     }
                 });
             }
@@ -175,7 +173,7 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
     public void updateNewsfeed() {
         mNewsfeed = new Newsfeed();
         askedConnection = true;
-        new Connection(mActivity, fragment, "checkparty").execute();
+        new Connection(mActivity, fragment, "checkparty").execute("true");
     }
 
     @Override
@@ -187,7 +185,7 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
         if (!error) {
             refreshNewsfeed(ar.getNewsfeed());
         } else if (message.equals("USER_NOT_IN_PARTY")) {
-            Utils.showToast(mActivity, "You're not in a party...");
+            Utils.showToast(mActivity, "You're not in a party.");
             startActivity(new Intent(mActivity, JoinActivity.class));
             mActivity.finish();
         } else {

@@ -2,16 +2,22 @@ package com.insa.burnd.models;
 
 import android.content.Context;
 
+import com.google.gson.annotations.SerializedName;
 import com.insa.burnd.utils.SPManager;
 
 /* Class defining a user */
 public class User {
+    @SerializedName("user_id")
     private String userId;
+    @SerializedName("user_name")
     private String name;
-
+    @SerializedName("user_profilepic")
     private String profilePic;
+
     private String gender;
     private String accessToken;
+
+    public User() { }
 
     private User(UserBuilder ub) {
         this.userId = ub.userId;
@@ -19,6 +25,14 @@ public class User {
         this.profilePic = "https://graph.facebook.com/" + this.userId + "/picture?type=small";
         this.gender = ub.gender;
         this.accessToken = ub.accessToken;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", profilePic='" + profilePic + '\'' +
+                '}';
     }
 
     public static class UserBuilder {
@@ -97,12 +111,5 @@ public class User {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                " name='" + name + '\'' +
-                '}';
     }
 }

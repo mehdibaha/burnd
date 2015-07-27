@@ -1,13 +1,17 @@
 package com.insa.burnd.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /* Class defining a comment from a feed item*/
 public class Comment {
+    @SerializedName("comment_id")
     private int id;
+    @SerializedName("comment_status")
     private String status;
+    @SerializedName("comment_user")
     private User user;
 
-    public Comment() {
-    }
+    public Comment() {}
 
     public int getId() {
         return id;
@@ -36,7 +40,8 @@ public class Comment {
     @Override
     public String toString() {
         return "Comment{" +
-                "id=" + id +
+                "user=" + user +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

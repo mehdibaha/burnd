@@ -1,17 +1,26 @@
 package com.insa.burnd.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /* Class defining a feed item from a newsfeed */
 public class FeedItem {
+    @SerializedName("post_id")
     private int id;
-    private long timestamp;
+    @SerializedName("timestamp")
+    private String timestamp;
+    @SerializedName("votes_up")
     private int votesUp;
+    @SerializedName("votes_down")
     private int votesDown;
-
+    @SerializedName("status")
     private String status;
+    @SerializedName("image")
     private String image;
+    @SerializedName("video")
     private String video;
-
+    @SerializedName("post_user")
     private User user;
+    @SerializedName("comments")
     private CommentList commentList;
 
     public FeedItem() {
@@ -25,11 +34,11 @@ public class FeedItem {
         this.id = id;
     }
 
-    public long getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -92,7 +101,7 @@ public class FeedItem {
     @Override
     public String toString() {
         return "FeedItem{" +
-                "id=" + id +
+                "commentList=" + commentList +
                 '}';
     }
 }
