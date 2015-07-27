@@ -26,82 +26,46 @@ public class FeedItem {
     public FeedItem() {
     }
 
+    @Override
+    public String toString() {
+        return "FeedItem{" +
+                "commentList=" + commentList +
+                '}';
+    }
+
     public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public int getVotesUp() {
-        return votesUp;
-    }
-
-    public void setVotesUp(int votesUp) {
-        this.votesUp = votesUp;
-    }
-
-    public int getVotesDown() {
-        return votesDown;
-    }
-
-    public void setVotesDown(int votesDown) {
-        this.votesDown = votesDown;
+        return this.id;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public User getUser() {
+        return user;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
     }
 
     public String getImage() {
         return image;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getVideo() {
         return video;
     }
 
-    public void setVideo(String video) {
-        this.video = video;
+    public int getVotesUp() {
+        return votesUp;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public int getVotesDown() {
+        return votesDown;
     }
 
     public CommentList getCommentList() {
         return commentList;
-    }
-
-    public void setCommentList(CommentList commentList) {
-        this.commentList = commentList;
-    }
-
-    @Override
-    public String toString() {
-        return "FeedItem{" +
-                "commentList=" + commentList +
-                '}';
     }
 }

@@ -35,6 +35,25 @@ public class User {
                 '}';
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void saveToMemory(Context ctx) {
+        SPManager.save(ctx, userId, "USER_ID"); // Saves userId to local memory
+        SPManager.save(ctx, name, "NAME");
+        SPManager.save(ctx, gender, "GENDER");
+        SPManager.save(ctx, accessToken, "ACCESS_TOKEN");
+    }
+
     public static class UserBuilder {
         private String userId;
         private String name;
@@ -64,52 +83,5 @@ public class User {
         public User build() {
             return new User(this);
         }
-    }
-
-    public void saveToMemory(Context ctx) {
-        SPManager.save(ctx, userId, "USER_ID"); // Saves userId to local memory
-        SPManager.save(ctx, name, "NAME");
-        SPManager.save(ctx, gender, "GENDER");
-        SPManager.save(ctx, accessToken, "ACCESS_TOKEN");
-    }
-
-    public String getProfilePic() {
-        return profilePic;
-    }
-
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 }
