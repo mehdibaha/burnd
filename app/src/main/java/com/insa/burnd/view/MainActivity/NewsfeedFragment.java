@@ -92,14 +92,12 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
             swipeRefreshLayout.setProgressViewOffset(false, 0, Utils.dpToPx(mActivity, 50));
             swipeRefreshLayout.setRefreshing(true);
         }
-        Log.v("refresh state : " + String.valueOf(askedConnection));
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setProgressViewOffset(false, 0, 0);
                 swipeRefreshLayout.setRefreshing(true);
-                Log.d("User asking for refresh");
+                Log.v("User asking for refresh");
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
@@ -187,7 +185,7 @@ public class NewsfeedFragment extends BaseFragment implements Connection.Respons
         if (!error) {
             refreshNewsfeed(ar.getNewsfeed());
         } else if (message.equals("USER_NOT_IN_PARTY")) {
-            Utils.showToast(mActivity, "You're not in a party...");
+            Utils.showToast(mActivity, "You're not in a party.");
             startActivity(new Intent(mActivity, JoinActivity.class));
             mActivity.finish();
         } else {

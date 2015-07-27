@@ -45,27 +45,30 @@ public class Connection {
         else {
             if (dialog != null) dialog.show();
             this.setParams(arg0);
-
-            // Main request to retrive generic object from network call
-            GsonRequest<ApiResponse> gsonRequest = new GsonRequest<ApiResponse>(url,
-                    ApiResponse.class, headers, params, new Response.Listener<ApiResponse>() {
-                @Override
-                public void onResponse(ApiResponse response) {
-                    if (dialog != null) dialog.dismiss();
-                    if (rListener != null) rListener.requestCompleted(response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if (dialog != null) dialog.dismiss();
-                    Log.e(error.toString());
-                }
-            });
-
-            // Setting tag to request (to cancel later for example)
-            gsonRequest.setTag(ctx.getClass().toString());
-            VolleySingleton.getInstance().addToRequestQueue(gsonRequest);
+            makeRequest();
         }
+    }
+
+    private void makeRequest() {
+        // Main request to retrive generic object from network call
+        GsonRequest<ApiResponse> gsonRequest = new GsonRequest<>(url,
+                ApiResponse.class, headers, params, new Response.Listener<ApiResponse>() {
+            @Override
+            public void onResponse(ApiResponse response) {
+                if (dialog != null) dialog.dismiss();
+                if (rListener != null) rListener.requestCompleted(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (dialog != null) dialog.dismiss();
+                Log.e(error.toString());
+            }
+        });
+
+        // Setting tag to request (to cancel later for example)
+        gsonRequest.setTag(ctx.getClass().toString());
+        VolleySingleton.getInstance().addToRequestQueue(gsonRequest);
     }
 
     private void setParams(String[] arg0) {

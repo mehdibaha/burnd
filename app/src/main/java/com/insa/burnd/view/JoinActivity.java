@@ -63,7 +63,6 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
         String partyPass = etPartyPass.getText().toString();
 
         if (!TextUtils.isEmpty(partyName) && !TextUtils.isEmpty(partyPass)) {
-            Log.d("partyname" + partyName + "partypass" + partyPass);
             new Connection(activity, activity, "joinparty", "Searching for party...").execute(partyName, partyPass);
         }
         else {
@@ -190,7 +189,6 @@ public class JoinActivity extends BaseActivity implements Connection.ResponseLis
                 startActivity(new Intent(this, LoginActivity.class));
                 activity.finish();
             }
-
         } else {
             if (message.equals("USER_ALREADY_EXISTS")) {
                 Log.d("User already exists.");

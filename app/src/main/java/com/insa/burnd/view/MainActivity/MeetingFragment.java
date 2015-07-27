@@ -23,6 +23,7 @@ import com.insa.burnd.network.VolleySingleton;
 import com.insa.burnd.utils.BaseFragment;
 import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.CompassActivity;
+import com.insa.burnd.view.JoinActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -64,17 +65,18 @@ public class MeetingFragment extends BaseFragment implements Connection.Response
 
     @Override
     public void requestCompleted(ApiResponse sr) {
-        MeetingResponse mr = sr.getMeetingResponse();
+        String message = sr.getMessage();
         boolean error = sr.isError();
-        boolean stop = mr.isStop();
-        int age = mr.getAge();
-        final String id = mr.getId();
-        String match = mr.getMatch();
-        String name = mr.getName();
-        Log.d(mr.toString());
+        MeetingResponse mr = sr.getMeetingResponse();
+        Log.d(sr.toString());
 
         if (!error) {
-            if(match.equals("Match!")) displayNotification();
+            int age = mr.getAge();
+            final String id = mr.getId();
+            String match = mr.getMatch();
+            String name = mr.getName();
+
+            if(match.equals("MATCH")) displayNotification();
             tView.setText(name + " | " + age);
             photo.setEnabled(true);
             photo.setImageUrl("https://graph.facebook.com/" + id + "/picture?type=large", imageLoader);
@@ -87,13 +89,10 @@ public class MeetingFragment extends BaseFragment implements Connection.Response
                     new Connection(mActivity, fragment, "swipedown", "Nope").execute(id);
                 }
             });
-        } else {
-            if(stop){
+        } else if(mr.isStop()) {
                 photo.setImageUrl("http://burnd.cles-facil.fr/uploads/seen_everyone.png", imageLoader);
                 tView.setText("You have seen everyone!");
                 photo.setEnabled(false);
-            } else
-                Utils.showToast(mActivity, "Sorry, the server was unable to process your request.");
         }
     }
 

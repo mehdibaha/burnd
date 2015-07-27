@@ -1,5 +1,6 @@
 package com.insa.burnd.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -18,17 +19,19 @@ import com.insa.burnd.view.SplashActivity;
 
 import java.util.Calendar;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /* Class to handle Dates settings */
 public class DatePreference extends DialogPreference implements Connection.ResponseListener {
     private String curVal;
     private String defVal;
-    private DatePicker dp;
     private Context ctx;
-    private static String TAG = "BURND-DatePreference";
+    @Bind(R.id.dp) DatePicker dp;
 
     public DatePreference(Context ctx, AttributeSet atts) {
         super(ctx, atts);
-        this.ctx=ctx;
+        this.ctx = ctx;
         setDialogLayoutResource(R.layout.dp_layout);
         setPositiveButtonText(android.R.string.ok);
         setNegativeButtonText(android.R.string.cancel);
@@ -40,7 +43,8 @@ public class DatePreference extends DialogPreference implements Connection.Respo
     @Override
     protected void onBindDialogView(@NonNull View v) {
         super.onBindDialogView(v);
-        dp = (DatePicker) v.findViewById(R.id.dp);
+        ButterKnife.bind(this, v);
+
         if (Build.VERSION.SDK_INT >= 11) {
             dp.setCalendarViewShown(false);
         }
@@ -96,7 +100,7 @@ public class DatePreference extends DialogPreference implements Connection.Respo
         else {
             Utils.showToast(ctx, "Access denied.");
             ctx.startActivity(new Intent(ctx, SplashActivity.class));
-            ((MainActivity) ctx).finish();
+            ((Activity) ctx).finish();
         }
     }
 }
