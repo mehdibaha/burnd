@@ -55,7 +55,6 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
     public RedView(Context ctx, AttributeSet atts){
         super(ctx, atts);
         b = BitmapFactory.decodeResource(getResources(), R.drawable.love_compass);
-        cR = 100;
         color = INITIAL_COLOR;
         p = new Paint();
         p.setColor(Color.WHITE);
@@ -93,6 +92,7 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
         cPosW = realWidth/2;
         bPosH = (realHeight-b.getHeight())/2;
         bPosW = (realWidth-b.getWidth())/2;
+        cR = (int) (b.getHeight()*0.7);
         setPivotX(cPosW);
         setPivotY(cPosH);
     }
