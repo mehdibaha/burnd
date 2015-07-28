@@ -53,7 +53,7 @@ public class CreateActivity extends BaseActivity implements Connection.ResponseL
         ButterKnife.bind(activity);
 
         initToolbar();
-        setButtonToCurrentTime();
+        setButtonToDefaultEndTime();
     }
 
     @OnClick(R.id.button_create)
@@ -92,6 +92,16 @@ public class CreateActivity extends BaseActivity implements Connection.ResponseL
     private void setButtonToCurrentTime() {
         now = Calendar.getInstance();
         hours = now.get(Calendar.HOUR_OF_DAY);
+        minutes = now.get(Calendar.MINUTE);
+        buttonTime.setText(hours + ":" + minutes);
+    }
+
+    private void setButtonToDefaultEndTime() {
+        now = Calendar.getInstance();
+        hours = now.get(Calendar.HOUR_OF_DAY)+8;
+        if (hours>24){
+            hours=8-(24-now.get(Calendar.HOUR_OF_DAY));
+        }
         minutes = now.get(Calendar.MINUTE);
         buttonTime.setText(hours + ":" + minutes);
     }
