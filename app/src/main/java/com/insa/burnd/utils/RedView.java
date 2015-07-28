@@ -2,6 +2,7 @@ package com.insa.burnd.utils;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import com.insa.burnd.R;
+import com.insa.burnd.view.CompassActivity;
 
 import trikita.log.Log;
 
@@ -44,9 +46,9 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
     private final float TOTAL_DISTANCE = 60;
     private final float INTERVAL_DISTANCE = 5;
     private final long ANIMATION_TIME = 2000;
-    private final int INITIAL_COLOR = Color.rgb(255,150,150);
-    private final int START_COLOR = Color.rgb(255,125,125);
-    private final int FINAL_COLOR = Color.rgb(232,0,0);
+    private final int INITIAL_COLOR = getResources().getColor(R.color.primary_light);
+    private final int START_COLOR = getResources().getColor(R.color.primary_dark);
+    private final int FINAL_COLOR = getResources().getColor(R.color.primary);
     private int counter = 0;
     private ArgbEvaluator painter;
 
@@ -57,7 +59,6 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
         b = BitmapFactory.decodeResource(getResources(), R.drawable.love_compass);
         color = INITIAL_COLOR;
         p = new Paint();
-        p.setColor(Color.WHITE);
         aAcc = 0;
         aVel = 0;
         ang = 0;
@@ -99,7 +100,9 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
 
     @Override
     protected void onDraw(@NonNull Canvas c){
-        c.drawColor(color);
+        p.setColor(color);
+        c.drawCircle(cPosW, cPosH, (float)(cR*1.4), p);
+        p.setColor(Color.WHITE);
         c.drawCircle(cPosW, cPosH, cR, p);
         c.drawBitmap(b,bPosW,bPosH,null);
     }
@@ -130,7 +133,7 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
                     valueAn = new ValueAnimator();
                     valueAn.setStartDelay(0);
                     valueAn.setIntValues(color
-                                         ,(int)painter.evaluate(1-((INTERVAL_DISTANCE*counter)/(TOTAL_DISTANCE-INTERVAL_DISTANCE)),START_COLOR,FINAL_COLOR));
+                            , (int) painter.evaluate(1 - ((INTERVAL_DISTANCE * counter) / (TOTAL_DISTANCE - INTERVAL_DISTANCE)), START_COLOR, FINAL_COLOR));
                     valueAn.setEvaluator(new ArgbEvaluator());
                     valueAn.setDuration(ANIMATION_TIME);
                     valueAn.addUpdateListener(this);
@@ -199,4 +202,5 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
     public Boolean getSearch(){
         return search;
     }
+
 }

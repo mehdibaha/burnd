@@ -12,7 +12,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.insa.burnd.R;
 import com.insa.burnd.models.ApiResponse;
@@ -43,13 +45,11 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
     private volatile double myLon = 0;
     private volatile double yourLat = 0;
     private volatile double yourLon = 0;
-    private volatile float declination = 0;
     private volatile float[] distance = new float[3];
     private static final long COMPASS_FREQ = 8000;
     private static final long MEET_DURATION = 7*60000;
     private Context ctx = this;
     private Connection.ResponseListener rListener = this;
-    private Timer timer;
     private Bundle compBundle;
     private volatile boolean running = true;
     private volatile Thread gpsThread;
@@ -57,9 +57,14 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
 
     @Bind(R.id.redView) volatile RedView rv;
     @Bind(R.id.button_start_stop) Button ssButton;
+    @Bind(R.id.timer) TextView timerText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        float[] distance = new float[3];
+        Location.distanceBetween(39.819708, -97.634262, 39.819728, -97.633425, distance);
+        Log.d("distance : " + distance[0]);
+        Log.d("bearing : " + distance[1]);
         super.onCreate(savedInstanceState);
         instance = this;
         compBundle = new Bundle();
@@ -92,9 +97,20 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
         });
         gpsThread.start();
         //Cette timertask permet de tout interrompre après une durée MEET_DURATION déterminée.
-        TimerTask tt = new TimerTask() {
-            @Override
-            public void run() {
+        new CountDownTimer(MEET_DURATION, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                long secs = (millisUntilFinished / 1000) % 60;
+                long minutes = ((millisUntilFinished / 1000) - secs)/60;
+                if(secs < 10){
+                    timerText.setText("0"+minutes + ":0" + secs);
+                }else{
+                    timerText.setText("0"+minutes + ":" + secs);
+                }
+            }
+
+            public void onFinish() {
+                timerText.setText("Time !");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -114,9 +130,7 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
                 SyncAdapter.killMatch();
                 new Connection(ctx, rListener, "killmatch").execute();
             }
-        };
-        timer = new Timer();
-        timer.schedule(tt, MEET_DURATION);
+        }.start();
     }
 
     @OnClick(R.id.button_start_stop)
@@ -151,7 +165,7 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
         //On calcule la distance entre les deux personnes, ainsi que la direction qui est stockée dans direction[1].
         //Location.distanceBetween(myLat, myLon, yourLat, yourLon, distance);
         rv.updateBearing(result[0]);
-        rv.updateDistance(distance[0]);
+        rv.updateDistance(0);
     }
 
     @Override
@@ -187,8 +201,7 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
         d[1] = myLon;
         yourLat = 45.780774;
         yourLon = 4.868868;
-        GeomagneticField gmf = new GeomagneticField((float)myLat, (float)myLon, 0, System.currentTimeMillis());
-        declination = (float) Math.toRadians(gmf.getDeclination());
+        float declination = (float) Math.toRadians(new GeomagneticField((float)myLat, (float)myLon, 0, System.currentTimeMillis()).getDeclination());
         if(!(myLat != 0 && myLon != 0 && yourLat != 0 && yourLon != 0)){
             runOnUiThread(new Runnable() {
                 @Override
