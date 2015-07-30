@@ -63,8 +63,6 @@ public class CompassActivity extends Activity implements SensorEventListener, Co
     protected void onCreate(Bundle savedInstanceState) {
         float[] distance = new float[3];
         Location.distanceBetween(39.819708, -97.634262, 39.819728, -97.633425, distance);
-        Log.d("distance : " + distance[0]);
-        Log.d("bearing : " + distance[1]);
         super.onCreate(savedInstanceState);
         instance = this;
         compBundle = new Bundle();

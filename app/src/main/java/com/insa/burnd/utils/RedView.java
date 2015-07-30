@@ -2,7 +2,6 @@ package com.insa.burnd.utils;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,10 +10,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 
 import com.insa.burnd.R;
-import com.insa.burnd.view.CompassActivity;
 
 import trikita.log.Log;
 
@@ -23,9 +22,7 @@ import trikita.log.Log;
 //dont le but est de la bouger de manière "naturelle" vers la direction désirée.
 //Ainsi, il suffit de modifier l'input (Voir méthode update) et le view amènera naturellement la boussole vers l'angle désiré.
 public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateListener{
-    private final ImageView red = this;
     private Bitmap b;
-    private float degrees;
     private int bPosW;
     private int bPosH;
     private int cPosW;
@@ -33,19 +30,14 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
     private int cR;
     private int color;
     private Paint p;
-    private float aAcc;
-    private float aVel;
     private float ang;
-    private final float elastFactor = 10;
-    private final float friction = 2;
-    private float force;
-    private final float mass = 5;
     private boolean search;
-    private final double dt = 0.001;
     private ValueAnimator valueAn;
+    private ValueAnimator rotateAn;
     private final float TOTAL_DISTANCE = 60;
     private final float INTERVAL_DISTANCE = 5;
     private final long ANIMATION_TIME = 2000;
+    private final long ROTATION_TIME = 2000;
     private final int INITIAL_COLOR = getResources().getColor(R.color.primary_light);
     private final int START_COLOR = getResources().getColor(R.color.primary_dark);
     private final int FINAL_COLOR = getResources().getColor(R.color.primary);
@@ -59,11 +51,8 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
         b = BitmapFactory.decodeResource(getResources(), R.drawable.love_compass);
         color = INITIAL_COLOR;
         p = new Paint();
-        aAcc = 0;
-        aVel = 0;
         ang = 0;
         search = false;
-        degrees = 0;
         painter = new ArgbEvaluator();
         valueAn = new ValueAnimator();
     }
@@ -107,43 +96,56 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
         c.drawBitmap(b,bPosW,bPosH,null);
     }
 
-    public void updateBearing(final float degrees){
-        this.degrees = degrees;
-    }
     //On update la direction
+    public void updateBearing(final float degrees){
+        if(search){
+            //Start animation to get there if there's no animation running;
+            if(!rotateAn.isStarted()){
+                rotateAn = new ValueAnimator();
+                rotateAn.setFloatValues(ang, -degrees);
+                rotateAn.setStartDelay(0);
+                rotateAn.setInterpolator(new OvershootInterpolator());
+                rotateAn.setDuration(ROTATION_TIME);
+                rotateAn.addUpdateListener(this);
+                rotateAn.start();
+            }
+        }
+    }
 
     //On update la distance
     public void updateDistance(final float distance){
-        //La logique qui suit permet de modifier de manière continue et animée la couleur afin de la rendre de plus en plus rouge plus on s'approche
-        if(distance > TOTAL_DISTANCE){
-            if(!valueAn.isStarted()){
-                valueAn = new ValueAnimator();
-                valueAn.setIntValues(color, Color.rgb(255,150,150));
-                valueAn.setStartDelay(0);
-                valueAn.setEvaluator(new ArgbEvaluator());
-                valueAn.setDuration(ANIMATION_TIME);
-                valueAn.addUpdateListener(this);
-                valueAn.start();
-            }
-            counter = (int) (TOTAL_DISTANCE/INTERVAL_DISTANCE);
-        }
-        while(counter<TOTAL_DISTANCE/INTERVAL_DISTANCE){
-            if(counter*INTERVAL_DISTANCE <=distance && distance <= (counter+1)*INTERVAL_DISTANCE){
-                if(!valueAn.isRunning()){
+        if(search){
+            //La logique qui suit permet de modifier de manière continue et animée la couleur afin de la rendre de plus en plus rouge plus on s'approche
+            if(distance > TOTAL_DISTANCE){
+                if(!valueAn.isStarted()){
                     valueAn = new ValueAnimator();
+                    valueAn.setIntValues(color, Color.rgb(255,150,150));
                     valueAn.setStartDelay(0);
-                    valueAn.setIntValues(color
-                            , (int) painter.evaluate(1 - ((INTERVAL_DISTANCE * counter) / (TOTAL_DISTANCE - INTERVAL_DISTANCE)), START_COLOR, FINAL_COLOR));
                     valueAn.setEvaluator(new ArgbEvaluator());
                     valueAn.setDuration(ANIMATION_TIME);
                     valueAn.addUpdateListener(this);
                     valueAn.start();
                 }
-                counter = (int)(TOTAL_DISTANCE/INTERVAL_DISTANCE) +1;
+                counter = (int) (TOTAL_DISTANCE/INTERVAL_DISTANCE);
             }
-            counter++;
+            while(counter<TOTAL_DISTANCE/INTERVAL_DISTANCE){
+                if(counter*INTERVAL_DISTANCE <=distance && distance <= (counter+1)*INTERVAL_DISTANCE){
+                    if(!valueAn.isRunning()){
+                        valueAn = new ValueAnimator();
+                        valueAn.setStartDelay(0);
+                        valueAn.setIntValues(color
+                                , (int) painter.evaluate(1 - ((INTERVAL_DISTANCE * counter) / (TOTAL_DISTANCE - INTERVAL_DISTANCE)), START_COLOR, FINAL_COLOR));
+                        valueAn.setEvaluator(new ArgbEvaluator());
+                        valueAn.setDuration(ANIMATION_TIME);
+                        valueAn.addUpdateListener(this);
+                        valueAn.start();
+                    }
+                    counter = (int)(TOTAL_DISTANCE/INTERVAL_DISTANCE) +1;
+                }
+                counter++;
+            }
+            counter = 0;
         }
-        counter = 0;
     }
 
 
@@ -151,52 +153,24 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
     public void startStopSearch(){
         if(!search){
             search = true;
-            //On recalcule régulièrement les paramètres dynamiques.
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    while(search){
-                        force = -elastFactor*(degrees+ (float)Math.toRadians(red.getRotation())) - friction*aVel;
-                        aAcc = force/mass;
-                        aVel += aAcc*dt;
-                        ang += aVel*dt;
-                        Log.d("Angle : " , ang);
-                        try{
-                            Thread.sleep(1);
-                        }catch(InterruptedException e){
-                            e.printStackTrace();
-                        }
-                        red.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateRotation();
-                            }
-                        });
-                    }
-                }
-            };
-            Thread calcThread = new Thread(runnable);
-            calcThread.setPriority(Thread.MIN_PRIORITY);
-            calcThread.start();
         }else{
             search = false;
-            force = 0;
-            aAcc = 0;
-            aVel = 0;
             ang = 0;
+            setRotation((float)Math.toDegrees(ang));
             color = INITIAL_COLOR;
             invalidate();
         }
     }
 
-    private void updateRotation(){
-        setRotation((float)Math.toDegrees(ang));
-    }
-
     @Override
     public void onAnimationUpdate(ValueAnimator va){
-        color = (int) va.getAnimatedValue();
-        postInvalidate();
+        if(va == valueAn){
+            color = (int) va.getAnimatedValue();
+            postInvalidate();
+        }else{
+            setRotation((float)Math.toDegrees(ang));
+            postInvalidate();
+        }
     }
 
     public Boolean getSearch(){
