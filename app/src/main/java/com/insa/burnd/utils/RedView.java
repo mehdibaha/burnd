@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.animation.OvershootInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 import com.insa.burnd.R;
@@ -55,6 +56,7 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
         search = false;
         painter = new ArgbEvaluator();
         valueAn = new ValueAnimator();
+        rotateAn = new ValueAnimator();
     }
 
     @Override
@@ -89,6 +91,8 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
 
     @Override
     protected void onDraw(@NonNull Canvas c){
+        Log.d("drawing");
+        setRotation((float) Math.toDegrees(ang));
         p.setColor(color);
         c.drawCircle(cPosW, cPosH, (float)(cR*1.4), p);
         p.setColor(Color.WHITE);
@@ -100,7 +104,7 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
     public void updateBearing(final float degrees){
         if(search){
             //Start animation to get there if there's no animation running;
-            if(!rotateAn.isStarted()){
+            if(!rotateAn.isStarted() && ang != -degrees){
                 rotateAn = new ValueAnimator();
                 rotateAn.setFloatValues(ang, -degrees);
                 rotateAn.setStartDelay(0);
@@ -108,6 +112,7 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
                 rotateAn.setDuration(ROTATION_TIME);
                 rotateAn.addUpdateListener(this);
                 rotateAn.start();
+                Log.d("Rotated.");
             }
         }
     }
@@ -155,11 +160,32 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
             search = true;
         }else{
             search = false;
+            reset();
             ang = 0;
-            setRotation((float)Math.toDegrees(ang));
             color = INITIAL_COLOR;
-            invalidate();
         }
+    }
+
+    private void reset(){
+        ValueAnimator oldCol = valueAn;
+        ValueAnimator oldAng = rotateAn;
+        valueAn = new ValueAnimator();
+        valueAn.setStartDelay(0);
+        valueAn.setIntValues(color
+                , INITIAL_COLOR);
+        valueAn.setEvaluator(new ArgbEvaluator());
+        valueAn.setDuration(ANIMATION_TIME);
+        valueAn.addUpdateListener(this);
+        rotateAn = new ValueAnimator();
+        rotateAn.setFloatValues(ang, 0);
+        rotateAn.setStartDelay(0);
+        rotateAn.setInterpolator(new OvershootInterpolator());
+        rotateAn.setDuration(ROTATION_TIME);
+        rotateAn.addUpdateListener(this);
+        oldCol.cancel();
+        valueAn.start();
+        oldAng.cancel();
+        rotateAn.start();
     }
 
     @Override
@@ -168,7 +194,7 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
             color = (int) va.getAnimatedValue();
             postInvalidate();
         }else{
-            setRotation((float)Math.toDegrees(ang));
+            ang = (float) va.getAnimatedValue();
             postInvalidate();
         }
     }
