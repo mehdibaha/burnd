@@ -21,9 +21,7 @@ import com.insa.burnd.models.MeetingResponse;
 import com.insa.burnd.network.Connection;
 import com.insa.burnd.network.VolleySingleton;
 import com.insa.burnd.utils.BaseFragment;
-import com.insa.burnd.utils.Utils;
 import com.insa.burnd.view.CompassActivity;
-import com.insa.burnd.view.JoinActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,11 +31,10 @@ import trikita.log.Log;
 
 public class MeetingFragment extends BaseFragment implements Connection.ResponseListener {
     private final MeetingFragment fragment = this;
-    private ImageLoader imageLoader;
-    private int numMessages = 0;
-
     @Bind(R.id.profilePic) NetworkImageView photo;
     @Bind(R.id.textView) TextView tView;
+    private ImageLoader imageLoader;
+    private int numMessages = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,16 +63,16 @@ public class MeetingFragment extends BaseFragment implements Connection.Response
     @Override
     public void requestCompleted(ApiResponse sr) {
         boolean error = sr.isError();
+        String message = sr.getMessage();
         MeetingResponse mr = sr.getMeetingResponse();
         Log.d(sr.toString());
 
         if (!error) {
             int age = mr.getAge();
             final String id = mr.getId();
-            String match = mr.getMatch();
             String name = mr.getName();
 
-            if(match.equals("MATCH")) displayNotification();
+            if (message.equals("MATCH")) displayNotification();
             tView.setText(name + " | " + age);
             photo.setEnabled(true);
             photo.setImageUrl("https://graph.facebook.com/" + id + "/picture?type=large", imageLoader);
@@ -89,9 +86,9 @@ public class MeetingFragment extends BaseFragment implements Connection.Response
                 }
             });
         } else if(mr.isStop()) {
-                photo.setImageUrl("http://burnd.cles-facil.fr/uploads/seen_everyone.png", imageLoader);
-                tView.setText("You have seen everyone!");
-                photo.setEnabled(false);
+            photo.setImageUrl("http://burnd.cles-facil.fr/uploads/seen_everyone.png", imageLoader);
+            tView.setText("You have seen everyone!");
+            photo.setEnabled(false);
         }
     }
 
