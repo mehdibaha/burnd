@@ -30,7 +30,7 @@ import trikita.log.Log;
 
 public class CreateActivity extends BaseActivity implements Connection.ResponseListener {
     private final CreateActivity activity = this;
-
+    final private int MAX_DURATION_PARTY = 12;
     @Bind(R.id.edittext_create_party_name) EditText etPartyName;
     @Bind(R.id.edittext_create_party_pass) EditText etPartyPass;
     @Bind(R.id.til_create_party_name) TextInputLayout tilPartyName;
@@ -38,8 +38,6 @@ public class CreateActivity extends BaseActivity implements Connection.ResponseL
     @Bind(R.id.edittext_location) EditText etLocation;
     @Bind(R.id.toolbar_create) Toolbar toolbar;
     @Bind(R.id.time) Button buttonTime;
-
-    final private int MAX_DURATION_PARTY = 12;
     private double latitude = 0;
     private double longitude = 0;
     private Calendar now ;
@@ -87,13 +85,6 @@ public class CreateActivity extends BaseActivity implements Connection.ResponseL
             ab.setTitle("Create a party");
             ab.setDisplayHomeAsUpEnabled(true);
         }
-    }
-
-    private void setButtonToCurrentTime() {
-        now = Calendar.getInstance();
-        hours = now.get(Calendar.HOUR_OF_DAY);
-        minutes = now.get(Calendar.MINUTE);
-        buttonTime.setText(hours + ":" + minutes);
     }
 
     private void setButtonToDefaultEndTime() {
