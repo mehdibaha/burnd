@@ -16,46 +16,6 @@ public class MeetingResponse {
 
     public MeetingResponse() { }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getMatch() {
-        return match;
-    }
-
-    public void setMatch(String match) {
-        this.match = match;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isStop() {
-        return stop;
-    }
-
-    public void setStop(boolean stop) {
-        this.stop = stop;
-    }
-
     @Override
     public String toString() {
         return "MeetingResponse{" +
@@ -65,5 +25,25 @@ public class MeetingResponse {
                 ", name='" + name + '\'' +
                 ", stop=" + stop +
                 '}';
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getMatch() {
+        return match;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isStop() {
+        return stop;
     }
 }
