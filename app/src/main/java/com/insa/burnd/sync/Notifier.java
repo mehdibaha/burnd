@@ -13,11 +13,11 @@ import com.insa.burnd.view.MainActivity.MainActivity;
 
 public class Notifier {
 
-    public static void launch(Context ctx, String ticker,String title, String text, int d){
+    public static void launch(Context ctx, String ticker,String title, String text, int icon){
         //Le protocole pour créer une notification est récupéré sur developpers.android
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(ctx)
-                        .setSmallIcon(d)
+                        .setSmallIcon(icon)
                         .setContentTitle(title)
                         .setContentText(text);
         mBuilder.setTicker(ticker);

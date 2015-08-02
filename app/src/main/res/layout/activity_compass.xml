@@ -23,7 +23,7 @@
         android:text="Timer"
         android:gravity="center"
         android:textColor="@color/primary_text"
-        android:textSize="100sp"
+        android:textSize="50sp"
         android:layout_above="@+id/linearLayout"
         android:autoText="false" />
 

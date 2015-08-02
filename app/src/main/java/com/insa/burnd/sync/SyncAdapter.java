@@ -9,9 +9,12 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
 
+import com.insa.burnd.R;
 import com.insa.burnd.models.ApiResponse;
 import com.insa.burnd.network.Connection;
 import com.insa.burnd.view.CompassActivity;
+
+import org.json.JSONArray;
 
 import trikita.log.Log;
 
@@ -24,33 +27,24 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connecti
     // Define a variable to contain a content resolver instance
     ContentResolver mContentResolver;
     private static boolean checkedMatch = false;
+    private Context ctx;
     private double[] pos = new double[2];
     /**
      * Set up the sync adapter
      */
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        /*
-         * If your app uses a content resolver, get an instance of it
-         * from the incoming Context
-         */
+        ctx = context;
         mContentResolver = context.getContentResolver();
     }
 
-    /**
-     * Set up the sync adapter. This form of the
-     * constructor maintains compatibility with Android 3.0
-     * and later platform versions
-     */
+
     public SyncAdapter(
             Context context,
             boolean autoInitialize,
             boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
-        /*
-         * If your app uses a content resolver, get an instance of it
-         * from the incoming Context
-         */
+        ctx = context;
         mContentResolver = context.getContentResolver();
     }
 
@@ -77,21 +71,26 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connecti
     }
 
     private void matchSync(){
-        new Connection(getContext(), this, "checkmatch").execute();
-        Log.d("sync");
+        new Connection(getContext(), this, "checkmatches").execute();
+        Log.d("syncMatch");
     }
 
     private void gpsSync(){
-        new Connection(getContext(), this, "updatelocation").execute(Double.toString(pos[0]),Double.toString(pos[1]));
+        double[] pos = new double[2];
         CompassActivity ca = CompassActivity.getInstance();
         if(ca != null){
-           pos = ca.updateLocation();
+           pos = ca.getLocation();
         }
-        Log.d("sync");
+        new Connection(getContext(), this, "updatelocation").execute(Double.toString(pos[0]),Double.toString(pos[1]));
+        Log.d("syncGPS");
     }
 
     public static void killMatch(){
         checkedMatch = false;
+    }
+
+    public static void setCheckedMatch(){
+        checkedMatch = true;
     }
 
     //Les 2 fonctions suivantes ont été ajoutées afin de permettre de gérer les syncs, trouver un sync par exemple.
@@ -119,25 +118,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter implements Connecti
 
     @Override
     public void requestCompleted(ApiResponse sr) {
-        /*
-        String id = json.optString("id");
-        Log.d("checkID" + id);
-        switch(id){
-            //We discriminate against the reponse id (sync type) to get the appropriate info (gps, match, etc...)
-            case "updatelocation":{
-                Log.d("inUpdateLocation");
-                JSONArray jArray = json.optJSONArray("location");
+        Log.d(sr);
+        /*if(!sr.isError()) {
+            if (sr.getLocation() != null) {
                 CompassActivity ca = CompassActivity.getInstance();
-                /*if(ca != null){
-                    ca.updateYou(Double.parseDouble(jArray.getString(0)), Double.parseDouble(jArray.getString(1)));
+                if (ca != null) {
+                    ca.setLocation(Double.parseDouble(sr.getLocation()[0]), Double.parseDouble(sr.getLocation()[0]));
                 }
-            }
-            case "checkmatch":{
-                Log.d("in");
-                String message = json.optString("match");
-                if(!checkedMatch && message.equals("Match!")){
-                    Notifier.launch(getContext(), "Explicit: Match!", "You have a match!" , "If you want to meet your match, click here." , R.mipmap.ic_launcher);
-                    checkedMatch = true;
+            }else if (sr.getMessage().equals("MATCH")) {
+                if(!checkedMatch){
+                    Notifier.launch(ctx, "Match !", "Match found !", "Click to find your match now !", R.mipmap.ic_launcher);
                 }
             }
         }*/

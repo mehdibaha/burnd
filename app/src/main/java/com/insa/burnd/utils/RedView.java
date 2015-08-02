@@ -91,7 +91,6 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
 
     @Override
     protected void onDraw(@NonNull Canvas c){
-        Log.d("drawing");
         setRotation((float) Math.toDegrees(ang));
         p.setColor(color);
         c.drawCircle(cPosW, cPosH, (float)(cR*1.4), p);
@@ -112,7 +111,6 @@ public class RedView extends ImageView implements ValueAnimator.AnimatorUpdateLi
                 rotateAn.setDuration(ROTATION_TIME);
                 rotateAn.addUpdateListener(this);
                 rotateAn.start();
-                Log.d("Rotated.");
             }
         }
     }
